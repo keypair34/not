@@ -17,6 +17,7 @@ import { storeWallet } from "../../lib/store/store";
 import { SolanaWallet, WALET_0 } from "../../lib/crate/generated";
 import { debug } from "@tauri-apps/plugin-log";
 import { redirect, useRouter } from "next/navigation";
+import Tooltip from "@mui/material/Tooltip";
 
 enum State {
   Loading,
@@ -115,8 +116,28 @@ export default function WalletHome() {
           background: "linear-gradient(135deg, #212529 60%, #1e88e5 100%)",
           color: "#fff",
           mb: 3,
+          position: "relative", // Add for absolute positioning
         }}
       >
+        {/* Lock button in top right */}
+        <Button
+          size="small"
+          variant="outlined"
+          sx={{
+            position: "absolute",
+            top: 16,
+            right: 16,
+            minWidth: 0,
+            px: 1,
+            borderColor: "#1e88e5",
+            color: "#1e88e5",
+            zIndex: 1,
+          }}
+          onClick={handleLock}
+          startIcon={<LockIcon />}
+        >
+          Lock
+        </Button>
         <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 2 }}>
           <Avatar sx={{ width: 56, height: 56, bgcolor: "#fff" }}>
             <Typography variant="h5" color="#212529">
@@ -142,51 +163,30 @@ export default function WalletHome() {
                 boxShadow: 1,
               }}
             >
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "#1e88e5",
-                  fontFamily: "monospace",
-                  fontWeight: "bold",
-                  fontSize: "1.05rem",
-                  wordBreak: "break-all",
-                  whiteSpace: "pre-wrap",
-                  flex: 1,
-                  userSelect: "all",
-                  m: 0,
-                  p: 0,
-                }}
-              >
-                {wallet?.pubkey}
-              </Typography>
-              <Button
-                size="small"
-                variant="outlined"
-                sx={{
-                  minWidth: 0,
-                  px: 1,
-                  borderColor: "#1e88e5",
-                  color: "#1e88e5",
-                }}
-                onClick={() => navigator.clipboard.writeText(wallet?.pubkey)}
-              >
-                Copy
-              </Button>
-              <Button
-                size="small"
-                variant="outlined"
-                sx={{
-                  minWidth: 0,
-                  px: 1,
-                  ml: 1,
-                  borderColor: "#1e88e5",
-                  color: "#1e88e5",
-                }}
-                onClick={handleLock}
-                startIcon={<LockIcon />}
-              >
-                Lock
-              </Button>
+              <Tooltip title="Copy pubkey" arrow>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "#1e88e5",
+                    fontFamily: "monospace",
+                    fontWeight: "bold",
+                    fontSize: "1.05rem",
+                    wordBreak: "break-all",
+                    whiteSpace: "pre-wrap",
+                    flex: 1,
+                    userSelect: "all",
+                    m: 0,
+                    p: 0,
+                    cursor: "pointer",
+                  }}
+                  onClick={() => wallet?.pubkey && navigator.clipboard.writeText(wallet.pubkey)}
+                >
+                  {wallet?.pubkey
+                    ? `${wallet.pubkey.slice(0, 3)}...${wallet.pubkey.slice(-3)}`
+                    : ""}
+                </Typography>
+              </Tooltip>
+              {/* Lock button removed from here */}
             </Box>
           </Box>
         </Stack>

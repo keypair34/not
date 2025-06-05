@@ -24,3 +24,12 @@ $ pnpm run tauri android init
 $ pnpm run tauri ios init
 ```
 
+<details>
+  <summary>Screenshots</summary>
+
+  <p><img src="screenshots/0.png" alt="locked-wallet-view.png" width="250"/></p>
+  <p><img src="screenshots/1.png" alt="wallet-home.png" width="250"/></p>
+  <p><img src="screenshots/2.png" alt="wallet-mobile.png" width="250"/></p>
+
+</details>
+
