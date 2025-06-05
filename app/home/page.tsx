@@ -11,7 +11,6 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import BottomTabBar from "../../lib/components/bottom-tab-bar";
 
 const feed = [
 	{
@@ -185,7 +184,6 @@ export default function HomeFeedPage() {
 					</Card>
 				))}
 			</Box>
-			<BottomTabBar />
 		</Box>
 	);
 }

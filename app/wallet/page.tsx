@@ -10,7 +10,6 @@ import Divider from "@mui/material/Divider";
 import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
 import LockIcon from "@mui/icons-material/Lock";
-import BottomTabBar from "../../lib/components/bottom-tab-bar";
 import { useAppLock } from "../../lib/context/app-lock-context";
 import CircularProgress from "@mui/material/CircularProgress";
 import { storeWallet } from "../../lib/store/store";
@@ -111,10 +110,13 @@ export default function WalletHome() {
         <Card
           sx={{
             mb: 3,
-            borderRadius: 3,
-            boxShadow: 2,
-            background: "#fff",
+            borderRadius: 4,
+            boxShadow: 6,
+            p: 4,
+            background: "linear-gradient(135deg, #212529 60%, #1e88e5 100%)",
+            color: "#fff",
             overflow: "hidden",
+            position: "relative",
           }}
         >
           {/* Lock button in top right */}
@@ -251,8 +253,9 @@ export default function WalletHome() {
             mb: 3,
             borderRadius: 3,
             boxShadow: 2,
-            background: "#fff",
+            background: "linear-gradient(135deg, #f5f6fa 60%, #e3f2fd 100%)",
             overflow: "hidden",
+            p: 4,
           }}
         >
           <Typography
@@ -283,7 +286,6 @@ export default function WalletHome() {
           </Stack>
         </Card>
       </Box>
-      <BottomTabBar />
     </Box>
   );
 }
