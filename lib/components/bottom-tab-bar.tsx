@@ -1,6 +1,9 @@
+"use client";
+
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import Paper from "@mui/material/Paper";
 import HomeIcon from "@mui/icons-material/Home";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { usePathname, useRouter } from "next/navigation";
@@ -8,71 +11,56 @@ import { usePathname, useRouter } from "next/navigation";
 export default function BottomTabBar() {
   const pathname = usePathname();
   const router = useRouter();
-  const isWallet = pathname === "/wallet";
-  const isHomeFeed = pathname === "/home";
+  const value = pathname === "/wallet" ? 1 : 0;
+
+  const handleChange = (_: React.SyntheticEvent, newValue: number) => {
+    if (newValue === 0 && pathname !== "/home") {
+      router.push("/home");
+    } else if (newValue === 1 && pathname !== "/wallet") {
+      router.push("/wallet");
+    }
+  };
 
   return (
-    <Box
+    <Paper
       sx={{
         position: "fixed",
         bottom: 0,
         left: 0,
         width: "100vw",
-        bgcolor: "#fff",
-        boxShadow: "0 -2px 12px #0001",
-        py: 2,
-        px: 2,
-        display: "flex",
-        justifyContent: "center",
         zIndex: 100,
+        boxShadow: "0 -2px 12px #0001",
       }}
+      elevation={3}
     >
-      <Box sx={{ width: "100%", maxWidth: 420, display: "flex", gap: 1 }}>
-        <Button
-          startIcon={<HomeIcon />}
-          variant={isHomeFeed ? "contained" : "outlined"}
-          color="primary"
-          fullWidth
+      <BottomNavigation
+        value={value}
+        onChange={handleChange}
+        showLabels
+        sx={{
+          width: "100%",
+          maxWidth: 420,
+          margin: "0 auto",
+          bgcolor: "#fff",
+        }}
+      >
+        <BottomNavigationAction
+          label="Home"
+          icon={<HomeIcon />}
           sx={{
-            borderRadius: 2,
-            fontSize: "1.4rem",
-            boxShadow: 2,
-            bgcolor: isHomeFeed ? "#1e88e5" : "#fff",
-            color: isHomeFeed ? "#fff" : "#1e88e5",
-            "&:hover": { bgcolor: isHomeFeed ? "#1565c0" : "#f3f4f6" },
-            flex: 1,
-            minWidth: 0,
-            px: 0,
-            py: 1.2,
-            justifyContent: "center",
-          }}
-          onClick={() => {
-            if (!isHomeFeed) router.push("/home");
+            color: value === 0 ? "#1e88e5" : undefined,
+            "&.Mui-selected": { color: "#1e88e5" },
           }}
         />
-        <Button
-          startIcon={<AccountBalanceWalletIcon />}
-          variant={isWallet ? "contained" : "outlined"}
-          color="primary"
-          fullWidth
+        <BottomNavigationAction
+          label="Wallet"
+          icon={<AccountBalanceWalletIcon />}
           sx={{
-            borderRadius: 2,
-            fontSize: "1.4rem",
-            boxShadow: 2,
-            minWidth: 0,
-            px: 0,
-            py: 1.2,
-            flex: 1,
-            justifyContent: "center",
-            bgcolor: isWallet ? "#1e88e5" : "#fff",
-            color: isWallet ? "#fff" : "#1e88e5",
-            "&:hover": { bgcolor: isWallet ? "#1565c0" : "#f3f4f6" },
-          }}
-          onClick={() => {
-            if (!isWallet) router.push("/wallet");
+            color: value === 1 ? "#1e88e5" : undefined,
+            "&.Mui-selected": { color: "#1e88e5" },
           }}
         />
-      </Box>
-    </Box>
+      </BottomNavigation>
+    </Paper>
   );
 }

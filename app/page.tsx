@@ -72,8 +72,6 @@ function MainPageContent() {
   if (state == State.Loaded && wallet && locked) {
     return (
       <LockedWalletView
-        passwordInput={passwordInput}
-        setPasswordInput={setPasswordInput}
         showPassword={showPassword}
         setShowPassword={setShowPassword}
         unlock={unlock}

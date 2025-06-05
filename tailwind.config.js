@@ -6,7 +6,12 @@ export default {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      // Add utility for overscroll-behavior to prevent bounce scroll
+      overscrollBehavior: {
+        none: 'none',
+      },
+    },
   },
   plugins: [],
 }
