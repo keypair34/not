@@ -1,0 +1,40 @@
+{
+  "$schema": "https://schema.tauri.app/config/2.0.0",
+  "productName": "notwallet",
+  "version": "0.1.0",
+  "identifier": "xyz.notwallet.NotWallet",
+  "build": {
+    "beforeDevCommand": "pnpm dev --turbopack",
+    "beforeBuildCommand": "pnpm build",
+    "devUrl": "http://localhost:3000",
+    "frontendDist": "../out"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Not Wallet",
+        "width": 800,
+        "height": 600
+        
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "iOS": {
+      "minimumSystemVersion": "13.0",
+      "developmentTeam": "NADBSNEZWH"
+    }
+  }
+}
