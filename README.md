@@ -2,6 +2,11 @@
 
 Solana wallet and more.
 
+## License
+
+This project is licensed under the GNU General Public License v3.0.  
+See [LICENSE](LICENSE) for details.
+
 ## Recommended IDE Setup
 
 - [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
