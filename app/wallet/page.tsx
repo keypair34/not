@@ -17,11 +17,37 @@ import { SolanaWallet, WALET_0 } from "../../lib/crate/generated";
 import { debug } from "@tauri-apps/plugin-log";
 import { redirect, useRouter } from "next/navigation";
 import Tooltip from "@mui/material/Tooltip";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 enum State {
   Loading,
   Loaded,
   Error,
+}
+
+// Helper to group stablecoins by denomination
+function groupStablecoinsByDenomination(activities: { coin: string; amount: number; date: string; type: "received" | "sent" }[]) {
+  // Define mapping from coin to denomination
+  const denominationMap: Record<string, string> = {
+    USDC: "USD",
+    USDT: "USD",
+    USDG: "USD",
+    EURC: "EUR",
+    EURT: "EUR",
+    // Add more as needed
+  };
+
+  // Group by denomination
+  const grouped: Record<string, { coin: string; amount: number; date: string; type: "received" | "sent" }[]> = {};
+  for (const activity of activities) {
+    const denom = denominationMap[activity.coin] || activity.coin;
+    if (!grouped[denom]) grouped[denom] = [];
+    grouped[denom].push(activity);
+  }
+  return grouped;
 }
 
 export default function WalletHome() {
@@ -94,6 +120,18 @@ export default function WalletHome() {
     lock();
     return redirect("/");
   }
+
+  // Example activities data
+  const activities = [
+    { coin: "USDC", amount: 1000, date: "Jun 12, 2024", type: "received" },
+    { coin: "USDT", amount: 500, date: "Jun 11, 2024", type: "received" },
+    { coin: "USDG", amount: 200, date: "Jun 10, 2024", type: "received" },
+    { coin: "USDC", amount: 250, date: "Jun 10, 2024", type: "sent" },
+    { coin: "EURC", amount: 100, date: "Jun 9, 2024", type: "received" },
+    // ...other activities...
+  ];
+
+  const groupedActivities = groupStablecoinsByDenomination(activities);
 
   return (
     <Box
@@ -227,6 +265,7 @@ export default function WalletHome() {
                 "&:hover": { bgcolor: "#e3f2fd" },
               }}
               fullWidth
+              onClick={() => router.push("/deposit")}
             >
               Deposit
             </Button>
@@ -267,22 +306,35 @@ export default function WalletHome() {
           </Typography>
           <Divider sx={{ mb: 2 }} />
           <Stack spacing={2}>
-            <Box>
-              <Typography variant="body2" color="#212529">
-                Received USDC
-              </Typography>
-              <Typography variant="caption" color="#90a4ae">
-                +$1,000.00 &nbsp; • &nbsp; Jun 12, 2024
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="body2" color="#212529">
-                Sent USDC
-              </Typography>
-              <Typography variant="caption" color="#90a4ae">
-                -$250.00 &nbsp; • &nbsp; Jun 10, 2024
-              </Typography>
-            </Box>
+            {Object.entries(groupedActivities).map(([denom, acts]) => (
+              <Accordion key={denom} sx={{ mb: 1, boxShadow: "none", bgcolor: "transparent" }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls={`${denom}-content`}
+                  id={`${denom}-header`}
+                  sx={{ px: 0, bgcolor: "transparent" }}
+                >
+                  <Typography variant="subtitle2" sx={{ color: "#1e88e5" }}>
+                    {denom}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ px: 0 }}>
+                  {acts.map((activity, idx) => (
+                    <Box key={idx}>
+                      <Typography variant="body2" color="#212529">
+                        {activity.type === "received" ? "Received" : "Sent"}{" "}
+                        {activity.coin}
+                      </Typography>
+                      <Typography variant="caption" color="#90a4ae">
+                        {activity.type === "received" ? "+" : "-"}$
+                        {activity.amount.toLocaleString()} &nbsp; • &nbsp;{" "}
+                        {activity.date}
+                      </Typography>
+                    </Box>
+                  ))}
+                </AccordionDetails>
+              </Accordion>
+            ))}
           </Stack>
         </Card>
       </Box>
