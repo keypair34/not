@@ -9,27 +9,27 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import { store } from "../store/store";
-import { debug } from "@tauri-apps/plugin-log";
+import { useAppLock } from "../context/app-lock-context";
 
 type LockedWalletViewProps = {
   showPassword: boolean;
   setShowPassword: (value: boolean) => void;
-  unlock: () => void;
 };
 
 export default function LockedWalletView({
   showPassword,
   setShowPassword,
-  unlock,
 }: LockedWalletViewProps) {
   const [passwordInput, setPasswordInput] = React.useState<string>("");
   const [error, setError] = React.useState<string | null>(null);
+  const { unlock } = useAppLock();
 
   const handleUnlock = async () => {
+    setError(null);
+    // Optimistically unlock immediately, then check password
+    unlock();
     const stored = await store().get<string>("password");
     if (stored && stored === passwordInput) {
-      setError(null);
-      unlock();
       setPasswordInput("");
       return;
     }

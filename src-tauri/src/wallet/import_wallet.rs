@@ -1,15 +1,18 @@
+use crate::constants::{store::store_wallet, wallet_key::WALET_0};
+use crate::wallet::create_wallet::SolanaWallet;
 use bip39::Mnemonic;
+use serde_json::json;
 use solana_sdk::derivation_path::DerivationPath;
 use solana_sdk::signature::Signer;
 use solana_sdk::signer::keypair::keypair_from_seed_and_derivation_path;
 use tauri::command;
-use crate::wallet::create_wallet::SolanaWallet;
-use crate::constants::{store::store_wallet, wallet_key::WALET_0};
-use serde_json::json;
 use tauri::AppHandle;
 
 #[command]
-pub fn import_solana_wallet(app: AppHandle, mnemonic_phrase: String) -> Result<SolanaWallet, String> {
+pub fn import_solana_wallet(
+    app: AppHandle,
+    mnemonic_phrase: String,
+) -> Result<SolanaWallet, String> {
     // Parse mnemonic using FromStr
     let mnemonic = mnemonic_phrase
         .parse::<Mnemonic>()
