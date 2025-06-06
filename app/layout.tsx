@@ -4,13 +4,21 @@ import { Container } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import BottomTabBar from "../lib/components/bottom-tab-bar";
 import { AppLockProvider, useAppLock } from "../lib/context/app-lock-context";
+import React from "react";
 
 function LayoutWithBottomBar({ children }: { children: React.ReactNode }) {
   const { locked } = useAppLock();
+  const [initialized, setInitialized] = React.useState(false);
+
+  // Wait for the lock state to be initialized before showing tabs
+  React.useEffect(() => {
+    setInitialized(true);
+  }, []);
+
   return (
     <>
       <Container>{children}</Container>
-      {!locked && <BottomTabBar />}
+      {initialized && !locked && <BottomTabBar />}
     </>
   );
 }

@@ -11,6 +11,11 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Alert from "@mui/material/Alert";
+import CloseIcon from "@mui/icons-material/Close";
+import { useState } from "react";
+import Link from "next/link";
+import Button from "@mui/material/Button";
 
 const feed = [
 	{
@@ -55,6 +60,8 @@ const feed = [
 ];
 
 export default function HomeFeedPage() {
+	const [showOnboarding, setShowOnboarding] = useState(true);
+
 	return (
 		<Box
 			sx={{
@@ -76,6 +83,88 @@ export default function HomeFeedPage() {
 					Activity Feed
 				</Typography>
 			</Box>
+			{/* Onboarding Card BELOW the title, ABOVE the feed */}
+			{showOnboarding && (
+				<Card
+					sx={{
+						width: "100%",
+						maxWidth: 480,
+						mb: 3,
+						borderRadius: 4,
+						boxShadow: 6,
+						background: "linear-gradient(135deg, #212529 60%, #1e88e5 100%)",
+						color: "#fff",
+						position: "relative",
+						overflow: "visible",
+						border: "2px solid #1e88e5",
+					}}
+				>
+					<IconButton
+						aria-label="close"
+						onClick={() => setShowOnboarding(false)}
+						sx={{
+							position: "absolute",
+							top: 10,
+							right: 10,
+							color: "#1e88e5",
+							bgcolor: "#fff",
+							"&:hover": { bgcolor: "#e3f2fd" },
+							zIndex: 2,
+						}}
+					>
+						<CloseIcon />
+					</IconButton>
+					<Box sx={{ p: 3, textAlign: "center" }}>
+						<Typography
+							variant="h5"
+							fontWeight="bold"
+							sx={{
+								mb: 1,
+								color: "#fff",
+								textShadow: "0 2px 8px #1e88e599",
+								letterSpacing: 1,
+							}}
+						>
+							🎉 Claim Your BACH Airdrop!
+						</Typography>
+						<Typography
+							variant="subtitle1"
+							sx={{
+								mb: 2,
+								color: "#b0bec5",
+								fontWeight: 500,
+								fontSize: "1.1rem",
+							}}
+						>
+							Sign up now and get up to <b>10.99 <span style={{fontFamily: "monospace"}}>€BACH</span> Tokens</b> airdropped to your wallet! You can use your favorite login provider (like Google, Twitter, or Discord) to join in seconds.
+						</Typography>
+						<Button
+							variant="contained"
+							size="large"
+							sx={{
+								bgcolor: "#fff",
+								color: "#1e88e5",
+								fontWeight: "bold",
+								fontSize: "1.1rem",
+								borderRadius: 3,
+								boxShadow: 2,
+								px: 4,
+								py: 1.5,
+								"&:hover": { bgcolor: "#e3f2fd", color: "#1565c0" },
+								transition: "all 0.2s",
+							}}
+							component={Link}
+							href="https://api.musik88.com/login"
+							target="_blank"
+						>
+							Sign Up &amp; Claim
+						</Button>
+						<Typography variant="caption" sx={{ display: "block", mt: 2, color: "#b0bec5" }}>
+							Your wallet address will be used for the airdrop.
+						</Typography>
+					</Box>
+				</Card>
+			)}
 			<Box sx={{ width: "100%", maxWidth: 480 }}>
 				{feed.map((item) => (
 					<Card

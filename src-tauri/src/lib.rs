@@ -1,9 +1,12 @@
-mod wallet;
-mod setup;
 mod constants;
+mod setup;
+mod wallet;
 
+use crate::{
+    setup::setup,
+    wallet::{create_wallet::create_solana_wallet, import_wallet::import_solana_wallet},
+};
 use tauri_plugin_log::fern::colors::{Color, ColoredLevelConfig};
-use crate::{setup::setup, wallet::{create_wallet::create_solana_wallet, import_wallet::import_solana_wallet}};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -19,9 +22,7 @@ pub fn run() {
                 .build(),
         )
         .plugin(tauri_plugin_shell::init())
-        .setup(|app| {
-            setup(app)
-        })
+        .setup(|app| setup(app))
         .invoke_handler(tauri::generate_handler![
             create_solana_wallet,
             import_solana_wallet,
