@@ -136,7 +136,7 @@ export default function HomeFeedPage() {
 								fontSize: "1.1rem",
 							}}
 						>
-							Sign up your wallet for <b>musik88.com</b> and get <b>9–11 BACH Tokens</b> airdropped to your pubkey!
+							Sign up now and get up to <b>10.99 <span style={{fontFamily: "monospace"}}>€BACH</span> Tokens</b> airdropped to your wallet! You can use your favorite login provider (like Google, Twitter, or Discord) to join in seconds.
 						</Typography>
 						<Button
 							variant="contained"
@@ -160,7 +160,7 @@ export default function HomeFeedPage() {
 							Sign Up &amp; Claim
 						</Button>
 						<Typography variant="caption" sx={{ display: "block", mt: 2, color: "#b0bec5" }}>
-							Your pubkey will be used for the airdrop.
+							Your wallet address will be used for the airdrop.
 						</Typography>
 					</Box>
 				</Card>
