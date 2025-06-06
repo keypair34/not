@@ -12,15 +12,27 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import * as React from "react";
 import { QRCodeCanvas } from "qrcode.react"; // Use QRCodeCanvas instead of default export
+import { storeWallet } from "../../lib/store/store";
+import { SolanaWallet, WALET_0 } from "../../lib/crate/generated";
 
 export default function DepositPage() {
   const router = useRouter();
   const [selectedDenom, setSelectedDenom] = React.useState("USD");
   const denominationOptions = ["USD", "EUR"]; // Add more as needed
 
-  // Example: get pubkey from somewhere, or pass as prop
-  // Replace with actual wallet pubkey retrieval logic as needed
-  const pubkey = "YourWalletPublicAddressHere"; // TODO: Replace with real pubkey
+  const [pubkey, setPubkey] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    // Get wallet from store, like in page.tsx
+    (async () => {
+      try {
+        const wallet = await storeWallet().get<SolanaWallet>(WALET_0);
+        setPubkey(wallet?.pubkey ?? null);
+      } catch {
+        setPubkey(null);
+      }
+    })();
+  }, []);
 
   return (
     <Box
@@ -76,7 +88,7 @@ export default function DepositPage() {
           </FormControl>
           {/* QR code above card payment */}
           <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mb: 2 }}>
-            <QRCodeCanvas value={pubkey} size={160} />
+            <QRCodeCanvas value={pubkey ?? ""} size={160} />
             <Typography variant="caption" sx={{ mt: 1, color: "#888" }}>
               Scan to get address
             </Typography>
