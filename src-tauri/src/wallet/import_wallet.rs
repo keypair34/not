@@ -40,7 +40,7 @@ pub fn import_solana_wallet(
     // Store the wallet using the same pattern as create_wallet.rs
     let store = match store_wallet(&app) {
         Ok(store) => store,
-        Err(e) => {
+        Err(_) => {
             return Err("Failed to load store".to_string());
         }
     };
