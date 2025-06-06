@@ -4,15 +4,10 @@ use solana_sdk::derivation_path::DerivationPath;
 use solana_sdk::signature::Signer;
 use solana_sdk::signer::keypair::keypair_from_seed_and_derivation_path;
 use tauri::command;
-
-#[derive(Serialize)]
-pub struct ImportedWallet {
-    pub mnemonic: String,
-    pub pubkey: String,
-}
+use crate::wallet::create_wallet::SolanaWallet;
 
 #[command]
-pub fn import_solana_wallet(mnemonic_phrase: String) -> Result<ImportedWallet, String> {
+pub fn import_solana_wallet(mnemonic_phrase: String) -> Result<SolanaWallet, String> {
     // Parse mnemonic using FromStr
     let mnemonic = mnemonic_phrase
         .parse::<Mnemonic>()
@@ -29,9 +24,11 @@ pub fn import_solana_wallet(mnemonic_phrase: String) -> Result<ImportedWallet, S
         .map_err(|e| format!("Keypair derivation failed: {:?}", e))?;
 
     let pubkey = keypair.pubkey().to_string();
+    let privkey = bs58::encode(keypair.to_bytes()).into_string();
 
-    Ok(ImportedWallet {
+    Ok(SolanaWallet {
         mnemonic: mnemonic_phrase,
         pubkey,
+        privkey,
     })
 }

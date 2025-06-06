@@ -11,7 +11,6 @@ import Link from "next/link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { invoke } from "@tauri-apps/api/core";
 import { debug } from '@tauri-apps/plugin-log';
-import BottomTabBar from "../../lib/components/bottom-tab-bar";
 
 export default function ImportWalletPage() {
   const [seed, setSeed] = React.useState("");
