@@ -6,18 +6,23 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Paper from "@mui/material/Paper";
 import HomeIcon from "@mui/icons-material/Home";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function BottomTabBar() {
   const pathname = usePathname();
   const router = useRouter();
-  const value = pathname === "/wallet" ? 1 : 0;
+  let value = 0;
+  if (pathname === "/wallet") value = 1;
+  else if (pathname === "/settings") value = 2;
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     if (newValue === 0 && pathname !== "/home") {
       router.push("/home");
     } else if (newValue === 1 && pathname !== "/wallet") {
       router.push("/wallet");
+    } else if (newValue === 2 && pathname !== "/settings") {
+      router.push("/settings");
     }
   };
 
@@ -57,6 +62,14 @@ export default function BottomTabBar() {
           icon={<AccountBalanceWalletIcon />}
           sx={{
             color: value === 1 ? "#1e88e5" : undefined,
+            "&.Mui-selected": { color: "#1e88e5" },
+          }}
+        />
+        <BottomNavigationAction
+          label="Settings"
+          icon={<SettingsIcon />}
+          sx={{
+            color: value === 2 ? "#1e88e5" : undefined,
             "&.Mui-selected": { color: "#1e88e5" },
           }}
         />
