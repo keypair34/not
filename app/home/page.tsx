@@ -225,7 +225,7 @@ export default function HomeFeedPage() {
               transition: "box-shadow 0.2s",
               "&:hover": { boxShadow: 6, bgcolor: "#f3f4f6" },
             }}
-            onClick={() => router.push(`/activity/${item.id}`)}
+            onClick={() => router.push(`/activity?id=${item.id}`)}
           >
             <CardHeader
               avatar={
