@@ -10,13 +10,12 @@ import IconButton from "@mui/material/IconButton";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ShareIcon from "@mui/icons-material/Share";
-import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import Button from "@mui/material/Button";
-import { openUrl } from "@tauri-apps/plugin-opener";
 import Modal from "@mui/material/Modal";
 import { useRouter } from "next/navigation";
 import { invoke } from "@tauri-apps/api/core";
+import OnboardingCard from "./components/onboarding_card";
 
 export const feed = [
   {
@@ -92,87 +91,7 @@ export default function HomeFeedPage() {
         </Typography>
       </Box>
       {/* Onboarding Card BELOW the title, ABOVE the feed */}
-      {showOnboarding && (
-        <Card
-          sx={{
-            width: "100%",
-            maxWidth: 480,
-            mb: 3,
-            borderRadius: 4,
-            boxShadow: 6,
-            background: "linear-gradient(135deg, #212529 60%, #1e88e5 100%)",
-            color: "#fff",
-            position: "relative",
-            overflow: "visible",
-            border: "2px solid #1e88e5",
-          }}
-        >
-          <IconButton
-            aria-label="close"
-            onClick={() => setShowOnboarding(false)}
-            sx={{
-              position: "absolute",
-              top: 10,
-              right: 10,
-              color: "#1e88e5",
-              bgcolor: "#fff",
-              "&:hover": { bgcolor: "#e3f2fd" },
-              zIndex: 2,
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-          <Box sx={{ p: 3, textAlign: "center" }}>
-            <Typography
-              variant="h5"
-              fontWeight="bold"
-              sx={{
-                mb: 1,
-                color: "#fff",
-                textShadow: "0 2px 8px #1e88e599",
-                letterSpacing: 1,
-              }}
-            >
-              🎉 Claim Your €BACH Airdrop!
-            </Typography>
-            <Button
-              variant="contained"
-              size="large"
-              sx={{
-                bgcolor: "#fff",
-                color: "#1e88e5",
-                fontWeight: "bold",
-                fontSize: "1.1rem",
-                borderRadius: 3,
-                boxShadow: 2,
-                px: 4,
-                py: 1.5,
-                "&:hover": { bgcolor: "#e3f2fd", color: "#1565c0" },
-                transition: "all 0.2s",
-              }}
-              onClick={() => setModalOpen(true)}
-            >
-              Sign Up &amp; Claim
-            </Button>
-            <Typography
-              variant="caption"
-              sx={{
-                display: "block",
-                mt: 2,
-                color: "#b0bec5",
-                cursor: "pointer",
-              }}
-              onClick={() => openUrl("https://bachmoney.5mb.app/")}
-            >
-              Your wallet address will be used for the airdrop.
-              <br />
-              <span style={{ color: "#1e88e5", textDecoration: "underline" }}>
-                bachmoney.5mb.app
-              </span>
-            </Typography>
-          </Box>
-        </Card>
-      )}
+      <OnboardingCard open={showOnboarding} onClose={() => setShowOnboarding(false)} />
       {/* Modal for sign with keys info */}
       <Modal
         open={modalOpen}
