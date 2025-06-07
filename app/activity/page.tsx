@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { feed } from "../home/page";
+import { feed } from "../home/components/feed";
 
 export default function ActivityDetailPage() {
   const searchParams = useSearchParams();
