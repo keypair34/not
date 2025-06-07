@@ -40,7 +40,7 @@ export default function AboutPage() {
             Back
           </Button>
           <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end"}}>
-            <Typography variant="h5" fontWeight="bold" paddingRight={8}>
+            <Typography variant="h5" fontWeight="bold" paddingRight={2}>
               About
             </Typography>
           </Box>
