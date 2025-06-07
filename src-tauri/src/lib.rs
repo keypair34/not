@@ -4,7 +4,7 @@ mod wallet;
 
 use crate::{
     setup::setup,
-    wallet::{create_wallet::create_solana_wallet, import_wallet::import_solana_wallet},
+    wallet::{create_wallet::create_solana_wallet, import_wallet::import_solana_wallet, sign::sign_message},
 };
 use tauri_plugin_log::fern::colors::{Color, ColoredLevelConfig};
 
@@ -27,6 +27,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             create_solana_wallet,
             import_solana_wallet,
+            sign_message,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

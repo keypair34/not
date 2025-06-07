@@ -16,6 +16,7 @@ import Button from "@mui/material/Button";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import Modal from "@mui/material/Modal";
 import { useRouter } from "next/navigation";
+import { invoke } from "@tauri-apps/api/core";
 
 export const feed = [
   {
@@ -51,7 +52,23 @@ export const feed = [
 export default function HomeFeedPage() {
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+  const [signing, setSigning] = useState(false);
+  const [signResult, setSignResult] = useState<string | null>(null);
   const router = useRouter();
+
+  const handleSign = async () => {
+    setSigning(true);
+    setSignResult(null);
+    try {
+      // You can customize the message as needed
+      const message = "Claim €BACH airdrop";
+      const signature = await invoke<string>("sign_message", { message });
+      setSignResult(signature);
+    } catch (e: any) {
+      setSignResult("Failed to sign message: " + (e?.toString() || "Unknown error"));
+    }
+    setSigning(false);
+  };
 
   return (
     <Box
@@ -116,24 +133,7 @@ export default function HomeFeedPage() {
                 letterSpacing: 1,
               }}
             >
-              🎉 Claim Your BACH Airdrop!
-            </Typography>
-            <Typography
-              variant="subtitle1"
-              sx={{
-                mb: 2,
-                color: "#b0bec5",
-                fontWeight: 500,
-                fontSize: "1.1rem",
-              }}
-            >
-              Sign up now and get up to{" "}
-              <b>
-                10.99 <span style={{ fontFamily: "monospace" }}>€BACH</span>{" "}
-                Tokens
-              </b>{" "}
-              airdropped to your wallet! You can use your favorite login
-              provider (like Google, Twitter, or Discord) to join in seconds.
+              🎉 Claim Your €BACH Airdrop!
             </Typography>
             <Button
               variant="contained"
@@ -176,7 +176,10 @@ export default function HomeFeedPage() {
       {/* Modal for sign with keys info */}
       <Modal
         open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={() => {
+          setModalOpen(false);
+          setSignResult(null);
+        }}
         aria-labelledby="sign-modal-title"
         aria-describedby="sign-modal-desc"
       >
@@ -196,19 +199,32 @@ export default function HomeFeedPage() {
           }}
         >
           <Typography id="sign-modal-title" variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-            Signature Required
+            Claim Airdrop
           </Typography>
           <Typography id="sign-modal-desc" variant="body1" sx={{ mb: 2 }}>
-            To claim the airdrop, you will need to sign a message with your wallet keys. This proves ownership of your wallet and is required for the airdrop process.
+            Sign this message by clicking the button below.
           </Typography>
           <Button
             variant="contained"
             color="primary"
-            onClick={() => setModalOpen(false)}
+            onClick={handleSign}
             sx={{ mt: 2, px: 4, borderRadius: 2 }}
+            disabled={signing}
           >
-            OK
+            {signing ? "Signing..." : "Sign"}
           </Button>
+          {signResult && (
+            <Typography
+              variant="body2"
+              sx={{
+                mt: 2,
+                wordBreak: "break-all",
+                color: signResult.startsWith("Failed") ? "error.main" : "success.main",
+              }}
+            >
+              {signResult}
+            </Typography>
+          )}
         </Box>
       </Modal>
       <Box sx={{ width: "100%", maxWidth: 480 }}>
