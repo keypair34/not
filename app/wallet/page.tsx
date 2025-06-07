@@ -122,7 +122,7 @@ export default function WalletHome() {
   }
 
   // Example activities data
-  const activities = [
+  const activities: { coin: string; amount: number; date: string; type: "received" | "sent" }[] = [
     { coin: "USDC", amount: 1000, date: "Jun 12, 2024", type: "received" },
     { coin: "USDT", amount: 500, date: "Jun 11, 2024", type: "received" },
     { coin: "USDG", amount: 200, date: "Jun 10, 2024", type: "received" },
@@ -136,7 +136,8 @@ export default function WalletHome() {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: "unset",
+        height: "auto",
         bgcolor: "#f5f6fa",
         pb: 10,
         display: "flex",

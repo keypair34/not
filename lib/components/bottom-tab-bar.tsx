@@ -13,8 +13,18 @@ export default function BottomTabBar() {
   const pathname = usePathname();
   const router = useRouter();
   let value = 0;
-  if (pathname === "/wallet") value = 1;
-  else if (pathname === "/settings") value = 2;
+  if (
+    pathname === "/wallet" ||
+    pathname === "/deposit"
+  ) value = 1;
+  else if (
+    pathname === "/settings" ||
+    pathname === "/about"
+  ) value = 2;
+  else if (
+    pathname === "/home" ||
+    pathname.startsWith("/activity")
+  ) value = 0;
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     if (newValue === 0 && pathname !== "/home") {

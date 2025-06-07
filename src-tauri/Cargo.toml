@@ -29,4 +29,6 @@ tauri-plugin-log = {version = "2", features = ["colored"] }
 tauri-plugin-store = "2"
 bs58 = "0.5"
 tsync = "2"
+openssl = { version = "0.10", features = ["vendored"] }
+tauri-plugin-opener = "2"
 

@@ -5,10 +5,11 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import { useRouter } from "next/navigation";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import { openUrl } from "@tauri-apps/plugin-opener";
+import { useRouter } from "next/navigation";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -16,7 +17,8 @@ export default function SettingsPage() {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: "unset",
+        height: "auto",
         bgcolor: "#f5f6fa",
         display: "flex",
         flexDirection: "column",
@@ -24,7 +26,15 @@ export default function SettingsPage() {
         py: 4,
       }}
     >
-      <Card sx={{ maxWidth: 400, width: "100%", p: 0, boxShadow: 3, position: "relative" }}>
+      <Card
+        sx={{
+          maxWidth: 400,
+          width: "100%",
+          p: 0,
+          boxShadow: 3,
+          position: "relative",
+        }}
+      >
         <Box sx={{ pt: 4, pb: 2, px: 4 }}>
           <Typography variant="h5" fontWeight="bold" sx={{ mb: 2 }}>
             Settings
@@ -32,20 +42,46 @@ export default function SettingsPage() {
         </Box>
         <Divider />
         <List sx={{ p: 0 }}>
-          <ListItem button sx={{ px: 4 }}>
-            <ListItemText primary="Account" />
+          <ListItem
+            sx={{
+              px: 4,
+              cursor: "pointer",
+              minHeight: 56,
+              borderRadius: 2,
+              "&:hover": { bgcolor: "#f3f4f6" },
+              transition: "background 0.2s",
+            }}
+            onClick={() => router.push("/about")}
+            component="li"
+            disablePadding
+          >
+            <ListItemText
+              primary="About"
+              primaryTypographyProps={{
+                sx: { fontSize: "1.08rem", fontWeight: 500, py: 1 },
+              }}
+            />
           </ListItem>
           <Divider />
-          <ListItem button sx={{ px: 4 }}>
-            <ListItemText primary="Security" />
-          </ListItem>
-          <Divider />
-          <ListItem button sx={{ px: 4 }}>
-            <ListItemText primary="Notifications" />
-          </ListItem>
-          <Divider />
-          <ListItem button sx={{ px: 4 }}>
-            <ListItemText primary="About" />
+          <ListItem
+            sx={{
+              px: 4,
+              cursor: "pointer",
+              minHeight: 56,
+              borderRadius: 2,
+              "&:hover": { bgcolor: "#f3f4f6" },
+              transition: "background 0.2s",
+            }}
+            onClick={() => openUrl("https://github.com/TheStableFoundation/not")}
+            component="li"
+            disablePadding
+          >
+            <ListItemText
+              primary="Open Source"
+              primaryTypographyProps={{
+                sx: { fontSize: "1.08rem", fontWeight: 500, py: 1 },
+              }}
+            />
           </ListItem>
         </List>
       </Card>
@@ -56,17 +92,15 @@ export default function SettingsPage() {
           color: "#888",
           fontStyle: "italic",
           textAlign: "center",
+          wordBreak: "break-all",
+          cursor: "pointer",
         }}
+        onClick={() => openUrl("https://bachmoney.5mb.app/")}
       >
         © {new Date().getFullYear()}{" "}
-        <a
-          href="https://bachmoney.5mb.app/"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "#1e88e5", textDecoration: "underline" }}
-        >
-          bachmoney.5mb.app
-        </a>
+        <span style={{ color: "#1e88e5", textDecoration: "underline" }}>
+          https://bachmoney.5mb.app
+        </span>
         <br />
         The Stable Foundation
       </Typography>

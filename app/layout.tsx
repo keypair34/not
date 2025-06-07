@@ -10,14 +10,22 @@ function LayoutWithBottomBar({ children }: { children: React.ReactNode }) {
   const { locked } = useAppLock();
   const [initialized, setInitialized] = React.useState(false);
 
-  // Wait for the lock state to be initialized before showing tabs
   React.useEffect(() => {
     setInitialized(true);
   }, []);
 
   return (
     <>
-      <Container>{children}</Container>
+      <Container
+        sx={{
+          height: "auto",
+          minHeight: "unset",
+          display: "block",
+          flex: "none",
+        }}
+      >
+        {children}
+      </Container>
       {initialized && !locked && <BottomTabBar />}
     </>
   );
@@ -35,6 +43,16 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
         />
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="user-scalable=no, maximum-scale=1, minimum-scale=1"
+        />
+        <style>{`
+          html, body {
+            touch-action: pan-x pan-y;
+            overscroll-behavior: none;
+          }
+        `}</style>
       </head>
       <body>
         <AppRouterCacheProvider>
