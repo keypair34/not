@@ -10,6 +10,8 @@ import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import { store } from "../store/store";
 import { useAppLock } from "../context/app-lock-context";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 type LockedWalletViewProps = {
   showPassword: boolean;
@@ -82,9 +84,9 @@ export default function LockedWalletView({
                       size="small"
                     >
                       {showPassword ? (
-                        <LockIcon color="primary" />
+                        <Visibility color="primary" />
                       ) : (
-                        <LockIcon />
+                        <VisibilityOff />
                       )}
                     </IconButton>
                   </InputAdornment>
