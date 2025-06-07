@@ -1,6 +1,7 @@
 mod constants;
 mod setup;
 mod wallet;
+mod network;
 
 use crate::{
     setup::setup,

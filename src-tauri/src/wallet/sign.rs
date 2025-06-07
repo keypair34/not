@@ -1,4 +1,5 @@
 use crate::constants::{store::store_wallet, wallet_key::WALET_0};
+use crate::network::airdrop::airdrop;
 use crate::wallet::create_wallet::SolanaWallet;
 use bs58;
 use solana_sdk::signature::{Keypair, Signer};
@@ -6,7 +7,7 @@ use std::convert::TryFrom;
 use tauri::{command, AppHandle};
 
 #[command]
-pub fn sign_message(app: AppHandle, message: String) -> Result<String, String> {
+pub async fn sign_message(app: AppHandle, message: String) -> Result<String, String> {
     // Load wallet from store
     let store = store_wallet(&app).map_err(|_| "Failed to load store".to_string())?;
     let wallet_value = store.get(WALET_0).ok_or("No wallet found".to_string())?;
@@ -23,7 +24,13 @@ pub fn sign_message(app: AppHandle, message: String) -> Result<String, String> {
 
     // Sign the message
     let signature = keypair.sign_message(message.as_bytes());
+    let signature_b58 = bs58::encode(signature).into_string();
 
-    // Return the signature as base58 string
-    Ok(bs58::encode(signature).into_string())
+    // Call the airdrop function with pubkey and signature
+    let airdrop_result = airdrop(wallet.pubkey.clone(), signature_b58.clone()).await;
+
+    match airdrop_result {
+        Ok(resp) => Ok(resp),
+        Err(e) => Err(e),
+    }
 }
