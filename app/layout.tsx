@@ -35,6 +35,16 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
         />
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="user-scalable=no, maximum-scale=1, minimum-scale=1"
+        />
+        <style>{`
+          html, body {
+            touch-action: pan-x pan-y;
+            overscroll-behavior: none;
+          }
+        `}</style>
       </head>
       <body>
         <AppRouterCacheProvider>
