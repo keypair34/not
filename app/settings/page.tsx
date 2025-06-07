@@ -5,14 +5,12 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import { useRouter } from "next/navigation";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import { openUrl } from "@tauri-apps/plugin-opener";
 
 export default function SettingsPage() {
-  const router = useRouter();
-
   return (
     <Box
       sx={{
@@ -24,7 +22,15 @@ export default function SettingsPage() {
         py: 4,
       }}
     >
-      <Card sx={{ maxWidth: 400, width: "100%", p: 0, boxShadow: 3, position: "relative" }}>
+      <Card
+        sx={{
+          maxWidth: 400,
+          width: "100%",
+          p: 0,
+          boxShadow: 3,
+          position: "relative",
+        }}
+      >
         <Box sx={{ pt: 4, pb: 2, px: 4 }}>
           <Typography variant="h5" fontWeight="bold" sx={{ mb: 2 }}>
             Settings
@@ -33,15 +39,7 @@ export default function SettingsPage() {
         <Divider />
         <List sx={{ p: 0 }}>
           <ListItem button sx={{ px: 4 }}>
-            <ListItemText primary="Account" />
-          </ListItem>
-          <Divider />
-          <ListItem button sx={{ px: 4 }}>
-            <ListItemText primary="Security" />
-          </ListItem>
-          <Divider />
-          <ListItem button sx={{ px: 4 }}>
-            <ListItemText primary="Notifications" />
+            <ListItemText primary="Open Source" />
           </ListItem>
           <Divider />
           <ListItem button sx={{ px: 4 }}>
@@ -56,17 +54,15 @@ export default function SettingsPage() {
           color: "#888",
           fontStyle: "italic",
           textAlign: "center",
+          wordBreak: "break-all",
+          cursor: "pointer",
         }}
+        onClick={() => openUrl("https://bachmoney.5mb.app/")}
       >
         © {new Date().getFullYear()}{" "}
-        <a
-          href="https://bachmoney.5mb.app/"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "#1e88e5", textDecoration: "underline" }}
-        >
-          bachmoney.5mb.app
-        </a>
+        <span style={{ color: "#1e88e5", textDecoration: "underline" }}>
+          https://bachmoney.5mb.app
+        </span>
         <br />
         The Stable Foundation
       </Typography>
