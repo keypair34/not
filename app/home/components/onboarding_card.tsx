@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { invoke } from "@tauri-apps/api/core";
+import Confetti from "react-confetti";
 
 type OnboardingCardProps = {
   open: boolean;
@@ -18,18 +19,24 @@ type OnboardingCardProps = {
 export default function OnboardingCard({ open, onClose }: OnboardingCardProps) {
   const [modalOpen, setModalOpen] = React.useState(false);
   const [signing, setSigning] = React.useState(false);
-  const [signResult, setSignResult] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState(false);
+  const [showConfetti, setShowConfetti] = React.useState(false);
 
   const handleSign = async () => {
     setSigning(true);
-    setSignResult(null);
     try {
       const now = Date.now();
       const message = `I want my €BACH ${now}`;
-      const signature = await invoke<string>("sign_message", { message });
-      setSignResult(signature);
+      await invoke<string>("sign_message", { message });
+      setModalOpen(false);
+      setShowConfetti(true);
+      setSuccess(true);
+      setTimeout(() => {
+        setShowConfetti(false);
+        onClose();
+      }, 1800);
     } catch (e: any) {
-      setSignResult("Failed to sign message: " + (e?.toString() || "Unknown error"));
+      // Optionally handle error
     }
     setSigning(false);
   };
@@ -38,6 +45,7 @@ export default function OnboardingCard({ open, onClose }: OnboardingCardProps) {
 
   return (
     <>
+      {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
       <Card
         sx={{
           width: "100%",
@@ -80,49 +88,63 @@ export default function OnboardingCard({ open, onClose }: OnboardingCardProps) {
           >
             🎉 Claim Your €BACH Airdrop!
           </Typography>
-          <Button
-            variant="contained"
-            size="large"
-            sx={{
-              bgcolor: "#fff",
-              color: "#1e88e5",
-              fontWeight: "bold",
-              fontSize: "1.1rem",
-              borderRadius: 3,
-              boxShadow: 2,
-              px: 4,
-              py: 1.5,
-              "&:hover": { bgcolor: "#e3f2fd", color: "#1565c0" },
-              transition: "all 0.2s",
-            }}
-            onClick={() => setModalOpen(true)}
-          >
-            Sign Up &amp; Claim
-          </Button>
-          <Typography
-            variant="caption"
-            sx={{
-              display: "block",
-              mt: 2,
-              color: "#b0bec5",
-              cursor: "pointer",
-            }}
-            onClick={() => openUrl("https://bachmoney.5mb.app/")}
-          >
-            Your wallet address will be used for the airdrop.
-            <br />
-            <span style={{ color: "#1e88e5", textDecoration: "underline" }}>
-              bachmoney.5mb.app
-            </span>
-          </Typography>
+          {!success ? (
+            <>
+              <Button
+                variant="contained"
+                size="large"
+                sx={{
+                  bgcolor: "#fff",
+                  color: "#1e88e5",
+                  fontWeight: "bold",
+                  fontSize: "1.1rem",
+                  borderRadius: 3,
+                  boxShadow: 2,
+                  px: 4,
+                  py: 1.5,
+                  "&:hover": { bgcolor: "#e3f2fd", color: "#1565c0" },
+                  transition: "all 0.2s",
+                }}
+                onClick={() => setModalOpen(true)}
+              >
+                Sign Up &amp; Claim
+              </Button>
+              <Typography
+                variant="caption"
+                sx={{
+                  display: "block",
+                  mt: 2,
+                  color: "#b0bec5",
+                  cursor: "pointer",
+                }}
+                onClick={() => openUrl("https://bachmoney.5mb.app/")}
+              >
+                Your wallet address will be used for the airdrop.
+                <br />
+                <span style={{ color: "#1e88e5", textDecoration: "underline" }}>
+                  bachmoney.5mb.app
+                </span>
+              </Typography>
+            </>
+          ) : (
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              sx={{
+                mt: 2,
+                color: "#fff",
+                textShadow: "0 2px 8px #1e88e599",
+                letterSpacing: 1,
+              }}
+            >
+              🎊 Success! You have claimed your airdrop.
+            </Typography>
+          )}
         </Box>
       </Card>
       <Modal
         open={modalOpen}
-        onClose={() => {
-          setModalOpen(false);
-          setSignResult(null);
-        }}
+        onClose={() => setModalOpen(false)}
         aria-labelledby="sign-modal-title"
         aria-describedby="sign-modal-desc"
       >
@@ -156,18 +178,6 @@ export default function OnboardingCard({ open, onClose }: OnboardingCardProps) {
           >
             {signing ? "Signing..." : "Sign"}
           </Button>
-          {signResult && (
-            <Typography
-              variant="body2"
-              sx={{
-                mt: 2,
-                wordBreak: "break-all",
-                color: signResult.startsWith("Failed") ? "error.main" : "success.main",
-              }}
-            >
-              {signResult}
-            </Typography>
-          )}
         </Box>
       </Modal>
     </>
