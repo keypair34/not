@@ -10,14 +10,22 @@ function LayoutWithBottomBar({ children }: { children: React.ReactNode }) {
   const { locked } = useAppLock();
   const [initialized, setInitialized] = React.useState(false);
 
-  // Wait for the lock state to be initialized before showing tabs
   React.useEffect(() => {
     setInitialized(true);
   }, []);
 
   return (
     <>
-      <Container>{children}</Container>
+      <Container
+        sx={{
+          height: "auto",
+          minHeight: "unset",
+          display: "block",
+          flex: "none",
+        }}
+      >
+        {children}
+      </Container>
       {initialized && !locked && <BottomTabBar />}
     </>
   );

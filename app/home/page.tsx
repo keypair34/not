@@ -10,14 +10,14 @@ import IconButton from "@mui/material/IconButton";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ShareIcon from "@mui/icons-material/Share";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
-import Link from "next/link";
 import Button from "@mui/material/Button";
 import { openUrl } from "@tauri-apps/plugin-opener";
+import Modal from "@mui/material/Modal";
+import { useRouter } from "next/navigation";
 
-const feed = [
+export const feed = [
   {
     id: 1,
     user: {
@@ -46,24 +46,12 @@ const feed = [
       "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=480&q=80", // coffee
     amount: "-250 USDC",
   },
-  {
-    id: 3,
-    user: {
-      name: "Alex Morgan",
-      avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=alexmorgan",
-      wallet: "7k3h...2x9v",
-    },
-    time: "3 days ago",
-    action: "Received 500 USDC",
-    description: "Gift from @mom.",
-    image:
-      "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=480&q=80", // gift
-    amount: "+500 USDC",
-  },
 ];
 
 export default function HomeFeedPage() {
   const [showOnboarding, setShowOnboarding] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <Box
@@ -162,7 +150,7 @@ export default function HomeFeedPage() {
                 "&:hover": { bgcolor: "#e3f2fd", color: "#1565c0" },
                 transition: "all 0.2s",
               }}
-              onClick={() => openUrl("https://api.musik88.com/login")}
+              onClick={() => setModalOpen(true)}
             >
               Sign Up &amp; Claim
             </Button>
@@ -185,6 +173,44 @@ export default function HomeFeedPage() {
           </Box>
         </Card>
       )}
+      {/* Modal for sign with keys info */}
+      <Modal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        aria-labelledby="sign-modal-title"
+        aria-describedby="sign-modal-desc"
+      >
+        <Box
+          sx={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "#fff",
+            borderRadius: 3,
+            boxShadow: 24,
+            p: 4,
+            minWidth: 320,
+            maxWidth: "90vw",
+            textAlign: "center",
+          }}
+        >
+          <Typography id="sign-modal-title" variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
+            Signature Required
+          </Typography>
+          <Typography id="sign-modal-desc" variant="body1" sx={{ mb: 2 }}>
+            To claim the airdrop, you will need to sign a message with your wallet keys. This proves ownership of your wallet and is required for the airdrop process.
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setModalOpen(false)}
+            sx={{ mt: 2, px: 4, borderRadius: 2 }}
+          >
+            OK
+          </Button>
+        </Box>
+      </Modal>
       <Box sx={{ width: "100%", maxWidth: 480 }}>
         {feed.map((item) => (
           <Card
@@ -195,18 +221,17 @@ export default function HomeFeedPage() {
               boxShadow: 2,
               background: "#fff",
               overflow: "hidden",
+              cursor: "pointer",
+              transition: "box-shadow 0.2s",
+              "&:hover": { boxShadow: 6, bgcolor: "#f3f4f6" },
             }}
+            onClick={() => router.push(`/activity/${item.id}`)}
           >
             <CardHeader
               avatar={
                 <Avatar src={item.user.avatar} alt={item.user.name}>
                   {item.user.name[0]}
                 </Avatar>
-              }
-              action={
-                <IconButton>
-                  <MoreVertIcon />
-                </IconButton>
               }
               title={
                 <Box>

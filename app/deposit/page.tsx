@@ -37,7 +37,8 @@ export default function DepositPage() {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: "unset",
+        height: "auto",
         bgcolor: "#f5f6fa",
         display: "flex",
         flexDirection: "column",
