@@ -9,6 +9,7 @@ import ActivityComponent from "./components/activity_component";
 import { invoke } from "@tauri-apps/api/core";
 import { SolanaWallet, WALET_0 } from "../../lib/crate/generated";
 import { storeWallet } from "../../lib/store/store";
+import { debug as tauriDebug } from "@tauri-apps/plugin-log";
 
 enum OnboardingState {
   Loading,
@@ -21,24 +22,22 @@ export default function HomeFeedPage() {
   const [onboardingState, setOnboardingState] = useState<OnboardingState>(OnboardingState.Loading);
 
   React.useEffect(() => {
-    let cancelled = false;
     async function checkOnboarding() {
       try {
         const wallet = await storeWallet().get<SolanaWallet>(WALET_0);
         if (!wallet?.pubkey) {
-          if (!cancelled) setOnboardingState(OnboardingState.Hide);
+          setOnboardingState(OnboardingState.Hide);
           return;
         }
         const exists = await invoke<boolean>("check_pubkey", { pubkey: wallet.pubkey });
-        if (!cancelled) setOnboardingState(exists ? OnboardingState.Hide : OnboardingState.Show);
-      } catch {
-        if (!cancelled) setOnboardingState(OnboardingState.Error);
+        tauriDebug(`check_pubkey exists: ${exists}, pubkey: ${wallet.pubkey}`);
+        setOnboardingState(exists ? OnboardingState.Hide : OnboardingState.Show);
+      } catch (err) {
+        tauriDebug(`check_pubkey error: ${err}`);
+        setOnboardingState(OnboardingState.Error);
       }
     }
     checkOnboarding();
-    return () => {
-      cancelled = true;
-    };
   }, []);
 
   return (

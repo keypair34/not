@@ -4,7 +4,7 @@ use serde::Deserialize;
 pub struct CheckPubkeyResponse {
     pub exists: bool,
     // Add more fields if needed
-    pub user_id: i32
+    pub user_id: Option<i32>
 }
 
 pub async fn check_pubkey(pubkey: &str) -> Result<CheckPubkeyResponse, String> {
