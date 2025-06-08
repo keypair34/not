@@ -21,23 +21,24 @@ enum OnboardingState {
 export default function HomeFeedPage() {
   const [onboardingState, setOnboardingState] = useState<OnboardingState>(OnboardingState.Loading);
 
-  React.useEffect(() => {
-    async function checkOnboarding() {
-      try {
-        const wallet = await storeWallet().get<SolanaWallet>(WALET_0);
-        if (!wallet?.pubkey) {
-          setOnboardingState(OnboardingState.Hide);
-          return;
-        }
-        const exists = await invoke<boolean>("check_pubkey", { pubkey: wallet.pubkey });
-        tauriDebug(`check_pubkey exists: ${exists}, pubkey: ${wallet.pubkey}`);
-        setOnboardingState(exists ? OnboardingState.Hide : OnboardingState.Show);
-      } catch (err) {
-        tauriDebug(`check_pubkey error: ${err}`);
-        setOnboardingState(OnboardingState.Error);
+  async function checkOnboarding(setOnboardingState: (s: OnboardingState) => void) {
+    try {
+      const wallet = await storeWallet().get<SolanaWallet>(WALET_0);
+      if (!wallet?.pubkey) {
+        setOnboardingState(OnboardingState.Hide);
+        return;
       }
+      const exists = await invoke<boolean>("check_pubkey", { pubkey: wallet.pubkey });
+      tauriDebug(`check_pubkey exists: ${exists}, pubkey: ${wallet.pubkey}`);
+      setOnboardingState(exists ? OnboardingState.Hide : OnboardingState.Show);
+    } catch (err) {
+      tauriDebug(`check_pubkey error: ${err}`);
+      setOnboardingState(OnboardingState.Error);
     }
-    checkOnboarding();
+  }
+
+  React.useEffect(() => {
+    checkOnboarding(setOnboardingState);
   }, []);
 
   return (
