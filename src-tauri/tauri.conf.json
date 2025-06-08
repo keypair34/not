@@ -4,9 +4,9 @@
   "version": "0.0.1",
   "identifier": "xyz.notwallet.NotWallet",
   "build": {
-    "beforeDevCommand": "pnpm dev --turbopack",
+    "beforeDevCommand": "pnpm dev --turbopack -p 61234",
     "beforeBuildCommand": "pnpm build",
-    "devUrl": "http://localhost:3000",
+    "devUrl": "http://localhost:61234",
     "frontendDist": "../out"
   },
   "app": {

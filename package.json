@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack -p 61234",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -26,6 +26,7 @@
     "next": "^15.3.3",
     "qrcode.react": "^4.2.0",
     "react": "^19.1.0",
+    "react-confetti": "^6.4.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
