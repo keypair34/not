@@ -1,24 +1,14 @@
 "use client";
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
-import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import ShareIcon from "@mui/icons-material/Share";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import OnboardingCard from "./components/onboarding_card";
 import { feed } from "./components/feed";
 import ActivityComponent from "./components/activity_component";
 
 export default function HomeFeedPage() {
   const [showOnboarding, setShowOnboarding] = useState(true);
-  const router = useRouter();
 
   return (
     <Box
