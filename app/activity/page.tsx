@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -10,7 +11,7 @@ import Button from "@mui/material/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { feed } from "../home/components/feed";
 
-export default function ActivityDetailPage() {
+function ActivityDetailContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const id = Number(searchParams.get("id"));
@@ -87,5 +88,13 @@ export default function ActivityDetailPage() {
         </Box>
       </Card>
     </Box>
+  );
+}
+
+export default function ActivityDetailPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ActivityDetailContent />
+    </Suspense>
   );
 }

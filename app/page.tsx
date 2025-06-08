@@ -19,7 +19,7 @@ enum State {
 function MainPageContent() {
   const [wallet, setWallet] = useState<SolanaWallet | undefined>();
   const [state, setState] = useState(State.Loading);
-  const { lock, locked, unlock } = useAppLock();
+  const { lock, locked } = useAppLock();
   const [showPassword, setShowPassword] = useState(false);
 
   const checkWallet = async () => {
