@@ -261,9 +261,27 @@ export default function OnboardingCard({ open, onClose }: OnboardingCardProps) {
                 bgcolor: "#f3f4f6",
                 borderRadius: 2,
                 input: { color: "#212529" },
+                "& .MuiOutlinedInput-root": {
+                  bgcolor: "#f3f4f6",
+                  borderRadius: 2,
+                  "& fieldset": {
+                    borderColor: "#b0bec5",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#90caf9",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#1e88e5",
+                  },
+                },
+                "& input::placeholder": {
+                  color: "#b0bec5",
+                  opacity: 1,
+                  fontStyle: "italic",
+                },
               }}
               inputProps={{
-                style: { fontFamily: "monospace", fontSize: "1.1rem" },
+                style: { fontFamily: "monospace", fontSize: "1.1rem", color: "#212529" },
                 maxLength: 32,
               }}
               disabled={usernameSaved}
@@ -282,6 +300,9 @@ export default function OnboardingCard({ open, onClose }: OnboardingCardProps) {
                 py: 1.5,
                 "&:hover": { bgcolor: "#e3f2fd", color: "#1565c0" },
                 transition: "all 0.2s",
+                opacity: !username || usernameSaved ? 0.5 : 1,
+                pointerEvents: !username || usernameSaved ? "none" : "auto",
+                mt: 1,
               }}
               onClick={handleSaveUsername}
               disabled={!username || usernameSaved}
