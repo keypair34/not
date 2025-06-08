@@ -27,7 +27,7 @@ export default function CreatePasswordPage() {
   const [loading, setLoading] = React.useState(false);
   const [state, setState] = React.useState(State.Loading);
   const [showDialog, setShowDialog] = React.useState(false);
-  const [storedPassword, setStoredPassword] = React.useState<string | null>(null);
+  const [, setStoredPassword] = React.useState<string | null>(null);
   const router = useRouter();
 
   const handleContinue = async () => {

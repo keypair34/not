@@ -9,7 +9,7 @@ import CreateOrImportWalletView from "../lib/components/create-or-import-wallet-
 import { storeWallet } from "../lib/store/store";
 import { SolanaWallet, WALET_0 } from "../lib/crate/generated";
 import { useState, useEffect } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 enum State {
   Loading,
@@ -19,8 +19,7 @@ enum State {
 function MainPageContent() {
   const [wallet, setWallet] = useState<SolanaWallet | undefined>();
   const [state, setState] = useState(State.Loading);
-  const { lock, locked, unlock } = useAppLock();
-  const [passwordInput, setPasswordInput] = useState("");
+  const { lock, locked } = useAppLock();
   const [showPassword, setShowPassword] = useState(false);
 
   const checkWallet = async () => {
@@ -72,11 +71,8 @@ function MainPageContent() {
   if (state == State.Loaded && wallet && locked) {
     return (
       <LockedWalletView
-        passwordInput={passwordInput}
-        setPasswordInput={setPasswordInput}
         showPassword={showPassword}
         setShowPassword={setShowPassword}
-        unlock={unlock}
       />
     );
   }

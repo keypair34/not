@@ -8,27 +8,57 @@ import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
+import { store } from "../store/store";
+import { useAppLock } from "../context/app-lock-context";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 type LockedWalletViewProps = {
-  passwordInput: string;
-  setPasswordInput: (value: string) => void;
   showPassword: boolean;
   setShowPassword: (value: boolean) => void;
-  unlock: () => void;
 };
 
 export default function LockedWalletView({
-  passwordInput,
-  setPasswordInput,
   showPassword,
   setShowPassword,
-  unlock,
 }: LockedWalletViewProps) {
+  const [passwordInput, setPasswordInput] = React.useState<string>("");
+  const [error, setError] = React.useState<string | null>(null);
+  const { unlock } = useAppLock();
+
+  const handleUnlock = async () => {
+    setError(null);
+    // Optimistically unlock immediately, then check password
+    unlock();
+    const stored = await store().get<string>("password");
+    if (stored && stored === passwordInput) {
+      setPasswordInput("");
+      return;
+    }
+    setError("Incorrect password. Please try again.");
+  };
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: '#f5f6fa' }}>
-      <Card sx={{ maxWidth: 400, width: '100%', boxShadow: 3 }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        background: "#f5f6fa",
+      }}
+    >
+      <Card sx={{ maxWidth: 400, width: "100%", boxShadow: 3 }}>
         <CardContent>
-          <Box sx={{ mt: 3, mb: 2, display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Box
+            sx={{
+              mt: 3,
+              mb: 2,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             <LockIcon sx={{ fontSize: 40, color: "#1e88e5", mb: 1 }} />
             <Typography variant="subtitle1" align="center" sx={{ mb: 1 }}>
               Wallet Locked
@@ -37,8 +67,13 @@ export default function LockedWalletView({
               label="Enter Password"
               type={showPassword ? "text" : "password"}
               value={passwordInput}
-              onChange={e => setPasswordInput(e.target.value)}
+              onChange={(e) => {
+                setPasswordInput(e.target.value);
+                setError(null);
+              }}
               sx={{ mb: 1, bgcolor: "#f3f4f6", borderRadius: 2, width: "100%" }}
+              error={!!error}
+              helperText={error}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -48,7 +83,11 @@ export default function LockedWalletView({
                       edge="end"
                       size="small"
                     >
-                      {showPassword ? <LockIcon color="primary" /> : <LockIcon />}
+                      {showPassword ? (
+                        <Visibility color="primary" />
+                      ) : (
+                        <VisibilityOff />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -60,11 +99,7 @@ export default function LockedWalletView({
               fullWidth
               sx={{ mt: 1 }}
               disabled={!passwordInput}
-              onClick={() => {
-                // TODO: Validate passwordInput with stronghold
-                unlock();
-                setPasswordInput("");
-              }}
+              onClick={handleUnlock}
             >
               Unlock Wallet
             </Button>

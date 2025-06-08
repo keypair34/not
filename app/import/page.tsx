@@ -11,12 +11,14 @@ import Link from "next/link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { invoke } from "@tauri-apps/api/core";
 import { debug } from '@tauri-apps/plugin-log';
-import BottomTabBar from "../../lib/components/bottom-tab-bar";
+import { useRouter } from "next/navigation";
+import { SolanaWallet } from "../../lib/crate/generated";
 
 export default function ImportWalletPage() {
   const [seed, setSeed] = React.useState("");
   const [error, setError] = React.useState("");
   const [pubkey, setPubkey] = React.useState<string | null>(null);
+  const router = useRouter();
 
   const handleImport = async () => {
     if (seed.trim().split(/\s+/).length < 12) {
@@ -27,13 +29,14 @@ export default function ImportWalletPage() {
     setError("");
     try {
       debug(`Invoking import_solana_wallet with seed: ${seed}`);
-      const result = await invoke<{ mnemonic: string; pubkey: string }>(
+      const result = await invoke<SolanaWallet>(
         "import_solana_wallet",
         { mnemonicPhrase: seed }
       );
       debug(`import_solana_wallet result: ${JSON.stringify(result)}`);
       setPubkey(result.pubkey);
-      // Optionally show a success message or redirect
+      // Redirect to home feed after successful import
+      router.replace("/home");
     } catch (e: any) {
       debug(`import_solana_wallet error: ${e?.toString()}`);
       setError(e?.toString() || "Failed to import wallet.");
