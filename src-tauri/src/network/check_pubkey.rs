@@ -8,7 +8,7 @@ pub struct CheckPubkeyResponse {
 }
 
 pub async fn check_pubkey(pubkey: &str) -> Result<CheckPubkeyResponse, String> {
-    let url = format!("https://localhost:3001/api/v1/onboarding/check-pubkey?pubkey={}", pubkey);
+    let url = format!("https://api.musik88.com/api/v1/onboarding/check-pubkey?pubkey={}", pubkey);
     let resp = reqwest::get(&url)
         .await
         .map_err(|e| format!("Network error: {:?}", e))?;
