@@ -10,6 +10,7 @@ import Modal from "@mui/material/Modal";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { invoke } from "@tauri-apps/api/core";
 import Confetti from "react-confetti";
+import TextField from "@mui/material/TextField";
 
 type OnboardingCardProps = {
   open: boolean;
@@ -21,9 +22,14 @@ export default function OnboardingCard({ open, onClose }: OnboardingCardProps) {
   const [signing, setSigning] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const [showConfetti, setShowConfetti] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [showUsername, setShowUsername] = React.useState(false);
+  const [username, setUsername] = React.useState("");
+  const [usernameSaved, setUsernameSaved] = React.useState(false);
 
   const handleSign = async () => {
     setSigning(true);
+    setError(null);
     try {
       const now = Date.now();
       const message = `I want my €BACH ${now}`;
@@ -33,12 +39,21 @@ export default function OnboardingCard({ open, onClose }: OnboardingCardProps) {
       setSuccess(true);
       setTimeout(() => {
         setShowConfetti(false);
-        onClose();
+        setShowUsername(true);
       }, 1800);
     } catch (e: any) {
-      // Optionally handle error
+      setError(e?.toString() || "Failed to sign and claim airdrop.");
     }
     setSigning(false);
+  };
+
+  const handleSaveUsername = () => {
+    // You can add logic to persist username here
+    setUsernameSaved(true);
+    setTimeout(() => {
+      setShowUsername(false);
+      onClose();
+    }, 1200);
   };
 
   if (!open) return null;
@@ -46,102 +61,248 @@ export default function OnboardingCard({ open, onClose }: OnboardingCardProps) {
   return (
     <>
       {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
-      <Card
-        sx={{
-          width: "100%",
-          maxWidth: 480,
-          mb: 3,
-          borderRadius: 4,
-          boxShadow: 6,
-          background: "linear-gradient(135deg, #212529 60%, #1e88e5 100%)",
-          color: "#fff",
-          position: "relative",
-          overflow: "visible",
-          border: "2px solid #1e88e5",
-        }}
-      >
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
+      {!showUsername ? (
+        <Card
           sx={{
-            position: "absolute",
-            top: 10,
-            right: 10,
-            color: "#1e88e5",
-            bgcolor: "#fff",
-            "&:hover": { bgcolor: "#e3f2fd" },
-            zIndex: 2,
+            width: "100%",
+            maxWidth: 480,
+            mb: 3,
+            borderRadius: 4,
+            boxShadow: 6,
+            background: "linear-gradient(135deg, #212529 60%, #1e88e5 100%)",
+            color: "#fff",
+            position: "relative",
+            overflow: "visible",
+            border: "2px solid #1e88e5",
           }}
         >
-          <CloseIcon />
-        </IconButton>
-        <Box sx={{ p: 3, textAlign: "center" }}>
-          <Typography
-            variant="h5"
-            fontWeight="bold"
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
             sx={{
-              mb: 1,
-              color: "#fff",
-              textShadow: "0 2px 8px #1e88e599",
-              letterSpacing: 1,
+              position: "absolute",
+              top: 10,
+              right: 10,
+              color: "#1e88e5",
+              bgcolor: "#fff",
+              "&:hover": { bgcolor: "#e3f2fd" },
+              zIndex: 2,
             }}
           >
-            🎉 Claim Your €BACH Airdrop!
-          </Typography>
-          {!success ? (
-            <>
-              <Button
-                variant="contained"
-                size="large"
-                sx={{
-                  bgcolor: "#fff",
-                  color: "#1e88e5",
-                  fontWeight: "bold",
-                  fontSize: "1.1rem",
-                  borderRadius: 3,
-                  boxShadow: 2,
-                  px: 4,
-                  py: 1.5,
-                  "&:hover": { bgcolor: "#e3f2fd", color: "#1565c0" },
-                  transition: "all 0.2s",
-                }}
-                onClick={() => setModalOpen(true)}
-              >
-                Sign Up &amp; Claim
-              </Button>
-              <Typography
-                variant="caption"
-                sx={{
-                  display: "block",
-                  mt: 2,
-                  color: "#b0bec5",
-                  cursor: "pointer",
-                }}
-                onClick={() => openUrl("https://bachmoney.5mb.app/")}
-              >
-                Your wallet address will be used for the airdrop.
-                <br />
-                <span style={{ color: "#1e88e5", textDecoration: "underline" }}>
-                  bachmoney.5mb.app
-                </span>
-              </Typography>
-            </>
-          ) : (
+            <CloseIcon />
+          </IconButton>
+          <Box sx={{ p: 3, textAlign: "center" }}>
             <Typography
-              variant="h6"
+              variant="h5"
               fontWeight="bold"
               sx={{
-                mt: 2,
+                mb: 1,
                 color: "#fff",
                 textShadow: "0 2px 8px #1e88e599",
                 letterSpacing: 1,
               }}
             >
-              🎊 Success! You have claimed your airdrop.
+              🎉 Claim Your €BACH Airdrop!
             </Typography>
-          )}
-        </Box>
-      </Card>
+            {error ? (
+              <Box sx={{ mt: 2 }}>
+                <Typography
+                  variant="body1"
+                  color="error"
+                  sx={{
+                    mb: 2,
+                    fontWeight: "bold",
+                    background: "#fff2f2",
+                    color: "#e53935",
+                    borderRadius: 2,
+                    p: 2,
+                    fontSize: "1.05rem",
+                    boxShadow: 1,
+                  }}
+                >
+                  {error}
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    setError(null);
+                    setModalOpen(true);
+                  }}
+                  sx={{
+                    mt: 1,
+                    px: 4,
+                    borderRadius: 2,
+                    bgcolor: "#fff",
+                    color: "#1e88e5",
+                    fontWeight: "bold",
+                    "&:hover": { bgcolor: "#e3f2fd", color: "#1565c0" },
+                  }}
+                >
+                  Try Again
+                </Button>
+              </Box>
+            ) : !success ? (
+              <>
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    bgcolor: "#fff",
+                    color: "#1e88e5",
+                    fontWeight: "bold",
+                    fontSize: "1.1rem",
+                    borderRadius: 3,
+                    boxShadow: 2,
+                    px: 4,
+                    py: 1.5,
+                    "&:hover": { bgcolor: "#e3f2fd", color: "#1565c0" },
+                    transition: "all 0.2s",
+                  }}
+                  onClick={() => setModalOpen(true)}
+                >
+                  Sign Up &amp; Claim
+                </Button>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    display: "block",
+                    mt: 2,
+                    color: "#b0bec5",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => openUrl("https://bachmoney.5mb.app/")}
+                >
+                  Your wallet address will be used for the airdrop.
+                  <br />
+                  <span style={{ color: "#1e88e5", textDecoration: "underline" }}>
+                    bachmoney.5mb.app
+                  </span>
+                </Typography>
+              </>
+            ) : (
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                sx={{
+                  mt: 2,
+                  color: "#fff",
+                  textShadow: "0 2px 8px #1e88e599",
+                  letterSpacing: 1,
+                }}
+              >
+                🎊 Success! You have claimed your airdrop.
+              </Typography>
+            )}
+          </Box>
+        </Card>
+      ) : (
+        <Card
+          sx={{
+            width: "100%",
+            maxWidth: 480,
+            mb: 3,
+            borderRadius: 4,
+            boxShadow: 6,
+            background: "linear-gradient(135deg, #212529 60%, #1e88e5 100%)",
+            color: "#fff",
+            position: "relative",
+            overflow: "visible",
+            border: "2px solid #1e88e5",
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            sx={{
+              position: "absolute",
+              top: 10,
+              right: 10,
+              color: "#1e88e5",
+              bgcolor: "#fff",
+              "&:hover": { bgcolor: "#e3f2fd" },
+              zIndex: 2,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <Box sx={{ p: 3, textAlign: "center" }}>
+            <Typography
+              variant="h5"
+              fontWeight="bold"
+              sx={{
+                mb: 1,
+                color: "#fff",
+                textShadow: "0 2px 8px #1e88e599",
+                letterSpacing: 1,
+              }}
+            >
+              👤 Set Your Username
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              sx={{
+                mb: 2,
+                color: "#b0bec5",
+                fontWeight: 500,
+                fontSize: "1.1rem",
+              }}
+            >
+              Choose a username to personalize your wallet.
+            </Typography>
+            <TextField
+              fullWidth
+              variant="outlined"
+              placeholder="Enter your username"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              sx={{
+                mb: 2,
+                bgcolor: "#f3f4f6",
+                borderRadius: 2,
+                input: { color: "#212529" },
+              }}
+              inputProps={{
+                style: { fontFamily: "monospace", fontSize: "1.1rem" },
+                maxLength: 32,
+              }}
+              disabled={usernameSaved}
+            />
+            <Button
+              variant="contained"
+              size="large"
+              sx={{
+                bgcolor: "#fff",
+                color: "#1e88e5",
+                fontWeight: "bold",
+                fontSize: "1.1rem",
+                borderRadius: 3,
+                boxShadow: 2,
+                px: 4,
+                py: 1.5,
+                "&:hover": { bgcolor: "#e3f2fd", color: "#1565c0" },
+                transition: "all 0.2s",
+              }}
+              onClick={handleSaveUsername}
+              disabled={!username || usernameSaved}
+            >
+              {usernameSaved ? "Saved!" : "Save Username"}
+            </Button>
+            {usernameSaved && (
+              <Typography
+                variant="body2"
+                sx={{
+                  mt: 2,
+                  color: "#b0bec5",
+                  fontWeight: 500,
+                }}
+              >
+                Username saved successfully!
+              </Typography>
+            )}
+          </Box>
+        </Card>
+      )}
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
