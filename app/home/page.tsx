@@ -6,9 +6,40 @@ import { useState } from "react";
 import OnboardingCard from "./components/onboarding_card";
 import { feed } from "./components/feed";
 import ActivityComponent from "./components/activity_component";
+import { invoke } from "@tauri-apps/api/core";
+import { SolanaWallet, WALET_0 } from "../../lib/crate/generated";
+import { storeWallet } from "../../lib/store/store";
+import { debug as tauriDebug } from "@tauri-apps/plugin-log";
+
+enum OnboardingState {
+  Loading,
+  Show,
+  Hide,
+  Error,
+}
 
 export default function HomeFeedPage() {
-  const [showOnboarding, setShowOnboarding] = useState(true);
+  const [onboardingState, setOnboardingState] = useState<OnboardingState>(OnboardingState.Loading);
+
+  async function checkOnboarding(setOnboardingState: (s: OnboardingState) => void) {
+    try {
+      const wallet = await storeWallet().get<SolanaWallet>(WALET_0);
+      if (!wallet?.pubkey) {
+        setOnboardingState(OnboardingState.Hide);
+        return;
+      }
+      const exists = await invoke<boolean>("check_pubkey", { pubkey: wallet.pubkey });
+      tauriDebug(`check_pubkey exists: ${exists}, pubkey: ${wallet.pubkey}`);
+      setOnboardingState(exists ? OnboardingState.Hide : OnboardingState.Show);
+    } catch (err) {
+      tauriDebug(`check_pubkey error: ${err}`);
+      setOnboardingState(OnboardingState.Error);
+    }
+  }
+
+  React.useEffect(() => {
+    checkOnboarding(setOnboardingState);
+  }, []);
 
   return (
     <Box
@@ -31,7 +62,24 @@ export default function HomeFeedPage() {
           Activity Feed
         </Typography>
       </Box>
-      <OnboardingCard open={showOnboarding} onClose={() => setShowOnboarding(false)} />
+      {onboardingState === OnboardingState.Loading && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "30vh",
+            background: "transparent",
+          }}
+        >
+          <span style={{ color: "#1e88e5", fontWeight: 500, fontSize: 18 }}>
+            Checking onboarding...
+          </span>
+        </div>
+      )}
+      {onboardingState === OnboardingState.Show && (
+        <OnboardingCard open={true} onClose={() => setOnboardingState(OnboardingState.Hide)} />
+      )}
       <Box sx={{ width: "100%", maxWidth: 480 }}>
         {feed.map((item) => (
           <ActivityComponent key={item.id} item={item} />

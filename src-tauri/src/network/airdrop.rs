@@ -14,7 +14,7 @@ pub async fn airdrop(pubkey: String, signature: String) -> Result<String, String
     };
 
     let resp = client
-        .post("https://localhost:3001/api/v1/airdrop")
+        .post("https://api.musik88.com/api/v1/airdrop")
         .json(&req_body)
         .send()
         .await
