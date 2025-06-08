@@ -4,6 +4,7 @@ use serde::Deserialize;
 pub struct CheckPubkeyResponse {
     pub exists: bool,
     // Add more fields if needed
+    pub user_id: i32
 }
 
 pub async fn check_pubkey(pubkey: &str) -> Result<CheckPubkeyResponse, String> {
@@ -14,6 +15,8 @@ pub async fn check_pubkey(pubkey: &str) -> Result<CheckPubkeyResponse, String> {
 
     let status = resp.status();
     let text = resp.text().await.map_err(|e| format!("Read error: {:?}", e))?;
+
+    println!("check_pubkey raw response: {}", text);
 
     if status.is_success() {
         serde_json::from_str::<CheckPubkeyResponse>(&text)
