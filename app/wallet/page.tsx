@@ -270,22 +270,7 @@ export default function WalletHome() {
             >
               Deposit
             </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              startIcon={<SendIcon />}
-              sx={{
-                bgcolor: "#1e88e5",
-                color: "#fff",
-                fontWeight: "bold",
-                borderRadius: 2,
-                boxShadow: 2,
-                "&:hover": { bgcolor: "#1565c0" },
-              }}
-              fullWidth
-            >
-              Send
-            </Button>
+            {/* Send button removed */}
           </Stack>
         </Card>
         <Card
