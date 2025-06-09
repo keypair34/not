@@ -17,32 +17,37 @@ pub struct SolanaWallet {
     pub privkey: String,
 }
 
-#[command]
-pub fn create_solana_wallet(app: AppHandle) -> Result<SolanaWallet, String> {
-    debug!("Starting Solana wallet creation");
+fn generate_mnemonic_and_keypair(account: u32) -> Result<(String, solana_sdk::signer::keypair::Keypair), String> {
     // Generate a new 12-word mnemonic
     let mnemonic = Mnemonic::generate_in(Language::English, 12).map_err(|e| {
-        error!("Mnemonic generation failed: {:?}", e);
         format!("Mnemonic generation failed: {:?}", e)
     })?;
     let mnemonic_phrase = mnemonic.to_string();
-    debug!("Mnemonic generated: {}", mnemonic_phrase);
 
     // Derive seed from mnemonic (BIP39 spec: PBKDF2 with mnemonic and empty passphrase)
     let seed = bip39::Mnemonic::to_seed(&mnemonic, "");
-    debug!("Seed derived from mnemonic");
 
-    // Use Solana's default derivation path for browser wallets: m/44'/501'/0'/0'
-    let derivation_path = DerivationPath::new_bip44(Some(501), Some(0));
-    debug!("Using derivation path: m/44'/501'/0'/0'");
+    // Use Solana's default derivation path for browser wallets: m/44'/501'/account'/0'
+    let derivation_path = DerivationPath::new_bip44(Some(account), Some(0));
 
     // Derive keypair
-    let keypair =
-        keypair_from_seed_and_derivation_path(&seed, Some(derivation_path)).map_err(|e| {
-            error!("Keypair derivation failed: {:?}", e);
-            format!("Keypair derivation failed: {:?}", e)
-        })?;
-    debug!("Keypair derived");
+    let keypair = keypair_from_seed_and_derivation_path(&seed, Some(derivation_path))
+        .map_err(|e| format!("Keypair derivation failed: {:?}", e))?;
+
+    Ok((mnemonic_phrase, keypair))
+}
+
+#[command]
+pub fn create_solana_wallet(app: AppHandle, account: u32) -> Result<SolanaWallet, String> {
+    debug!("Starting Solana wallet creation");
+    let (mnemonic_phrase, keypair) = match generate_mnemonic_and_keypair(account) {
+        Ok(res) => res,
+        Err(e) => {
+            error!("{}", e);
+            return Err(e);
+        }
+    };
+    debug!("Mnemonic generated: {}", mnemonic_phrase);
 
     let pubkey = keypair.pubkey().to_string();
     let privkey = bs58::encode(keypair.to_bytes()).into_string();

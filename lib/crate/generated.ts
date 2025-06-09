@@ -3,7 +3,8 @@
 /** Generate: tsync -i src-tauri/src/constants/store.rs -o lib/store/generated.ts */
 export const STORE = ".notwallet.dat";
 
-export const STORE_WALLET = "wallet.json";
+export const STORE_WALLET = "keypairs.dat";
+export const STORE_SEED_PHRASES = "seed.dat";
 
 export const WALET_0 = "wallet_0";
 

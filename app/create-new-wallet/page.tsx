@@ -15,18 +15,37 @@ import FormControl from "@mui/material/FormControl";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import { store } from "../../lib/store/store";
+import { useEffect } from "react";
+
+// Fetch all seed phrases from the tauri store
+async function fetchSeedsFromStore() {
+  // This assumes you store them under a key like "seedPhrases" as an array of objects
+  // Adjust the key and structure as needed for your app
+  return await store().get<{ id: string; label: string }[]>("seedPhrases");
+}
 
 export default function CreateNewWalletPage() {
   const router = useRouter();
 
-  // Example list of existing seed phrases (replace with real data)
-  const existingSeeds = [
-    { id: "seed1", label: "Seed Phrase 1 (created Jan 2024)" },
-    { id: "seed2", label: "Seed Phrase 2 (imported Mar 2024)" },
-  ];
   // Add a special id for "create new"
   const CREATE_NEW_ID = "__create_new__";
-  const [selectedSeed, setSelectedSeed] = React.useState<string>(existingSeeds[0]?.id ?? "");
+  const [existingSeeds, setExistingSeeds] = React.useState<{ id: string; label: string }[]>([]);
+  const [selectedSeed, setSelectedSeed] = React.useState<string>("");
+
+  useEffect(() => {
+    async function loadSeeds() {
+      const seeds = await fetchSeedsFromStore();
+      if (Array.isArray(seeds) && seeds.length > 0) {
+        setExistingSeeds(seeds);
+        setSelectedSeed(seeds[0].id);
+      } else {
+        setExistingSeeds([]);
+        setSelectedSeed(CREATE_NEW_ID);
+      }
+    }
+    loadSeeds();
+  }, []);
 
   return (
     <Box
