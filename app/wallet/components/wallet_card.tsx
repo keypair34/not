@@ -10,6 +10,7 @@ import { SolanaWallet } from "../../../lib/crate/generated";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
+import { useRouter } from "next/navigation";
 
 interface WalletCardProps {
   userName: string;
@@ -26,10 +27,11 @@ export default function WalletCard({
   onLock,
   onDeposit,
 }: WalletCardProps) {
+  const router = useRouter();
+
   // Handler for creating new keypair/mnemonic
   const handleCreateNew = () => {
-    // TODO: Implement actual logic for creating new keypair/mnemonic
-    alert("Create new keypair or mnemonic (not implemented)");
+    router.push("/create-new-wallet");
   };
 
   return (
