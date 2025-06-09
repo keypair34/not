@@ -5,10 +5,6 @@ import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import ShareIcon from "@mui/icons-material/Share";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/navigation";
 
@@ -109,7 +105,7 @@ export default function ActivityComponent({ item }: { item: ActivityItem }) {
         >
           {item.amount}
         </Typography>
-        <Box sx={{ display: "flex", gap: 2 }}>
+        {/* <Box sx={{ display: "flex", gap: 2 }}>
           <IconButton>
             <FavoriteBorderIcon />
           </IconButton>
@@ -119,7 +115,7 @@ export default function ActivityComponent({ item }: { item: ActivityItem }) {
           <IconButton>
             <ShareIcon />
           </IconButton>
-        </Box>
+        </Box> */}
       </CardContent>
     </Card>
   );
