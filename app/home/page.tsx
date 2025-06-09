@@ -10,6 +10,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { SolanaWallet, WALET_0 } from "../../lib/crate/generated";
 import { storeWallet } from "../../lib/store/store";
 import { debug as tauriDebug } from "@tauri-apps/plugin-log";
+import CircularProgress from "@mui/material/CircularProgress";
 
 enum OnboardingState {
   Loading,
@@ -72,9 +73,7 @@ export default function HomeFeedPage() {
             background: "transparent",
           }}
         >
-          <span style={{ color: "#1e88e5", fontWeight: 500, fontSize: 18 }}>
-            Checking onboarding...
-          </span>
+          <CircularProgress color="primary" size={48} />
         </div>
       )}
       {onboardingState === OnboardingState.Show && (
