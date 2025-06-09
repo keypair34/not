@@ -17,6 +17,7 @@ enum State {
 }
 
 // Helper to group stablecoins by denomination
+// (kept here for ActivityCard to receive as prop)
 function groupStablecoinsByDenomination(activities: { coin: string; amount: number; date: string; type: "received" | "sent" }[]) {
   // Define mapping from coin to denomination
   const denominationMap: Record<string, string> = {
@@ -102,18 +103,6 @@ export default function WalletHome() {
     return redirect("/");
   }
 
-  // Example activities data
-  const activities: { coin: string; amount: number; date: string; type: "received" | "sent" }[] = [
-    { coin: "USDC", amount: 1000, date: "Jun 12, 2024", type: "received" },
-    { coin: "USDT", amount: 500, date: "Jun 11, 2024", type: "received" },
-    { coin: "USDG", amount: 200, date: "Jun 10, 2024", type: "received" },
-    { coin: "USDC", amount: 250, date: "Jun 10, 2024", type: "sent" },
-    { coin: "EURC", amount: 100, date: "Jun 9, 2024", type: "received" },
-    // ...other activities...
-  ];
-
-  const groupedActivities = groupStablecoinsByDenomination(activities);
-
   return (
     <Box
       sx={{
@@ -137,7 +126,7 @@ export default function WalletHome() {
           }}
           onDeposit={() => router.push("/deposit")}
         />
-        <ActivityCard groupedActivities={groupedActivities} />
+        <ActivityCard groupStablecoinsByDenomination={groupStablecoinsByDenomination} />
       </Box>
     </Box>
   );
