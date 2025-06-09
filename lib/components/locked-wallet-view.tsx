@@ -44,7 +44,8 @@ export default function LockedWalletView({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "100vh",
+        minHeight: "unset",
+        height: "auto",
         background: "#f5f6fa",
       }}
     >
