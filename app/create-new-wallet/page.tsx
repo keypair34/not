@@ -8,9 +8,25 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useRouter } from "next/navigation";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 
 export default function CreateNewWalletPage() {
   const router = useRouter();
+
+  // Example list of existing seed phrases (replace with real data)
+  const existingSeeds = [
+    { id: "seed1", label: "Seed Phrase 1 (created Jan 2024)" },
+    { id: "seed2", label: "Seed Phrase 2 (imported Mar 2024)" },
+  ];
+  // Add a special id for "create new"
+  const CREATE_NEW_ID = "__create_new__";
+  const [selectedSeed, setSelectedSeed] = React.useState<string>(existingSeeds[0]?.id ?? "");
 
   return (
     <Box
@@ -24,31 +40,107 @@ export default function CreateNewWalletPage() {
         p: 2,
       }}
     >
-      <Card sx={{ maxWidth: 420, width: "100%", p: 4, boxShadow: 4 }}>
+      <Card
+        sx={{
+          maxWidth: 420,
+          width: "100%",
+          p: 4,
+          boxShadow: 4,
+          background: "linear-gradient(135deg, #212529 60%, #1e88e5 100%)",
+          color: "#fff",
+        }}
+      >
         <Stack direction="row" alignItems="center" sx={{ mb: 2 }}>
           <Button
             startIcon={<ArrowBackIcon />}
             onClick={() => router.back()}
-            sx={{ minWidth: 0 }}
+            sx={{ minWidth: 0, color: "#1e88e5", bgcolor: "#fff", "&:hover": { bgcolor: "#e3f2fd" } }}
           >
             Back
           </Button>
           <Box sx={{ flex: 1 }} />
-          <Typography variant="h5" fontWeight="bold" sx={{ textAlign: "right" }}>
+          <Typography variant="h5" fontWeight="bold" sx={{ textAlign: "right", color: "#fff" }}>
             Create New Wallet
           </Typography>
         </Stack>
-        <Typography sx={{ mb: 3 }}>
-          Here you can create a new keypair or mnemonic for your wallet.
+        <Typography sx={{ mb: 3, color: "#fff" }}>
+          Select an existing seed phrase or create a new one.
         </Typography>
-        {/* Placeholder for actual wallet creation logic */}
+        <FormControl component="fieldset" sx={{ width: "100%" }}>
+          <RadioGroup
+            value={selectedSeed}
+            onChange={(e) => setSelectedSeed(e.target.value)}
+          >
+            <List sx={{ bgcolor: "transparent", color: "#fff", p: 0 }}>
+              {existingSeeds.map((seed) => (
+                <ListItem
+                  key={seed.id}
+                  disableGutters
+                  sx={{
+                    bgcolor: selectedSeed === seed.id ? "#1e88e5" : "transparent",
+                    borderRadius: 2,
+                    mb: 1,
+                    px: 1,
+                  }}
+                >
+                  <FormControlLabel
+                    value={seed.id}
+                    control={<Radio sx={{
+                      color: "#fff",
+                      "&.Mui-checked": { color: "#fff" }
+                    }} />}
+                    label={<ListItemText primary={seed.label} />}
+                    sx={{ flex: 1, m: 0, color: "#fff" }}
+                  />
+                </ListItem>
+              ))}
+              {/* New radio for create new */}
+              <ListItem
+                key={CREATE_NEW_ID}
+                disableGutters
+                sx={{
+                  bgcolor: selectedSeed === CREATE_NEW_ID ? "#1e88e5" : "transparent",
+                  borderRadius: 2,
+                  mb: 1,
+                  px: 1,
+                }}
+              >
+                <FormControlLabel
+                  value={CREATE_NEW_ID}
+                  control={<Radio sx={{
+                    color: "#fff",
+                    "&.Mui-checked": { color: "#fff" }
+                  }} />}
+                  label={<ListItemText primary="+ Create New Seed Phrase" />}
+                  sx={{ flex: 1, m: 0, color: "#fff" }}
+                />
+              </ListItem>
+            </List>
+          </RadioGroup>
+        </FormControl>
         <Button
           variant="contained"
           color="primary"
           fullWidth
-          disabled
+          sx={{
+            mt: 2,
+            bgcolor: "#fff",
+            color: "#1e88e5",
+            fontWeight: "bold",
+            borderRadius: 2,
+            boxShadow: 2,
+            "&:hover": { bgcolor: "#e3f2fd" },
+          }}
+          onClick={() => {
+            if (selectedSeed === CREATE_NEW_ID) {
+              router.push("/create");
+            } else {
+              alert(`Use seed: ${selectedSeed} (not implemented)`);
+            }
+          }}
+          disabled={!selectedSeed}
         >
-          Create Wallet (Coming Soon)
+          {selectedSeed === CREATE_NEW_ID ? "Create New Seed Phrase" : "Use Selected Seed Phrase"}
         </Button>
       </Card>
     </Box>
