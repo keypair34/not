@@ -1,21 +1,16 @@
+use crate::constants::store::store_seeds;
 use crate::constants::{store::store_wallet, wallet_key::WALET_0};
 use bip39::{Language, Mnemonic};
 use log::{debug, error, info};
-use serde::{Deserialize, Serialize};
 use serde_json::json;
 use solana_sdk::derivation_path::DerivationPath;
 use solana_sdk::signature::Signer;
 use solana_sdk::signer::keypair::keypair_from_seed_and_derivation_path;
 use tauri::{command, AppHandle};
-use tsync::tsync;
-
-#[derive(Serialize, Deserialize)]
-#[tsync]
-pub struct SolanaWallet {
-    pub mnemonic: String,
-    pub pubkey: String,
-    pub privkey: String,
-}
+use crate::model::keypair::SolanaWallet;
+use crate::model::seed::{Seed, SeedType};
+use uuid::Uuid;
+use chrono::Utc;
 
 fn generate_mnemonic_and_keypair(account: u32) -> Result<(String, solana_sdk::signer::keypair::Keypair), String> {
     // Generate a new 12-word mnemonic
@@ -53,10 +48,32 @@ pub fn create_solana_wallet(app: AppHandle, account: u32) -> Result<SolanaWallet
     let privkey = bs58::encode(keypair.to_bytes()).into_string();
     debug!("Wallet pubkey: {}", pubkey);
     debug!("Wallet privkey (bs58, truncated): {}...", &privkey[..8]);
+
+    // Create Seed struct
+    let seed_id = Uuid::new_v4();
+    let seed_struct = Seed {
+        id: seed_id,
+        phrase: mnemonic_phrase.clone(),
+        seed_type: SeedType::Created { timestamp: Utc::now() },
+    };
+
+    // Save the seed struct to the store_seeds
+    let store_seeds = match store_seeds(&app) {
+        Ok(store) => store,
+        Err(_) => {
+            return Err("Failed to load store".to_string());
+        }
+    };
+    let mut seeds: Vec<Seed> = store_seeds.get("seedPhrases").unwrap_or_default();
+    seeds.push(seed_struct);
+    store_seeds.set("seedPhrases", serde_json::json!(seeds));
+    store_seeds.save().ok();
+
     let wallet = SolanaWallet {
         mnemonic: mnemonic_phrase,
         pubkey,
         privkey,
+        seed: seed_id,
     };
     let store = match store_wallet(&app) {
         Ok(store) => store,
@@ -65,7 +82,7 @@ pub fn create_solana_wallet(app: AppHandle, account: u32) -> Result<SolanaWallet
             return Err("Failed to load store".to_string());
         }
     };
-    store.set(WALET_0, json!(wallet));
+    store.set(WALET_0, serde_json::json!(wallet));
     match store.save() {
         Ok(_) => {
             info!("Wallet stored successfully.");

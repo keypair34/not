@@ -1,6 +1,6 @@
 use crate::constants::{store::store_wallet, wallet_key::WALET_0};
+use crate::model::keypair::SolanaWallet;
 use crate::network::airdrop::airdrop;
-use crate::wallet::create_wallet::SolanaWallet;
 use bs58;
 use solana_sdk::signature::{Keypair, Signer};
 use std::convert::TryFrom;

@@ -1,2 +1,2 @@
-mod keypair;
-mod seed;
+pub(crate) mod keypair;
+pub(crate) mod seed;
