@@ -1,4 +1,5 @@
-use crate::constants::{store::store_wallet, wallet_key::WALET_0};
+use crate::constants::store::STORE_KEYPAIRS;
+use crate::constants::store::STORE_SEEDS;
 use crate::model::keypair::SolanaWallet;
 use crate::model::seed::Seed;
 use bip39::Mnemonic;
@@ -11,6 +12,7 @@ use solana_sdk::signer::keypair::keypair_from_seed_and_derivation_path;
 use tauri::command;
 use tauri::AppHandle;
 use uuid::Uuid;
+use crate::constants::store::store;
 
 #[command]
 pub fn import_solana_wallet(
@@ -44,17 +46,20 @@ pub fn import_solana_wallet(
     };
 
     // Save the seed struct to the store_seeds
-    let store_seeds = match store_wallet(&app) {
+    let store = match store(&app) {
         Ok(store) => store,
         Err(_) => {
             return Err("Failed to load store".to_string());
         }
     };
     // Load existing seeds, append, and save
-    let mut seeds: Vec<Seed> = store_seeds.get("seedPhrases").unwrap_or_default();
+    let mut seeds: Vec<Seed> = match store.get(STORE_SEEDS) {
+        Some(value) => serde_json::from_value(value).unwrap_or_default(),
+        None => Vec::new(),
+    };
     seeds.push(seed_struct);
-    store_seeds.set("seedPhrases", json!(seeds));
-    store_seeds.save().ok();
+    store.set(STORE_SEEDS, json!(seeds));
+    store.save().ok();
 
     let wallet = SolanaWallet {
         mnemonic: mnemonic_phrase,
@@ -64,13 +69,7 @@ pub fn import_solana_wallet(
     };
 
     // Store the wallet using the same pattern as create_wallet.rs
-    let store = match store_wallet(&app) {
-        Ok(store) => store,
-        Err(_) => {
-            return Err("Failed to load store".to_string());
-        }
-    };
-    store.set(WALET_0, json!(wallet));
+    store.set(STORE_KEYPAIRS, json!(wallet));
     match store.save() {
         Ok(_) => Ok(wallet),
         Err(_) => Err("Error saving wallet".to_string()),

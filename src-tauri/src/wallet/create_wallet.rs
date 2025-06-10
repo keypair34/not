@@ -1,8 +1,6 @@
-use crate::constants::store::store_seeds;
-use crate::constants::{store::store_wallet, wallet_key::WALET_0};
+use crate::constants::wallet_key::WALET_0;
 use bip39::{Language, Mnemonic};
 use log::{debug, error, info};
-use serde_json::json;
 use solana_sdk::derivation_path::DerivationPath;
 use solana_sdk::signature::Signer;
 use solana_sdk::signer::keypair::keypair_from_seed_and_derivation_path;
@@ -11,6 +9,7 @@ use crate::model::keypair::SolanaWallet;
 use crate::model::seed::{Seed, SeedType};
 use uuid::Uuid;
 use chrono::Utc;
+use crate::constants::store::store;
 
 fn generate_mnemonic_and_keypair(account: u32) -> Result<(String, solana_sdk::signer::keypair::Keypair), String> {
     // Generate a new 12-word mnemonic
@@ -58,29 +57,25 @@ pub fn create_solana_wallet(app: AppHandle, account: u32) -> Result<SolanaWallet
     };
 
     // Save the seed struct to the store_seeds
-    let store_seeds = match store_seeds(&app) {
+    let store = match store(&app) {
         Ok(store) => store,
         Err(_) => {
             return Err("Failed to load store".to_string());
         }
     };
-    let mut seeds: Vec<Seed> = store_seeds.get("seedPhrases").unwrap_or_default();
+    let mut seeds: Vec<Seed> = match store.get("seedPhrases") {
+        Some(value) => serde_json::from_value(value).unwrap_or_default(),
+        None => Vec::new(),
+    };
     seeds.push(seed_struct);
-    store_seeds.set("seedPhrases", serde_json::json!(seeds));
-    store_seeds.save().ok();
+    store.set("seedPhrases", serde_json::json!(seeds));
+    store.save().ok();
 
     let wallet = SolanaWallet {
         mnemonic: mnemonic_phrase,
         pubkey,
         privkey,
         seed: seed_id,
-    };
-    let store = match store_wallet(&app) {
-        Ok(store) => store,
-        Err(e) => {
-            error!("Failed to load store: {:?}", e);
-            return Err("Failed to load store".to_string());
-        }
     };
     store.set(WALET_0, serde_json::json!(wallet));
     match store.save() {
