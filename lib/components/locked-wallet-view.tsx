@@ -16,11 +16,13 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 type LockedWalletViewProps = {
   showPassword: boolean;
   setShowPassword: (value: boolean) => void;
+  onUnlock?: () => void;
 };
 
 export default function LockedWalletView({
   showPassword,
   setShowPassword,
+  onUnlock,
 }: LockedWalletViewProps) {
   const [passwordInput, setPasswordInput] = React.useState<string>("");
   const [error, setError] = React.useState<string | null>(null);
@@ -33,6 +35,7 @@ export default function LockedWalletView({
     const stored = await store().get<string>("password");
     if (stored && stored === passwordInput) {
       setPasswordInput("");
+      if (onUnlock) onUnlock();
       return;
     }
     setError("Incorrect password. Please try again.");
@@ -44,7 +47,8 @@ export default function LockedWalletView({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "100vh",
+        minHeight: "unset",
+        height: "auto",
         background: "#f5f6fa",
       }}
     >

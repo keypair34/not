@@ -73,6 +73,7 @@ function MainPageContent() {
       <LockedWalletView
         showPassword={showPassword}
         setShowPassword={setShowPassword}
+        onUnlock={() => window.location.reload()}
       />
     );
   }
