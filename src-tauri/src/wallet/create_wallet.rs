@@ -1,21 +1,22 @@
+use crate::constants::store::store;
 use crate::constants::wallet_key::WALET_0;
+use crate::model::keypair::SolanaWallet;
+use crate::model::seed::{Seed, SeedType};
 use bip39::{Language, Mnemonic};
+use chrono::Utc;
 use log::{debug, error, info};
 use solana_sdk::derivation_path::DerivationPath;
 use solana_sdk::signature::Signer;
 use solana_sdk::signer::keypair::keypair_from_seed_and_derivation_path;
 use tauri::{command, AppHandle};
-use crate::model::keypair::SolanaWallet;
-use crate::model::seed::{Seed, SeedType};
 use uuid::Uuid;
-use chrono::Utc;
-use crate::constants::store::store;
 
-fn generate_mnemonic_and_keypair(account: u32) -> Result<(String, solana_sdk::signer::keypair::Keypair), String> {
+fn generate_mnemonic_and_keypair(
+    account: u32,
+) -> Result<(String, solana_sdk::signer::keypair::Keypair), String> {
     // Generate a new 12-word mnemonic
-    let mnemonic = Mnemonic::generate_in(Language::English, 12).map_err(|e| {
-        format!("Mnemonic generation failed: {:?}", e)
-    })?;
+    let mnemonic = Mnemonic::generate_in(Language::English, 12)
+        .map_err(|e| format!("Mnemonic generation failed: {:?}", e))?;
     let mnemonic_phrase = mnemonic.to_string();
 
     // Derive seed from mnemonic (BIP39 spec: PBKDF2 with mnemonic and empty passphrase)
@@ -53,7 +54,9 @@ pub fn create_solana_wallet(app: AppHandle, account: u32) -> Result<SolanaWallet
     let seed_struct = Seed {
         id: seed_id,
         phrase: mnemonic_phrase.clone(),
-        seed_type: SeedType::Created { timestamp: Utc::now() },
+        seed_type: SeedType::Created {
+            timestamp: Utc::now(),
+        },
     };
 
     // Save the seed struct to the store_seeds

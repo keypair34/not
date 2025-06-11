@@ -4,17 +4,23 @@ use serde::Deserialize;
 pub struct CheckPubkeyResponse {
     pub exists: bool,
     // Add more fields if needed
-    pub user_id: Option<i32>
+    pub user_id: Option<i32>,
 }
 
 pub async fn check_pubkey(pubkey: &str) -> Result<CheckPubkeyResponse, String> {
-    let url = format!("https://api.musik88.com/api/v1/onboarding/check-pubkey?pubkey={}", pubkey);
+    let url = format!(
+        "https://api.musik88.com/api/v1/onboarding/check-pubkey?pubkey={}",
+        pubkey
+    );
     let resp = reqwest::get(&url)
         .await
         .map_err(|e| format!("Network error: {:?}", e))?;
 
     let status = resp.status();
-    let text = resp.text().await.map_err(|e| format!("Read error: {:?}", e))?;
+    let text = resp
+        .text()
+        .await
+        .map_err(|e| format!("Read error: {:?}", e))?;
 
     println!("check_pubkey raw response: {}", text);
 

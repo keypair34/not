@@ -11,7 +11,8 @@ pub async fn sign_message(app: AppHandle, message: String) -> Result<String, Str
     // Load wallet from store
     let store = store(&app).map_err(|_| "Failed to load store".to_string())?;
     let wallet_value = store.get(WALET_0).ok_or("No wallet found".to_string())?;
-    let wallet: SolanaWallet = serde_json::from_value(wallet_value).map_err(|_| "Failed to parse wallet".to_string())?;
+    let wallet: SolanaWallet =
+        serde_json::from_value(wallet_value).map_err(|_| "Failed to parse wallet".to_string())?;
 
     // Decode private key from base58
     let privkey_bytes = bs58::decode(wallet.privkey)

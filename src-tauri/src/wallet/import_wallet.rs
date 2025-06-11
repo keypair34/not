@@ -1,10 +1,11 @@
+use crate::constants::store::store;
 use crate::constants::store::STORE_KEYPAIRS;
 use crate::constants::store::STORE_SEEDS;
 use crate::model::keypair::SolanaWallet;
 use crate::model::seed::Seed;
+use crate::model::seed::SeedType;
 use bip39::Mnemonic;
 use chrono::Utc;
-use crate::model::seed::SeedType;
 use serde_json::json;
 use solana_sdk::derivation_path::DerivationPath;
 use solana_sdk::signature::Signer;
@@ -12,7 +13,6 @@ use solana_sdk::signer::keypair::keypair_from_seed_and_derivation_path;
 use tauri::command;
 use tauri::AppHandle;
 use uuid::Uuid;
-use crate::constants::store::store;
 
 #[command]
 pub fn import_solana_wallet(
@@ -42,7 +42,9 @@ pub fn import_solana_wallet(
     let seed_struct = Seed {
         id: seed_id,
         phrase: mnemonic_phrase.clone(),
-        seed_type: SeedType::Imported { timestamp: Utc::now() },
+        seed_type: SeedType::Imported {
+            timestamp: Utc::now(),
+        },
     };
 
     // Save the seed struct to the store_seeds

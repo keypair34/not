@@ -4,7 +4,8 @@ use tauri::{AppHandle, Wry};
 use tauri_plugin_store::{Error, Store, StoreExt};
 use tsync::tsync;
 
-/// Generate: tsync -i src-tauri/src/constants/store.rs -o lib/store/generated.ts
+/// Generate:
+/// tsync -i src-tauri/src/ -o lib/crate/generated.ts
 
 #[tsync]
 pub const STORE: &str = ".notwallet.dat";
