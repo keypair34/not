@@ -3,7 +3,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import { store } from "../../lib/store/store";
-import { SolanaWallet, WALET_0 } from "../../lib/crate/generated";
+import { SolanaWallet, STORE_ACTIVE_KEYPAIR, STORE_KEYPAIRS, WALET_0 } from "../../lib/crate/generated";
 import { debug } from "@tauri-apps/plugin-log";
 import { redirect, useRouter } from "next/navigation";
 import { useAppLock } from "../../lib/context/app-lock-context";
@@ -52,7 +52,17 @@ export default function WalletHome() {
   // Simulate wallet loading, replace with real loading logic
   const loadWallet = async () => {
     try {
-      const wallet = await store().get<SolanaWallet>(WALET_0);
+      const keypairs = await store().get<SolanaWallet[]>(STORE_KEYPAIRS);
+      let walletActive: SolanaWallet | undefined;
+      try {
+        walletActive = await store().get<SolanaWallet>(STORE_ACTIVE_KEYPAIR);
+      } catch {
+        walletActive = undefined;
+      }
+      let wallet: SolanaWallet | undefined = walletActive;
+      if (!wallet && Array.isArray(keypairs) && keypairs.length > 0) {
+        wallet = keypairs[0];
+      }
       debug(`wallet: ${wallet?.pubkey}`);
       setWallet(wallet);
       setState(State.Loaded);

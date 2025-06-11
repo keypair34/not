@@ -13,6 +13,8 @@ pub const STORE: &str = ".notwallet.dat";
 pub const STORE_KEYPAIRS: &str = "keypairs";
 #[tsync]
 pub const STORE_SEEDS: &str = "seeds";
+#[tsync]
+pub const STORE_ACTIVE_KEYPAIR: &str = "activeKeypair";
 #[allow(dead_code)]
 #[tsync]
 pub const STORE_WALLET: &str = "wallet.json"; // Legacy.

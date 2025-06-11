@@ -1,11 +1,8 @@
-# Not
+# NotWallet
 
-Solana wallet and more.
+Solana wallet and more. Do your own research.
 
-## License
-
-This project is licensed under the GNU General Public License v3.0.  
-See [LICENSE](LICENSE) for details.
+**Use at your own risk.**
 
 ## Recommended IDE Setup
 
@@ -14,13 +11,17 @@ See [LICENSE](LICENSE) for details.
 
 ## Run targets
 
-Build desktop:
+Build desktop, iOS, and Android targets:
 
 ```bash
 $ pnpm run tauri dev
+$ pnpm run tauri ios init
+$ pnpm run tauri ios dev
+$ pnpm run tauri android init
+$ pnpm run tauri android dev
 ```
 
-If you want to build for iOS and Android, you enter the teritori of cross compilation. Follow Tauri guid.
+If you want to build for iOS and Android, you enter the teritori of cross compilation. Follow Tauri guide.
 
 - When updating tauri.conf.json, always clean up src-tauri/gen folder and init the android and ios project again.
 
