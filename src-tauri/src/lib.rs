@@ -10,6 +10,7 @@ use crate::{
         check_pubkey::check_pubkey,
         create_wallet::create_solana_wallet,
         import_wallet::{derive_new_keypair, import_solana_wallet},
+        set_active_keypair::set_active_keypair,
         sign::sign_message,
     },
 };
@@ -37,6 +38,7 @@ pub fn run() {
             derive_new_keypair,
             sign_message,
             check_pubkey,
+            set_active_keypair,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

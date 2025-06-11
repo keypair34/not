@@ -18,6 +18,7 @@ interface WalletCardProps {
   wallet: SolanaWallet;
   onLock: () => void;
   onDeposit: () => void;
+  onSwitchKeypair: ()=> void;
 }
 
 export default function WalletCard({
@@ -26,6 +27,7 @@ export default function WalletCard({
   wallet,
   onLock,
   onDeposit,
+  onSwitchKeypair,
 }: WalletCardProps) {
   const router = useRouter();
 
@@ -87,7 +89,8 @@ export default function WalletCard({
               display: "flex",
               alignItems: "center",
               gap: 1,
-              maxWidth: 260,
+              width: "100%", // Make the box extend to the end of the container
+              maxWidth: "100%",
               boxShadow: 1,
             }}
           >
@@ -118,6 +121,25 @@ export default function WalletCard({
                     )}`
                   : ""}
               </Typography>
+            </Tooltip>
+            {/* Switch button after pubkey, before plus button */}
+            <Tooltip title="Switch keypair" arrow>
+              <IconButton
+                sx={{
+                  color: "#1e88e5",
+                  bgcolor: "#f5f6fa",
+                  "&:hover": { bgcolor: "#e3f2fd" },
+                  ml: 1,
+                }}
+                onClick={onSwitchKeypair}
+                size="small"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M16 17L21 12L16 7" stroke="#1e88e5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M21 12H9" stroke="#1e88e5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M8 7L3 12L8 17" stroke="#1e88e5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </IconButton>
             </Tooltip>
             {/* Plus button next to pubkey */}
             <Tooltip title="Create new keypair or mnemonic" arrow>
