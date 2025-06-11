@@ -31,14 +31,15 @@ export default function CreateNewWalletPage() {
   // Add a special id for "create new"
   const CREATE_NEW_ID = "__create_new__";
   const [existingSeeds, setExistingSeeds] = React.useState<{ id: string; label: string }[]>([]);
-  const [selectedSeed, setSelectedSeed] = React.useState<string>("");
+  const [selectedSeed, setSelectedSeed] = React.useState<string>(CREATE_NEW_ID);
 
   useEffect(() => {
     async function loadSeeds() {
       const seeds = await fetchSeedsFromStore();
       if (Array.isArray(seeds) && seeds.length > 0) {
         setExistingSeeds(seeds);
-        setSelectedSeed(seeds[0].id);
+        // Always default to "create new" option
+        setSelectedSeed(CREATE_NEW_ID);
       } else {
         setExistingSeeds([]);
         setSelectedSeed(CREATE_NEW_ID);
@@ -113,7 +114,7 @@ export default function CreateNewWalletPage() {
                   />
                 </ListItem>
               ))}
-              {/* New radio for create new */}
+              {/* Always show the create new option */}
               <ListItem
                 key={CREATE_NEW_ID}
                 disableGutters
@@ -159,7 +160,7 @@ export default function CreateNewWalletPage() {
           }}
           disabled={!selectedSeed}
         >
-          {selectedSeed === CREATE_NEW_ID ? "Create New Seed Phrase" : "Use Selected Seed Phrase"}
+          Continue
         </Button>
       </Card>
     </Box>
