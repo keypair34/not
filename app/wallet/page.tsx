@@ -15,9 +15,6 @@ import WalletCard from "./components/wallet_card";
 import ActivityCard from "./components/activity_card";
 import { invoke } from "@tauri-apps/api/core";
 import Modal from "@mui/material/Modal";
-import IconButton from "@mui/material/IconButton";
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
-import AddIcon from "@mui/icons-material/Add";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 

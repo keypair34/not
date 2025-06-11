@@ -135,7 +135,7 @@ export default function ImportKeypairsPage() {
             sx={{ mt: 2 }}
             onClick={() => window.location.assign("/home")}
           >
-            I'm done
+            I&apos;m done
           </Button>
         </CardContent>
       </Card>

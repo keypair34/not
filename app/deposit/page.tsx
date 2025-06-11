@@ -12,7 +12,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import * as React from "react";
 import { QRCodeCanvas } from "qrcode.react"; // Use QRCodeCanvas instead of default export
-import { storeWallet } from "../../lib/store/store";
+import { store } from "../../lib/store/store";
 import { SolanaWallet, WALET_0 } from "../../lib/crate/generated";
 
 export default function DepositPage() {
@@ -26,7 +26,7 @@ export default function DepositPage() {
     // Get wallet from store, like in page.tsx
     (async () => {
       try {
-        const wallet = await storeWallet().get<SolanaWallet>(WALET_0);
+        const wallet = await store().get<SolanaWallet>(WALET_0);
         setPubkey(wallet?.pubkey ?? null);
       } catch {
         setPubkey(null);
