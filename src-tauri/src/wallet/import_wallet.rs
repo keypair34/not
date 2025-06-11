@@ -28,6 +28,7 @@ pub fn import_solana_wallet(
     let seed_bytes = bip39::Mnemonic::to_seed(&mnemonic, "");
 
     // Use Solana's default derivation path for browser wallets: m/44'/501'/0'/0'
+    // Generte new keypair by changing the account (first param)
     let derivation_path = DerivationPath::new_bip44(Some(0), Some(0));
 
     // Derive keypair
@@ -70,8 +71,13 @@ pub fn import_solana_wallet(
         seed: seed_id,
     };
 
-    // Store the wallet using the same pattern as create_wallet.rs
-    store.set(STORE_KEYPAIRS, json!(wallet));
+    // Load existing keypairs, append, and save
+    let mut keypairs: Vec<SolanaWallet> = match store.get(STORE_KEYPAIRS) {
+        Some(value) => serde_json::from_value(value).unwrap_or_default(),
+        None => Vec::new(),
+    };
+    keypairs.push(wallet.clone());
+    store.set(STORE_KEYPAIRS, json!(keypairs));
     match store.save() {
         Ok(_) => Ok(wallet),
         Err(_) => Err("Error saving wallet".to_string()),

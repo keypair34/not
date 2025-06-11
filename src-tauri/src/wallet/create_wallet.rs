@@ -1,5 +1,4 @@
-use crate::constants::store::store;
-use crate::constants::wallet_key::WALET_0;
+use crate::constants::store::{store, STORE_KEYPAIRS};
 use crate::model::keypair::SolanaWallet;
 use crate::model::seed::{Seed, SeedType};
 use bip39::{Language, Mnemonic};
@@ -80,7 +79,13 @@ pub fn create_solana_wallet(app: AppHandle, account: u32) -> Result<SolanaWallet
         privkey,
         seed: seed_id,
     };
-    store.set(WALET_0, serde_json::json!(wallet));
+    // Load existing keypairs, append, and save
+    let mut keypairs: Vec<SolanaWallet> = match store.get(STORE_KEYPAIRS) {
+        Some(value) => serde_json::from_value(value).unwrap_or_default(),
+        None => Vec::new(),
+    };
+    keypairs.push(wallet.clone());
+    store.set(STORE_KEYPAIRS, serde_json::json!(keypairs));
     match store.save() {
         Ok(_) => {
             info!("Wallet stored successfully.");

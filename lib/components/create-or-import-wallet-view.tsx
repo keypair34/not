@@ -23,7 +23,7 @@ export default function CreateOrImportWalletView() {
         </Box>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div" align="center">
-            Splitfire Wallet
+            Not Wallet
           </Typography>
           <Typography variant="body2" color="text.secondary" align="center">
             Your non-custodial stablecoins wallet. Secure, private, and easy to use.
