@@ -4,11 +4,13 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
 import AddIcon from "@mui/icons-material/Add";
 import LockIcon from "@mui/icons-material/Lock";
 import { SolanaWallet } from "../../../lib/crate/generated";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Box from "@mui/material/Box";
+import { useRouter } from "next/navigation";
 
 interface WalletCardProps {
   userName: string;
@@ -25,6 +27,13 @@ export default function WalletCard({
   onLock,
   onDeposit,
 }: WalletCardProps) {
+  const router = useRouter();
+
+  // Handler for creating new keypair/mnemonic
+  const handleCreateNew = () => {
+    router.push("/create-new-wallet");
+  };
+
   return (
     <Card
       sx={{
@@ -109,6 +118,21 @@ export default function WalletCard({
                     )}`
                   : ""}
               </Typography>
+            </Tooltip>
+            {/* Plus button next to pubkey */}
+            <Tooltip title="Create new keypair or mnemonic" arrow>
+              <IconButton
+                sx={{
+                  color: "#1e88e5",
+                  bgcolor: "#f5f6fa",
+                  "&:hover": { bgcolor: "#e3f2fd" },
+                  ml: 1,
+                }}
+                onClick={handleCreateNew}
+                size="small"
+              >
+                <AddIcon fontSize="small" />
+              </IconButton>
             </Tooltip>
           </Box>
         </Box>

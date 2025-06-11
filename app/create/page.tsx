@@ -31,7 +31,9 @@ export default function Page() {
     (async () => {
       debug("Invoking create_solana_wallet");
       try {
-        const result = await invoke<{ mnemonic: string; pubkey: string; privkey?: string }>("create_solana_wallet");
+        const result = await invoke<{ mnemonic: string; pubkey: string; privkey?: string }>("create_solana_wallet", {
+          account: 0
+        });
         if (!cancelled) {
           debug(`create_solana_wallet result: ${JSON.stringify(result)}`);
           setMnemonic(result.mnemonic);

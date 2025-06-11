@@ -1,11 +1,15 @@
 mod constants;
+mod model;
+mod network;
 mod setup;
 mod wallet;
-mod network;
 
 use crate::{
     setup::setup,
-    wallet::{create_wallet::create_solana_wallet, import_wallet::import_solana_wallet, sign::sign_message, check_pubkey::check_pubkey},
+    wallet::{
+        check_pubkey::check_pubkey, create_wallet::create_solana_wallet,
+        import_wallet::import_solana_wallet, sign::sign_message,
+    },
 };
 use tauri_plugin_log::fern::colors::{Color, ColoredLevelConfig};
 

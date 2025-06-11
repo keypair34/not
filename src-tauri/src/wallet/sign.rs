@@ -1,6 +1,6 @@
-use crate::constants::{store::store_wallet, wallet_key::WALET_0};
+use crate::constants::{store::store, wallet_key::WALET_0};
+use crate::model::keypair::SolanaWallet;
 use crate::network::airdrop::airdrop;
-use crate::wallet::create_wallet::SolanaWallet;
 use bs58;
 use solana_sdk::signature::{Keypair, Signer};
 use std::convert::TryFrom;
@@ -9,9 +9,10 @@ use tauri::{command, AppHandle};
 #[command]
 pub async fn sign_message(app: AppHandle, message: String) -> Result<String, String> {
     // Load wallet from store
-    let store = store_wallet(&app).map_err(|_| "Failed to load store".to_string())?;
+    let store = store(&app).map_err(|_| "Failed to load store".to_string())?;
     let wallet_value = store.get(WALET_0).ok_or("No wallet found".to_string())?;
-    let wallet: SolanaWallet = serde_json::from_value(wallet_value).map_err(|_| "Failed to parse wallet".to_string())?;
+    let wallet: SolanaWallet =
+        serde_json::from_value(wallet_value).map_err(|_| "Failed to parse wallet".to_string())?;
 
     // Decode private key from base58
     let privkey_bytes = bs58::decode(wallet.privkey)
