@@ -10,6 +10,8 @@ export const STORE_KEYPAIRS = "keypairs";
 
 export const STORE_SEEDS = "seeds";
 
+export const STORE_ACTIVE_KEYPAIR = "activeKeypair";
+
 export const STORE_WALLET = "wallet.json";
 
 export const WALET_0 = "wallet_0";
