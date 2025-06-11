@@ -4,12 +4,10 @@ use crate::constants::store::STORE_SEEDS;
 use crate::model::keypair::SolanaWallet;
 use crate::model::seed::Seed;
 use crate::model::seed::SeedType;
-use bip39::Mnemonic;
+use crate::wallet::derive_keypair::derive_keypair_default;
 use chrono::Utc;
 use serde_json::json;
-use solana_sdk::derivation_path::DerivationPath;
-use solana_sdk::signature::Signer;
-use solana_sdk::signer::keypair::keypair_from_seed_and_derivation_path;
+use solana_sdk::signer::Signer;
 use tauri::command;
 use tauri::AppHandle;
 use uuid::Uuid;
@@ -19,21 +17,8 @@ pub fn import_solana_wallet(
     app: AppHandle,
     mnemonic_phrase: String,
 ) -> Result<SolanaWallet, String> {
-    // Parse mnemonic using FromStr
-    let mnemonic = mnemonic_phrase
-        .parse::<Mnemonic>()
-        .map_err(|e| format!("Invalid mnemonic: {:?}", e))?;
-
-    // Derive seed from mnemonic (BIP39 spec: PBKDF2 with mnemonic and empty passphrase)
-    let seed_bytes = bip39::Mnemonic::to_seed(&mnemonic, "");
-
-    // Use Solana's default derivation path for browser wallets: m/44'/501'/0'/0'
-    // Generte new keypair by changing the account (first param)
-    let derivation_path = DerivationPath::new_bip44(Some(0), Some(0));
-
-    // Derive keypair
-    let keypair = keypair_from_seed_and_derivation_path(&seed_bytes, Some(derivation_path))
-        .map_err(|e| format!("Keypair derivation failed: {:?}", e))?;
+    // Derive keypair using the helper function (default account 0, change 0)
+    let keypair = derive_keypair_default(&mnemonic_phrase, 0)?;
 
     let pubkey = keypair.pubkey().to_string();
     let privkey = bs58::encode(keypair.to_bytes()).into_string();
@@ -65,7 +50,7 @@ pub fn import_solana_wallet(
     store.save().ok();
 
     let wallet = SolanaWallet {
-        mnemonic: mnemonic_phrase,
+        account: 0,
         pubkey,
         privkey,
         seed: seed_id,
@@ -82,4 +67,46 @@ pub fn import_solana_wallet(
         Ok(_) => Ok(wallet),
         Err(_) => Err("Error saving wallet".to_string()),
     }
+}
+
+// Add a tauri command to derive a new keypair from a stored seed UUID and account index
+#[command]
+pub fn derive_new_keypair(
+    app: AppHandle,
+    seed_uuid: Uuid,
+    account: u32,
+) -> Result<SolanaWallet, String> {
+    // Load store and seeds
+    let store = store(&app).map_err(|_| "Failed to load store".to_string())?;
+    let seeds: Vec<Seed> = match store.get(STORE_SEEDS) {
+        Some(value) => serde_json::from_value(value).unwrap_or_default(),
+        None => Vec::new(),
+    };
+    // Find the seed by UUID
+    let seed = seeds
+        .iter()
+        .find(|s| s.id == seed_uuid)
+        .ok_or_else(|| "Seed not found".to_string())?;
+    // Derive keypair using the mnemonic and account
+    let keypair = derive_keypair_default(&seed.phrase, account)?;
+    let pubkey = keypair.pubkey().to_string();
+    let privkey = bs58::encode(keypair.to_bytes()).into_string();
+
+    let wallet = SolanaWallet {
+        account,
+        pubkey,
+        privkey,
+        seed: seed_uuid,
+    };
+
+    // Optionally, you can save this new keypair to the store as well
+    let mut keypairs: Vec<SolanaWallet> = match store.get(STORE_KEYPAIRS) {
+        Some(value) => serde_json::from_value(value).unwrap_or_default(),
+        None => Vec::new(),
+    };
+    keypairs.push(wallet.clone());
+    store.set(STORE_KEYPAIRS, json!(keypairs));
+    store.save().ok();
+
+    Ok(wallet)
 }

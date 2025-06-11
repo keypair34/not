@@ -7,8 +7,10 @@ mod wallet;
 use crate::{
     setup::setup,
     wallet::{
-        check_pubkey::check_pubkey, create_wallet::create_solana_wallet,
-        import_wallet::import_solana_wallet, sign::sign_message,
+        check_pubkey::check_pubkey,
+        create_wallet::create_solana_wallet,
+        import_wallet::{derive_new_keypair, import_solana_wallet},
+        sign::sign_message,
     },
 };
 use tauri_plugin_log::fern::colors::{Color, ColoredLevelConfig};
@@ -32,6 +34,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             create_solana_wallet,
             import_solana_wallet,
+            derive_new_keypair,
             sign_message,
             check_pubkey,
         ])

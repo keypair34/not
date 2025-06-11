@@ -15,7 +15,7 @@ export const STORE_WALLET = "wallet.json";
 export const WALET_0 = "wallet_0";
 
 export interface SolanaWallet {
-  mnemonic: string;
+  account: number;
   pubkey: string;
   privkey: string;
   seed: string;

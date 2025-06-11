@@ -74,7 +74,7 @@ pub fn create_solana_wallet(app: AppHandle, account: u32) -> Result<SolanaWallet
     store.save().ok();
 
     let wallet = SolanaWallet {
-        mnemonic: mnemonic_phrase,
+        account: 0,
         pubkey,
         privkey,
         seed: seed_id,
