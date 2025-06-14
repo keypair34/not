@@ -9,20 +9,22 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import { store } from "../store/store";
-import { useAppLock } from "../context/app-lock-context";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { STORE_PASSWORD } from "../crate/generated";
+import bcrypt from "bcryptjs";
+import { redirect } from "next/navigation";
+import { selectionFeedback } from "@tauri-apps/plugin-haptics";
+import { useAppLock } from "../context/app-lock-context";
 
 type LockedWalletViewProps = {
   showPassword: boolean;
   setShowPassword: (value: boolean) => void;
-  onUnlock?: () => void;
 };
 
 export default function LockedWalletView({
   showPassword,
   setShowPassword,
-  onUnlock,
 }: LockedWalletViewProps) {
   const [passwordInput, setPasswordInput] = React.useState<string>("");
   const [error, setError] = React.useState<string | null>(null);
@@ -30,13 +32,13 @@ export default function LockedWalletView({
 
   const handleUnlock = async () => {
     setError(null);
-    // Optimistically unlock immediately, then check password
-    unlock();
-    const stored = await store().get<string>("password");
-    if (stored && stored === passwordInput) {
+    const hash = await store().get<string>(STORE_PASSWORD);
+    // Check if passwordInput matches the hash in the db
+    if (hash && bcrypt.compareSync(passwordInput, hash)) {
       setPasswordInput("");
-      if (onUnlock) onUnlock();
-      return;
+      await selectionFeedback();
+      unlock();
+      redirect("/wallet");
     }
     setError("Incorrect password. Please try again.");
   };

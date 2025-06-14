@@ -2,13 +2,20 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import { storeWallet } from "../../lib/store/store";
-import { SolanaWallet, WALET_0 } from "../../lib/crate/generated";
+import { store } from "../../lib/store/store";
+import {
+  SolanaWallet,
+  STORE_ACTIVE_KEYPAIR,
+  STORE_KEYPAIRS,
+} from "../../lib/crate/generated";
 import { debug } from "@tauri-apps/plugin-log";
 import { redirect, useRouter } from "next/navigation";
 import { useAppLock } from "../../lib/context/app-lock-context";
 import WalletCard from "./components/wallet_card";
 import ActivityCard from "./components/activity_card";
+import { invoke } from "@tauri-apps/api/core";
+import { selectionFeedback } from "@tauri-apps/plugin-haptics";
+import ActiveKeypairSelectionModal from "./components/active-keypair-selection";
 
 enum State {
   Loading,
@@ -18,7 +25,14 @@ enum State {
 
 // Helper to group stablecoins by denomination
 // (kept here for ActivityCard to receive as prop)
-function groupStablecoinsByDenomination(activities: { coin: string; amount: number; date: string; type: "received" | "sent" }[]) {
+function groupStablecoinsByDenomination(
+  activities: {
+    coin: string;
+    amount: number;
+    date: string;
+    type: "received" | "sent";
+  }[]
+) {
   // Define mapping from coin to denomination
   const denominationMap: Record<string, string> = {
     USDC: "USD",
@@ -30,7 +44,10 @@ function groupStablecoinsByDenomination(activities: { coin: string; amount: numb
   };
 
   // Group by denomination
-  const grouped: Record<string, { coin: string; amount: number; date: string; type: "received" | "sent" }[]> = {};
+  const grouped: Record<
+    string,
+    { coin: string; amount: number; date: string; type: "received" | "sent" }[]
+  > = {};
   for (const activity of activities) {
     const denom = denominationMap[activity.coin] || activity.coin;
     if (!grouped[denom]) grouped[denom] = [];
@@ -49,10 +66,29 @@ export default function WalletHome() {
     undefined
   );
   const [state, setState] = React.useState(State.Loading);
+  const [showSwitchModal, setShowSwitchModal] = React.useState(false);
+  const [allKeypairs, setAllKeypairs] = React.useState<SolanaWallet[]>([]);
+
   // Simulate wallet loading, replace with real loading logic
   const loadWallet = async () => {
     try {
-      const wallet = await storeWallet().get<SolanaWallet>(WALET_0);
+      const keypairs = await store().get<SolanaWallet[]>(STORE_KEYPAIRS);
+      let walletActive: SolanaWallet | undefined;
+      try {
+        walletActive = await store().get<SolanaWallet>(STORE_ACTIVE_KEYPAIR);
+      } catch {
+        walletActive = undefined;
+      }
+      let wallet: SolanaWallet | undefined = walletActive;
+      if (!wallet && Array.isArray(keypairs) && keypairs.length > 0) {
+        wallet = keypairs[0];
+        // Set the first wallet as active if none is active
+        try {
+          await invoke("set_active_keypair", { keypair: wallet });
+        } catch (e) {
+          // Optionally handle error
+        }
+      }
       debug(`wallet: ${wallet?.pubkey}`);
       setWallet(wallet);
       setState(State.Loaded);
@@ -63,6 +99,25 @@ export default function WalletHome() {
   React.useEffect(() => {
     loadWallet();
   }, []);
+
+  // Fetch all keypairs for switch modal
+  React.useEffect(() => {
+    async function fetchKeypairs() {
+      try {
+        const keypairs = await store().get<SolanaWallet[]>(STORE_KEYPAIRS);
+        setAllKeypairs(keypairs || []);
+      } catch {
+        setAllKeypairs([]);
+      }
+    }
+    fetchKeypairs();
+  }, []);
+
+  // Add onDeposit function
+  const onDeposit = React.useCallback(async () => {
+    await selectionFeedback();
+    router.push("/deposit");
+  }, [router]);
 
   if (state === State.Loading) {
     return (
@@ -120,14 +175,28 @@ export default function WalletHome() {
           userName={userName}
           balance={balance}
           wallet={wallet}
-          onLock={() => {
+          onLock={async () => {
+            await selectionFeedback();
             lock();
             router.replace("/");
           }}
-          onDeposit={() => router.push("/deposit")}
+          onDeposit={onDeposit}
+          onSwitchKeypair={async () => {
+            await selectionFeedback();
+            setShowSwitchModal(true);
+          }}
         />
-        <ActivityCard groupStablecoinsByDenomination={groupStablecoinsByDenomination} />
+        <ActivityCard
+          groupStablecoinsByDenomination={groupStablecoinsByDenomination}
+        />
       </Box>
+      <ActiveKeypairSelectionModal
+        open={showSwitchModal}
+        onClose={() => setShowSwitchModal(false)}
+        keypairs={allKeypairs}
+        activePubkey={wallet?.pubkey}
+        onSelect={(kp) => setWallet(kp)}
+      />
     </Box>
   );
 }
