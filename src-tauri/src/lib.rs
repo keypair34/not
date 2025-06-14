@@ -1,11 +1,18 @@
 mod constants;
+mod model;
+mod network;
 mod setup;
 mod wallet;
-mod network;
 
 use crate::{
     setup::setup,
-    wallet::{create_wallet::create_solana_wallet, import_wallet::import_solana_wallet, sign::sign_message, check_pubkey::check_pubkey},
+    wallet::{
+        check_pubkey::check_pubkey,
+        commands::{derive_next_keypair, onboarding_create_wallet},
+        import_wallet::{derive_new_keypair, import_solana_wallet},
+        set_active_keypair::set_active_keypair,
+        sign::sign_message,
+    },
 };
 use tauri_plugin_log::fern::colors::{Color, ColoredLevelConfig};
 
@@ -24,12 +31,16 @@ pub fn run() {
                 .build(),
         )
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_haptics::init())
         .setup(|app| setup(app))
         .invoke_handler(tauri::generate_handler![
-            create_solana_wallet,
+            onboarding_create_wallet,
             import_solana_wallet,
+            derive_new_keypair,
+            derive_next_keypair,
             sign_message,
             check_pubkey,
+            set_active_keypair,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

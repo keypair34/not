@@ -7,8 +7,8 @@ import OnboardingCard from "./components/onboarding_card";
 import { feed } from "./components/feed";
 import ActivityComponent from "./components/activity_component";
 import { invoke } from "@tauri-apps/api/core";
-import { SolanaWallet, WALET_0 } from "../../lib/crate/generated";
-import { storeWallet } from "../../lib/store/store";
+import { SolanaWallet, STORE_ACTIVE_KEYPAIR } from "../../lib/crate/generated";
+import { store } from "../../lib/store/store";
 import { debug as tauriDebug } from "@tauri-apps/plugin-log";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -24,7 +24,7 @@ export default function HomeFeedPage() {
 
   async function checkOnboarding(setOnboardingState: (s: OnboardingState) => void) {
     try {
-      const wallet = await storeWallet().get<SolanaWallet>(WALET_0);
+      const wallet = await store().get<SolanaWallet>(STORE_ACTIVE_KEYPAIR);
       if (!wallet?.pubkey) {
         setOnboardingState(OnboardingState.Hide);
         return;

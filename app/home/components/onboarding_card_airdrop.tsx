@@ -10,6 +10,7 @@ import Modal from "@mui/material/Modal";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { invoke } from "@tauri-apps/api/core";
 import Confetti from "react-confetti";
+import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 
 type OnboardingCardAirdropProps = {
   open: boolean;
@@ -162,12 +163,15 @@ export default function OnboardingCardAirdrop({
                   color: "#b0bec5",
                   cursor: "pointer",
                 }}
-                onClick={() => openUrl("https://bachmoney.5mb.app/")}
+                onClick={async () => {
+                  await selectionFeedback();
+                  openUrl("https://bach.money/")
+                }}
               >
                 Your wallet address will be used for the airdrop.
                 <br />
                 <span style={{ color: "#1e88e5", textDecoration: "underline" }}>
-                  bachmoney.5mb.app
+                  bach.money
                 </span>
               </Typography>
             </>

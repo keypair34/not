@@ -14,10 +14,14 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import { debug, error as logError } from "@tauri-apps/plugin-log";
 import { useRouter } from "next/navigation";
-import { store } from "../../lib/store/store";
+import { store } from "@/lib/store/store";
+import { STORE_PASSWORD } from "@/lib/crate/generated";
+import bcrypt from "bcryptjs";
 
 enum State {
-  Loading, Loaded, Error
+  Loading,
+  Loaded,
+  Error,
 }
 
 export default function CreatePasswordPage() {
@@ -42,13 +46,15 @@ export default function CreatePasswordPage() {
     setError("");
     setLoading(true);
     try {
-      // Use Tauri plugin store to store password
-      await store().set("password", password);
+      // Encrypt password before storing
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(password, salt); // Use the actual password, not a hardcoded string
+      await store().set(STORE_PASSWORD, hash);
       await store().save();
 
       debug("Password stored successfully in tauri plugin store.");
 
-      router.push("/create");
+      router.push("/wallet");
     } catch (e: any) {
       logError(`Failed to store password securely: ${e?.toString?.() ?? e}`);
       setError("Failed to store password securely.");
@@ -59,10 +65,10 @@ export default function CreatePasswordPage() {
 
   const checkPassword = async () => {
     try {
-      const result = await store().get<{value: string}>("password");
+      const result = await store().get<string>(STORE_PASSWORD);
       debug(`Found stored password: ${result}`);
-      if (result && result.value.length > 0) {
-        setStoredPassword(result.value);
+      if (result && result.length > 0) {
+        setStoredPassword(result);
         setShowDialog(true);
         setState(State.Loaded);
       } else {
@@ -71,11 +77,11 @@ export default function CreatePasswordPage() {
     } catch {
       setState(State.Error);
     }
-  }
+  };
 
   React.useEffect(() => {
     checkPassword();
-  }, [])
+  }, []);
 
   if (state === State.Loading) {
     return (
@@ -99,13 +105,14 @@ export default function CreatePasswordPage() {
       <Dialog open={showDialog} onClose={() => setShowDialog(false)}>
         <DialogTitle>Password Found</DialogTitle>
         <DialogContent>
-          A password already exists for this wallet. Would you like to use the existing password or create a new one?
+          A password already exists for this wallet. Would you like to use the
+          existing password or create a new one?
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
               setShowDialog(false);
-              router.push("/create");
+              router.push("/onboarding/create-wallet");
             }}
             color="primary"
             variant="contained"
@@ -139,21 +146,6 @@ export default function CreatePasswordPage() {
           bgcolor: "#f5f6fa",
         }}
       >
-        <Box sx={{ width: "100%", maxWidth: 480, mb: 2 }}>
-          <Button
-            variant="text"
-            color="primary"
-            sx={{ mb: 1 }}
-            fullWidth
-            startIcon={
-              // Use a left arrow unicode if you don't want to import an icon
-              <span style={{ fontSize: 20 }}>&larr;</span>
-            }
-            onClick={() => window.history.back()}
-          >
-            Back
-          </Button>
-        </Box>
         <Card sx={{ maxWidth: 480, width: "100%", boxShadow: 3 }}>
           <CardContent>
             <Typography
@@ -199,7 +191,8 @@ export default function CreatePasswordPage() {
               align="center"
               sx={{ mb: 1 }}
             >
-              This password will be required to access your wallet on this device.
+              This password will be required to access your wallet on this
+              device.
             </Typography>
           </CardContent>
           <CardActions sx={{ justifyContent: "center", pb: 2 }}>
@@ -209,7 +202,9 @@ export default function CreatePasswordPage() {
               size="large"
               onClick={handleContinue}
               disabled={!password || !confirm || loading}
-              startIcon={loading ? <CircularProgress size={22} color="inherit" /> : null}
+              startIcon={
+                loading ? <CircularProgress size={22} color="inherit" /> : null
+              }
             >
               {loading ? "Processing..." : "Continue"}
             </Button>

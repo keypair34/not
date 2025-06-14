@@ -21,7 +21,10 @@ pub async fn airdrop(pubkey: String, signature: String) -> Result<String, String
         .map_err(|e| format!("Network error: {:?}", e))?;
 
     let status = resp.status();
-    let text = resp.text().await.map_err(|e| format!("Read error: {:?}", e))?;
+    let text = resp
+        .text()
+        .await
+        .map_err(|e| format!("Read error: {:?}", e))?;
 
     if status.is_success() {
         Ok(text)
@@ -29,4 +32,3 @@ pub async fn airdrop(pubkey: String, signature: String) -> Result<String, String
         Err(format!("Airdrop failed: {} - {}", status, text))
     }
 }
-
