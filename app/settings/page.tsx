@@ -10,9 +10,22 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useRouter } from "next/navigation";
+import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 
 export default function SettingsPage() {
   const router = useRouter();
+
+  // Centralized click handler for all links
+  const handleClick = async (type: "about" | "openSource" | "footer") => {
+    await selectionFeedback();
+    if (type === "about") {
+      router.push("/about");
+    } else if (type === "openSource") {
+      openUrl("https://github.com/TheStableFoundation/not");
+    } else if (type === "footer") {
+      openUrl("https://bach.money/");
+    }
+  };
 
   return (
     <Box
@@ -51,7 +64,7 @@ export default function SettingsPage() {
               "&:hover": { bgcolor: "#f3f4f6" },
               transition: "background 0.2s",
             }}
-            onClick={() => router.push("/about")}
+            onClick={() => handleClick("about")}
             component="li"
             disablePadding
           >
@@ -72,7 +85,7 @@ export default function SettingsPage() {
               "&:hover": { bgcolor: "#f3f4f6" },
               transition: "background 0.2s",
             }}
-            onClick={() => openUrl("https://github.com/TheStableFoundation/not")}
+            onClick={() => handleClick("openSource")}
             component="li"
             disablePadding
           >
@@ -95,11 +108,11 @@ export default function SettingsPage() {
           wordBreak: "break-all",
           cursor: "pointer",
         }}
-        onClick={() => openUrl("https://bachmoney.5mb.app/")}
+        onClick={() => handleClick("footer")}
       >
         © {new Date().getFullYear()}{" "}
         <span style={{ color: "#1e88e5", textDecoration: "underline" }}>
-          https://bachmoney.5mb.app
+          bach.money
         </span>
         <br />
         The Stable Foundation

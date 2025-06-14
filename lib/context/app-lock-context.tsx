@@ -1,6 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { store } from "../store/store";
+import { error } from "@tauri-apps/plugin-log";
 
 type AppLockContextType = {
   locked: boolean;
@@ -17,24 +19,27 @@ const AppLockContext = createContext<AppLockContextType>({
 export function AppLockProvider({ children }: { children: React.ReactNode }) {
   const [locked, setLocked] = useState(false);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setLocked(window.localStorage.getItem("wallet_locked") === "true");
-    }
-  }, []);
-
-  const lock = () => {
-    setLocked(true);
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem("wallet_locked", "true");
+  const init = async () => {
+    try {
+      const locked = await store().get<boolean>("wallet_locked");
+      setLocked(locked ?? false);
+    } catch (e) {
+      error(`AppLockProvider: ${e}`);
     }
   };
 
-  const unlock = () => {
+  useEffect(() => {
+    init();
+  }, []);
+
+  const lock = async () => {
+    setLocked(true);
+    await store().set("wallet_locked", true);
+  };
+
+  const unlock = async () => {
     setLocked(false);
-    if (typeof window !== "undefined") {
-      window.localStorage.removeItem("wallet_locked");
-    }
+    await store().set("wallet_locked", false);
   };
 
   return (

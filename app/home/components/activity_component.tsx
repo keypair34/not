@@ -7,6 +7,9 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/navigation";
+import {
+  selectionFeedback
+} from '@tauri-apps/plugin-haptics';
 
 export type ActivityItem = {
   id: number;
@@ -24,6 +27,12 @@ export type ActivityItem = {
 
 export default function ActivityComponent({ item }: { item: ActivityItem }) {
   const router = useRouter();
+  const handleClick = async () => {
+    try {
+      await selectionFeedback();
+    } catch {}
+    router.push(`/activity?id=${item.id}`);
+  };
   return (
     <Card
       sx={{
@@ -36,7 +45,7 @@ export default function ActivityComponent({ item }: { item: ActivityItem }) {
         transition: "box-shadow 0.2s",
         "&:hover": { boxShadow: 6, bgcolor: "#f3f4f6" },
       }}
-      onClick={() => router.push(`/activity?id=${item.id}`)}
+      onClick={handleClick}
     >
       <CardHeader
         avatar={

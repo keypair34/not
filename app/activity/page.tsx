@@ -10,12 +10,20 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { feed } from "../home/components/feed";
+import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 
 function ActivityDetailContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const id = Number(searchParams.get("id"));
   const activity = feed.find((item) => item.id === id);
+
+  const handleBack = async () => {
+    try {
+      await selectionFeedback();
+    } catch {}
+    router.back();
+  };
 
   if (!activity) {
     return (
@@ -51,7 +59,7 @@ function ActivityDetailContent() {
         <Box sx={{ display: "flex", alignItems: "center", pl: 1, pt: 2, pb: 1 }}>
           <Button
             startIcon={<ArrowBackIcon />}
-            onClick={() => router.back()}
+            onClick={handleBack}
             sx={{
               minWidth: 0,
               px: 1,

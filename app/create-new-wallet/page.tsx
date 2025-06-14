@@ -17,12 +17,16 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { store } from "../../lib/store/store";
 import { useEffect } from "react";
+import { selectionFeedback } from "@tauri-apps/plugin-haptics";
+import { Seed, STORE_SEEDS } from "../../lib/crate/generated";
+import { DERIVE_NEXT_KEYPAIR } from "../../lib/commands";
+import { invoke } from "@tauri-apps/api/core";
 
 // Fetch all seed phrases from the tauri store
 async function fetchSeedsFromStore() {
   // This assumes you store them under a key like "seedPhrases" as an array of objects
   // Adjust the key and structure as needed for your app
-  return await store().get<{ id: string; label: string }[]>("seedPhrases");
+  return await store().get<Seed[]>(STORE_SEEDS);
 }
 
 export default function CreateNewWalletPage() {
@@ -30,8 +34,10 @@ export default function CreateNewWalletPage() {
 
   // Add a special id for "create new"
   const CREATE_NEW_ID = "__create_new__";
-  const [existingSeeds, setExistingSeeds] = React.useState<{ id: string; label: string }[]>([]);
+  const [existingSeeds, setExistingSeeds] = React.useState<Seed[]>([]);
   const [selectedSeed, setSelectedSeed] = React.useState<string>(CREATE_NEW_ID);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
 
   useEffect(() => {
     async function loadSeeds() {
@@ -48,10 +54,26 @@ export default function CreateNewWalletPage() {
     loadSeeds();
   }, []);
 
+  // Derive a new keypair for a given seedUuid and account index
+  async function deriveNextKeypair(seedUuid: string) {
+    setIsLoading(true);
+    setErrorMsg(null);
+    try {
+      const result = await invoke<any>(DERIVE_NEXT_KEYPAIR, { seedUuid });
+      // Navigate to done page with pubkey in search params
+      router.replace(`/create-new-wallet/done?pubkey=${encodeURIComponent(result.pubkey)}`);
+    } catch (e: any) {
+      setErrorMsg(e?.toString() || "Failed to derive keypair.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: "unset",
+        height: "auto",
         bgcolor: "#f5f6fa",
         display: "flex",
         flexDirection: "column",
@@ -73,7 +95,10 @@ export default function CreateNewWalletPage() {
         <Stack direction="row" alignItems="center" sx={{ mb: 2 }}>
           <Button
             startIcon={<ArrowBackIcon />}
-            onClick={() => router.back()}
+            onClick={async () => {
+              await selectionFeedback()
+              router.back()
+            }}
             sx={{ minWidth: 0, color: "#1e88e5", bgcolor: "#fff", "&:hover": { bgcolor: "#e3f2fd" } }}
           >
             Back
@@ -89,7 +114,10 @@ export default function CreateNewWalletPage() {
         <FormControl component="fieldset" sx={{ width: "100%" }}>
           <RadioGroup
             value={selectedSeed}
-            onChange={(e) => setSelectedSeed(e.target.value)}
+            onChange={async (e) => {
+              await selectionFeedback();
+              setSelectedSeed(e.target.value)
+            }}
           >
             <List sx={{ bgcolor: "transparent", color: "#fff", p: 0 }}>
               {existingSeeds.map((seed) => (
@@ -109,7 +137,21 @@ export default function CreateNewWalletPage() {
                       color: "#fff",
                       "&.Mui-checked": { color: "#fff" }
                     }} />}
-                    label={<ListItemText primary={seed.label} />}
+                    label={
+                      <ListItemText
+                        primary={
+                          seed.phrase
+                            ? (() => {
+                                const words = seed.phrase.split(/\s+/);
+                                if (words.length > 1) {
+                                  return `${words[0]} ... ${words[words.length - 1]}`;
+                                }
+                                return seed.phrase;
+                              })()
+                            : ""
+                        }
+                      />
+                    }
                     sx={{ flex: 1, m: 0, color: "#fff" }}
                   />
                 </ListItem>
@@ -138,6 +180,11 @@ export default function CreateNewWalletPage() {
             </List>
           </RadioGroup>
         </FormControl>
+        {errorMsg && (
+          <Typography sx={{ color: "#ff5252", mb: 2 }}>
+            {errorMsg}
+          </Typography>
+        )}
         <Button
           variant="contained"
           color="primary"
@@ -151,16 +198,20 @@ export default function CreateNewWalletPage() {
             boxShadow: 2,
             "&:hover": { bgcolor: "#e3f2fd" },
           }}
-          onClick={() => {
+          onClick={async () => {
+            await selectionFeedback();
             if (selectedSeed === CREATE_NEW_ID) {
-              router.push("/create");
+              router.push("/onboarding/create-wallet");
             } else {
-              alert(`Use seed: ${selectedSeed} (not implemented)`);
+              const seed = existingSeeds.find(s => s.id === selectedSeed);
+              if (seed) {
+                await deriveNextKeypair(seed.id);
+              }
             }
           }}
-          disabled={!selectedSeed}
+          disabled={!selectedSeed || isLoading}
         >
-          Continue
+          {isLoading ? "Processing..." : "Continue"}
         </Button>
       </Card>
     </Box>

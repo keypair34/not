@@ -8,6 +8,10 @@ import HomeIcon from "@mui/icons-material/Home";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { usePathname, useRouter } from "next/navigation";
+import {
+  selectionFeedback
+} from '@tauri-apps/plugin-haptics'
+
 
 export default function BottomTabBar() {
   const pathname = usePathname();
@@ -27,7 +31,10 @@ export default function BottomTabBar() {
     pathname.startsWith("/activity")
   ) value = 0;
 
-  const handleChange = (_: React.SyntheticEvent, newValue: number) => {
+  const handleChange = async (_: React.SyntheticEvent, newValue: number) => {
+    try {
+      await selectionFeedback();
+    } catch {}
     if (newValue === 0 && pathname !== "/home") {
       router.push("/home");
     } else if (newValue === 1 && pathname !== "/wallet") {
