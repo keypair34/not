@@ -48,12 +48,14 @@ pub fn import_solana_wallet(
     seeds.push(seed_struct);
     store.set(STORE_SEEDS, json!(seeds));
     store.save().ok();
-
+    let name = format!("Account {}", 0).to_string();
     let wallet = SolanaWallet {
+        name,
+        id: Uuid::new_v4(),
         account: 0,
         pubkey,
         privkey,
-        seed: seed_id,
+        seed_id: seed_id,
     };
 
     // Load existing keypairs, append, and save
@@ -91,12 +93,14 @@ pub fn derive_new_keypair(
     let keypair = derive_keypair_default(&seed.phrase, account)?;
     let pubkey = keypair.pubkey().to_string();
     let privkey = bs58::encode(keypair.to_bytes()).into_string();
-
+    let name = format!("Account {}", account).to_string();
     let wallet = SolanaWallet {
+        id: Uuid::new_v4(),
+        name,
         account,
         pubkey,
         privkey,
-        seed: seed_uuid,
+        seed_id: seed_uuid,
     };
 
     // Optionally, you can save this new keypair to the store as well

@@ -14,9 +14,8 @@ import { useAppLock } from "../../lib/context/app-lock-context";
 import WalletCard from "./components/wallet_card";
 import ActivityCard from "./components/activity_card";
 import { invoke } from "@tauri-apps/api/core";
-import Modal from "@mui/material/Modal";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { selectionFeedback } from "@tauri-apps/plugin-haptics";
+import ActiveKeypairSelectionModal from "./components/active-keypair-selection";
 
 enum State {
   Loading,
@@ -114,6 +113,12 @@ export default function WalletHome() {
     fetchKeypairs();
   }, []);
 
+  // Add onDeposit function
+  const onDeposit = React.useCallback(async () => {
+    await selectionFeedback();
+    router.push("/deposit");
+  }, [router]);
+
   if (state === State.Loading) {
     return (
       <Box
@@ -170,104 +175,28 @@ export default function WalletHome() {
           userName={userName}
           balance={balance}
           wallet={wallet}
-          onLock={() => {
+          onLock={async () => {
+            await selectionFeedback();
             lock();
             router.replace("/");
           }}
-          onDeposit={() => router.push("/deposit")}
-          onSwitchKeypair={() => setShowSwitchModal(true)}
+          onDeposit={onDeposit}
+          onSwitchKeypair={async () => {
+            await selectionFeedback();
+            setShowSwitchModal(true);
+          }}
         />
         <ActivityCard
           groupStablecoinsByDenomination={groupStablecoinsByDenomination}
         />
       </Box>
-      {/* Switch Keypair Modal */}
-      <Modal
+      <ActiveKeypairSelectionModal
         open={showSwitchModal}
         onClose={() => setShowSwitchModal(false)}
-        aria-labelledby="switch-keypair-modal"
-        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
-      >
-        <Box
-          sx={{
-            bgcolor: "background.paper",
-            borderRadius: 2,
-            boxShadow: 24,
-            p: 3,
-            minWidth: 320,
-            maxWidth: 400,
-            outline: "none",
-          }}
-        >
-          <Typography id="switch-keypair-modal" variant="h6" sx={{ mb: 2 }}>
-            Switch Keypair
-          </Typography>
-          <Box sx={{ maxHeight: 300, overflowY: "auto" }}>
-            {allKeypairs.length === 0 && (
-              <Typography color="text.secondary">No keypairs found.</Typography>
-            )}
-            {allKeypairs.map((kp) => (
-              <Box
-                key={kp.pubkey}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  mb: 1,
-                  p: 1,
-                  borderRadius: 1,
-                  bgcolor:
-                    wallet?.pubkey === kp.pubkey
-                      ? "primary.light"
-                      : "background.default",
-                  cursor: "pointer",
-                  transition: "background 0.2s",
-                  "&:hover": { bgcolor: "primary.lighter" },
-                }}
-                onClick={async () => {
-                  try {
-                    await invoke("set_active_keypair", { keypair: kp });
-                    setWallet(kp);
-                    setShowSwitchModal(false);
-                  } catch (e) {
-                    // Optionally handle error
-                  }
-                }}
-              >
-                <Box>
-                  <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                    Account {kp.account}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    sx={{ fontFamily: "monospace" }}
-                  >
-                    {kp.pubkey}
-                  </Typography>
-                </Box>
-                {wallet?.pubkey === kp.pubkey && (
-                  <Typography
-                    variant="caption"
-                    color="primary"
-                    sx={{ fontWeight: "bold" }}
-                  >
-                    Active
-                  </Typography>
-                )}
-              </Box>
-            ))}
-          </Box>
-          <Button
-            variant="outlined"
-            color="secondary"
-            fullWidth
-            sx={{ mt: 2 }}
-            onClick={() => setShowSwitchModal(false)}
-          >
-            Cancel
-          </Button>
-        </Box>
-      </Modal>
+        keypairs={allKeypairs}
+        activePubkey={wallet?.pubkey}
+        onSelect={(kp) => setWallet(kp)}
+      />
     </Box>
   );
 }

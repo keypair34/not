@@ -15,9 +15,15 @@ pub const STORE_KEYPAIRS: &str = "keypairs";
 pub const STORE_SEEDS: &str = "seeds";
 #[tsync]
 pub const STORE_ACTIVE_KEYPAIR: &str = "activeKeypair";
+#[tsync]
+#[allow(dead_code)]
+pub const STORE_PASSWORD: &str = "password";
+
+/// Legacy store for the wallet.
+/// This is used to store the wallet in the old format.
 #[allow(dead_code)]
 #[tsync]
-pub const STORE_WALLET: &str = "wallet.json"; // Legacy.
+pub const STORE_WALLET: &str = "wallet.json";
 
 pub fn store(app: &AppHandle) -> Result<Arc<Store<Wry>>, Error> {
     let path = PathBuf::from(STORE);

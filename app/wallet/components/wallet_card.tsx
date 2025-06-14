@@ -11,6 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/navigation";
+import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 
 interface WalletCardProps {
   userName: string;
@@ -32,7 +33,8 @@ export default function WalletCard({
   const router = useRouter();
 
   // Handler for creating new keypair/mnemonic
-  const handleCreateNew = () => {
+  const handleCreateNew = async () => {
+    await selectionFeedback();
     router.push("/create-new-wallet");
   };
 

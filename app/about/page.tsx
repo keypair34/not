@@ -8,6 +8,7 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useRouter } from "next/navigation";
+import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 
 export default function AboutPage() {
   const router = useRouter();
@@ -28,7 +29,10 @@ export default function AboutPage() {
         <Box sx={{ display: "flex", alignItems: "center", pl: 1, pt: 2, pb: 1 }}>
           <Button
             startIcon={<ArrowBackIcon />}
-            onClick={() => router.back()}
+            onClick={async () => {
+              await selectionFeedback();
+              router.back()
+            }}
             sx={{
               minWidth: 0,
               px: 1,

@@ -5,10 +5,13 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { selectionFeedback } from '@tauri-apps/plugin-haptics';
 import Box from '@mui/material/Box';
 
 export default function CreateOrImportWalletView() {
+  const router = useRouter();
+
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: '#f5f6fa' }}>
       <Card sx={{ maxWidth: 400, width: '100%', boxShadow: 3 }}>
@@ -30,16 +33,28 @@ export default function CreateOrImportWalletView() {
           </Typography>
         </CardContent>
         <CardActions sx={{ flexDirection: 'column', gap: 2, pb: 2 }}>
-          <Link href="/import" passHref legacyBehavior>
-            <Button variant="contained" color="primary" fullWidth>
-              Import Seed Phrase
-            </Button>
-          </Link>
-          <Link href="/create-password" passHref legacyBehavior>
-            <Button variant="outlined" color="primary" fullWidth>
-              Create New Wallet
-            </Button>
-          </Link>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={async () => {
+              await selectionFeedback();
+              router.push("/onboarding/import-wallet");
+            }}
+          >
+            Import Seed Phrase
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth
+            onClick={async () => {
+              await selectionFeedback();
+              router.push("/onboarding/create-wallet-disclaimer");
+            }}
+          >
+            Create New Wallet
+          </Button>
         </CardActions>
       </Card>
     </div>
