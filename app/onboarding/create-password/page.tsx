@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { store } from "@/lib/store/store";
 import { STORE_PASSWORD } from "@/lib/crate/generated";
 import bcrypt from "bcryptjs";
+import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 
 enum State {
   Loading,
@@ -35,6 +36,7 @@ export default function CreatePasswordPage() {
   const router = useRouter();
 
   const handleContinue = async () => {
+    await selectionFeedback();
     if (password.length < 6) {
       setError("Password must be at least 6 characters.");
       return;
@@ -54,7 +56,7 @@ export default function CreatePasswordPage() {
 
       debug("Password stored successfully in tauri plugin store.");
 
-      router.push("/wallet");
+      router.replace("/wallet");
     } catch (e: any) {
       logError(`Failed to store password securely: ${e?.toString?.() ?? e}`);
       setError("Failed to store password securely.");
@@ -102,7 +104,12 @@ export default function CreatePasswordPage() {
 
   return (
     <>
-      <Dialog open={showDialog} onClose={() => setShowDialog(false)}>
+      <Dialog 
+        open={showDialog}
+        onClose={async () => {
+          await selectionFeedback();
+          setShowDialog(false)
+      }}>
         <DialogTitle>Password Found</DialogTitle>
         <DialogContent>
           A password already exists for this wallet. Would you like to use the
@@ -110,9 +117,10 @@ export default function CreatePasswordPage() {
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={() => {
+            onClick={async () => {
+              await selectionFeedback();
               setShowDialog(false);
-              router.push("/onboarding/create-wallet");
+              router.replace("/wallet");
             }}
             color="primary"
             variant="contained"
@@ -120,7 +128,8 @@ export default function CreatePasswordPage() {
             Use Existing Password
           </Button>
           <Button
-            onClick={() => {
+            onClick={async () => {
+              await selectionFeedback();
               setShowDialog(false);
               setPassword("");
               setConfirm("");
