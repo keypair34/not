@@ -15,6 +15,8 @@ import { store } from "../../../lib/store/store";
 import { error } from "@tauri-apps/plugin-log";
 import { useRouter } from "next/navigation";
 import { DERIVE_NEW_KEYPAIR } from "../../../lib/commands";
+import { selectionFeedback } from "@tauri-apps/plugin-haptics";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function ImportKeypairsPage() {
   const [keypairs, setKeypairs] = React.useState<SolanaWallet[]>([]);
@@ -28,7 +30,9 @@ export default function ImportKeypairsPage() {
         const storeInstance = store();
         const result = await storeInstance.get<SolanaWallet[]>(STORE_KEYPAIRS);
         // Only show keypair(s) with account === 0
-        setKeypairs((result || []).filter((kp: SolanaWallet) => kp.account === 0));
+        setKeypairs(
+          (result || []).filter((kp: SolanaWallet) => kp.account === 0)
+        );
       } catch {
         setKeypairs([]);
       }
@@ -38,6 +42,7 @@ export default function ImportKeypairsPage() {
   }, []);
 
   const handleGenerateNew = async () => {
+    await selectionFeedback();
     // Only allow up to 5 keypairs
     if (keypairs.length >= 5) return;
     try {
@@ -56,7 +61,22 @@ export default function ImportKeypairsPage() {
     }
   };
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          bgcolor: "#f5f6fa",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -122,7 +142,10 @@ export default function ImportKeypairsPage() {
                     secondary={
                       <span style={{ fontFamily: "monospace" }}>
                         {wallet.pubkey.length > 6
-                          ? `${wallet.pubkey.slice(0, 3)}...${wallet.pubkey.slice(-3)}`
+                          ? `${wallet.pubkey.slice(
+                              0,
+                              3
+                            )}...${wallet.pubkey.slice(-3)}`
                           : wallet.pubkey}
                       </span>
                     }
@@ -145,7 +168,10 @@ export default function ImportKeypairsPage() {
               color="secondary"
               fullWidth
               sx={{ mt: 2 }}
-              onClick={() => window.location.assign("/home")}
+              onClick={async () => {
+                await selectionFeedback();
+                router.replace("/onboarding/create-password");
+              }}
             >
               I&apos;m done
             </Button>
