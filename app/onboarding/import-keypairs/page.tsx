@@ -31,7 +31,7 @@ export default function ImportKeypairsPage() {
         const result = await storeInstance.get<SolanaWallet[]>(STORE_KEYPAIRS);
         // Only show keypair(s) with account === 0
         setKeypairs(
-          (result || []).filter((kp: SolanaWallet) => kp.account === 0)
+          (result || []).filter((kp: SolanaWallet) => kp.account === 0),
         );
       } catch {
         setKeypairs([]);
@@ -144,7 +144,7 @@ export default function ImportKeypairsPage() {
                         {wallet.pubkey.length > 6
                           ? `${wallet.pubkey.slice(
                               0,
-                              3
+                              3,
                             )}...${wallet.pubkey.slice(-3)}`
                           : wallet.pubkey}
                       </span>
