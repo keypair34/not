@@ -33,14 +33,27 @@ export default function CreateWalletDisclaimerPage() {
           color: "#212529",
         }}
       >
-        <Typography variant="h5" fontWeight="bold" sx={{ mb: 2, textAlign: "center" }}>
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          sx={{ mb: 2, textAlign: "center" }}
+        >
           Important Disclaimer
         </Typography>
         <Typography sx={{ mb: 3, color: "#333", textAlign: "center" }}>
-          You are about to create a self-custody wallet. <br /><br />
-          <b>You are the only one who controls your wallet and funds.</b> <br /><br />
-          <b>Your seed phrase is the ONLY way to recover your wallet and assets.</b> <br /><br />
-          If you lose your seed phrase, <span style={{ color: "#e53935", fontWeight: "bold" }}>your funds cannot be recovered.</span>
+          You are about to create a self-custody wallet. <br />
+          <br />
+          <b>You are the only one who controls your wallet and funds.</b> <br />
+          <br />
+          <b>
+            Your seed phrase is the ONLY way to recover your wallet and assets.
+          </b>{" "}
+          <br />
+          <br />
+          If you lose your seed phrase,{" "}
+          <span style={{ color: "#e53935", fontWeight: "bold" }}>
+            your funds cannot be recovered.
+          </span>
         </Typography>
         <Button
           variant="contained"
@@ -55,7 +68,7 @@ export default function CreateWalletDisclaimerPage() {
           }}
           onClick={async () => {
             await selectionFeedback();
-            router.push("/onboarding/create-wallet?onboarding=1")
+            router.push("/onboarding/create-wallet?onboarding=1");
           }}
         >
           I Understand, Continue

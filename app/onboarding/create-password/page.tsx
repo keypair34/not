@@ -104,12 +104,13 @@ export default function CreatePasswordPage() {
 
   return (
     <>
-      <Dialog 
+      <Dialog
         open={showDialog}
         onClose={async () => {
           await selectionFeedback();
-          setShowDialog(false)
-      }}>
+          setShowDialog(false);
+        }}
+      >
         <DialogTitle>Password Found</DialogTitle>
         <DialogContent>
           A password already exists for this wallet. Would you like to use the
