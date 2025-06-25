@@ -54,7 +54,7 @@ function DetailContent() {
           ONBOARDING_CREATE_WALLET,
           {
             account: 0,
-          }
+          },
         );
         if (!cancelledRef.current) {
           debug(`create_solana_wallet result: ${JSON.stringify(result)}`);
@@ -74,7 +74,7 @@ function DetailContent() {
         }
       }
     },
-    []
+    [],
   );
   // Move this handler outside of the render to avoid closure issues
   const handleDialogClose = React.useCallback(async () => {
