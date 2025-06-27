@@ -1,7 +1,7 @@
 {
   "name": "notwallet",
   "private": false,
-  "version": "0.2.2",
+  "version": "0.2.3",
   "type": "module",
   "scripts": {
     "dev": "next dev --turbopack -p 61234",
@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "tauri": "tauri",
-    "publish-ios": "./scripts/publish-ios.sh"
+    "publish-ios": "./scripts/publish-ios.sh",
+    "publish-android": "./scripts/publish-android.sh"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
