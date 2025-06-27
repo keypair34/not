@@ -3,49 +3,44 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import OnboardingCard from "./components/onboarding_card";
 import { feed } from "./components/feed";
-import ActivityComponent from "./components/activity_component";
-import { invoke } from "@tauri-apps/api/core";
-import { SolanaWallet, STORE_ACTIVE_KEYPAIR } from "../../lib/crate/generated";
-import { store } from "../../lib/store/store";
-import { debug as tauriDebug } from "@tauri-apps/plugin-log";
-import CircularProgress from "@mui/material/CircularProgress";
+import LoadingCard from "@/lib/components/loading-card";
+import ActivityListView from "./components/activity_list_view";
+import { SolanaWallet, STORE_ACTIVE_KEYPAIR } from "@/lib/crate/generated";
+import { store } from "@/lib/store/store";
 
-enum OnboardingState {
+
+enum State {
   Loading,
-  Show,
-  Hide,
+  Loaded,
   Error,
 }
 
 export default function HomeFeedPage() {
-  const [onboardingState, setOnboardingState] = useState<OnboardingState>(OnboardingState.Loading);
+  const [state, setState] = useState<State>(State.Loading);
+  const [pubkey, setPubkey] = useState<string | undefined>(undefined);
 
-  async function checkOnboarding(setOnboardingState: (s: OnboardingState) => void) {
-    try {
-      const wallet = await store().get<SolanaWallet>(STORE_ACTIVE_KEYPAIR);
-      if (!wallet?.pubkey) {
-        setOnboardingState(OnboardingState.Hide);
-        return;
-      }
-      const exists = await invoke<boolean>("check_pubkey", { pubkey: wallet.pubkey });
-      tauriDebug(`check_pubkey exists: ${exists}, pubkey: ${wallet.pubkey}`);
-      setOnboardingState(exists ? OnboardingState.Hide : OnboardingState.Show);
-    } catch (err) {
-      tauriDebug(`check_pubkey error: ${err}`);
-      setOnboardingState(OnboardingState.Error);
+  async function loadActivities() {
+    const wallet = await store().get<SolanaWallet>(STORE_ACTIVE_KEYPAIR);
+    if (!wallet?.pubkey) {
+      setState(State.Error);
+      return;
     }
+
+    setPubkey(wallet.pubkey);
+    setTimeout(() => {
+      setState(State.Loaded);
+    }, 2000); // 2 seconds delay
   }
 
   React.useEffect(() => {
-    checkOnboarding(setOnboardingState);
+    loadActivities();
   }, []);
 
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: "unset",
         bgcolor: "#f5f6fa",
         pb: 10,
         display: "flex",
@@ -63,27 +58,10 @@ export default function HomeFeedPage() {
           Activity Feed
         </Typography>
       </Box>
-      {onboardingState === OnboardingState.Loading && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "30vh",
-            background: "transparent",
-          }}
-        >
-          <CircularProgress color="primary" size={48} />
-        </div>
+      {state === State.Loading && (
+        <LoadingCard/>
       )}
-      {onboardingState === OnboardingState.Show && (
-        <OnboardingCard open={true} onClose={() => setOnboardingState(OnboardingState.Hide)} />
-      )}
-      <Box sx={{ width: "100%", maxWidth: 480 }}>
-        {feed.map((item) => (
-          <ActivityComponent key={item.id} item={item} />
-        ))}
-      </Box>
+      {state === State.Loaded && pubkey && <ActivityListView feed={feed} pubkey={pubkey} /> }
     </Box>
   );
 }
