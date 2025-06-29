@@ -53,7 +53,9 @@ export default function OnboardingCardAirdrop({
 
   return (
     <>
-      {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
+      {showConfetti && (
+        <Confetti width={window.innerWidth} height={window.innerHeight} />
+      )}
       <Card
         sx={{
           width: "100%",
@@ -165,7 +167,7 @@ export default function OnboardingCardAirdrop({
                 }}
                 onClick={async () => {
                   await selectionFeedback();
-                  openUrl("https://bach.money/")
+                  openUrl("https://bach.money/");
                 }}
               >
                 Your wallet address will be used for the airdrop.
@@ -197,37 +199,84 @@ export default function OnboardingCardAirdrop({
         aria-labelledby="sign-modal-title"
         aria-describedby="sign-modal-desc"
       >
-        <Box
+        <Card
           sx={{
             position: "fixed",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            bgcolor: "#fff",
-            borderRadius: 3,
-            boxShadow: 24,
-            p: 4,
-            minWidth: 320,
+            bgcolor: "linear-gradient(135deg, #212529 60%, #1e88e5 100%)",
+            borderRadius: 4,
+            boxShadow: 8,
+            minWidth: 340,
             maxWidth: "90vw",
             textAlign: "center",
+            color: "#fff",
+            p: 0,
+            overflow: "visible",
+            border: "2px solid #1e88e5",
           }}
         >
-          <Typography id="sign-modal-title" variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-            Claim Airdrop
-          </Typography>
-          <Typography id="sign-modal-desc" variant="body1" sx={{ mb: 2 }}>
-            Sign this message by clicking the button below.
-          </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSign}
-            sx={{ mt: 2, px: 4, borderRadius: 2 }}
-            disabled={signing}
-          >
-            {signing ? "Signing..." : "Sign"}
-          </Button>
-        </Box>
+          <Box sx={{ p: 4, pb: 3 }}>
+            <Typography
+              id="sign-modal-title"
+              variant="h5"
+              fontWeight="bold"
+              sx={{
+                mb: 1,
+                color: "#212529",
+                textShadow: "0 2px 8px #1e88e599",
+                letterSpacing: 1,
+              }}
+            >
+              Claim Airdrop
+            </Typography>
+            <Typography
+              id="sign-modal-desc"
+              variant="body1"
+              sx={{
+                mb: 3,
+                color: "#b0bec5",
+                fontWeight: 500,
+              }}
+            >
+              Sign this message to prove wallet ownership and claim your
+              airdrop.
+            </Typography>
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={handleSign}
+              sx={{
+                bgcolor: "#fff",
+                color: "#1e88e5",
+                fontWeight: "bold",
+                fontSize: "1.1rem",
+                borderRadius: 3,
+                boxShadow: 2,
+                px: 4,
+                py: 1.5,
+                "&:hover": { bgcolor: "#e3f2fd", color: "#1565c0" },
+                transition: "all 0.2s",
+                mt: 1,
+              }}
+              disabled={signing}
+            >
+              {signing ? "Signing..." : "Sign & Claim"}
+            </Button>
+            <Typography
+              variant="caption"
+              sx={{
+                display: "block",
+                mt: 2,
+                color: "#b0bec5",
+              }}
+            >
+              Your signature is only used to verify your wallet address.
+            </Typography>
+          </Box>
+        </Card>
       </Modal>
     </>
   );

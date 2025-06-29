@@ -1,7 +1,7 @@
 {
   "name": "notwallet",
   "private": false,
-  "version": "0.3.1",
+  "version": "0.3.2",
   "type": "module",
   "scripts": {
     "dev": "next dev --turbopack -p 61234",
@@ -41,7 +41,7 @@
     "@types/react-dom": "19.0.4",
     "@vitejs/plugin-react": "^4.6.0",
     "autoprefixer": "^10.4.21",
-    "esbuild": ">=0.25.0",
+    "esbuild": "^0.25.5",
     "eslint": "^9.30.0",
     "eslint-config-next": "15.3.3",
     "postcss": "^8.5.6",
