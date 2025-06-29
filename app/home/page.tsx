@@ -29,7 +29,7 @@ export default function HomeFeedPage() {
     setPubkey(wallet.pubkey);
     setTimeout(() => {
       setState(State.Loaded);
-    }, 1000); // 2 seconds delay
+    }, 1500); // 2 seconds delay
   }
 
   React.useEffect(() => {
