@@ -44,16 +44,26 @@ export default function LockedWalletView({
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+    <Box
+      sx={{
         minHeight: "unset",
-        height: "auto",
-        background: "#f5f6fa",
+        bgcolor: "#f5f6fa",
+        pb: 10,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
       }}
     >
+      <Box sx={{ width: "100%", maxWidth: 480, pt: 3, pb: 2 }}>
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+          align="center"
+          sx={{ mb: 2 }}
+        >
+          Not - Crypto Wallet
+        </Typography>
+      </Box>
       <Card sx={{ maxWidth: 400, width: "100%", boxShadow: 3 }}>
         <CardContent>
           <Box
@@ -112,6 +122,6 @@ export default function LockedWalletView({
           </Box>
         </CardContent>
       </Card>
-    </div>
+    </Box>
   );
 }

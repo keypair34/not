@@ -1,7 +1,8 @@
 "use client";
 import * as React from "react";
 import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
+import LoadingCard from "@/lib/components/loading-card";
 import { store } from "../../lib/store/store";
 import {
   SolanaWallet,
@@ -31,7 +32,7 @@ function groupStablecoinsByDenomination(
     amount: number;
     date: string;
     type: "received" | "sent";
-  }[]
+  }[],
 ) {
   // Define mapping from coin to denomination
   const denominationMap: Record<string, string> = {
@@ -63,7 +64,7 @@ export default function WalletHome() {
   const { lock } = useAppLock();
   const router = useRouter();
   const [wallet, setWallet] = React.useState<SolanaWallet | undefined>(
-    undefined
+    undefined,
   );
   const [state, setState] = React.useState(State.Loading);
   const [showSwitchModal, setShowSwitchModal] = React.useState(false);
@@ -96,6 +97,21 @@ export default function WalletHome() {
       setState(State.Error);
     }
   };
+
+  const onSelectWallet = async (wallet: SolanaWallet) => {
+    setState(State.Loading);
+    try {
+      await invoke("set_active_keypair", { keypair: wallet });
+      setTimeout(() => {
+        setWallet(wallet);
+        setState(State.Loaded);
+      }, 500); // 2 seconds delay
+    } catch (e) {
+      // Optionally handle error
+      setState(State.Error);
+    }
+  };
+
   React.useEffect(() => {
     loadWallet();
   }, []);
@@ -131,7 +147,7 @@ export default function WalletHome() {
           justifyContent: "center",
         }}
       >
-        <CircularProgress />
+        <LoadingCard />
       </Box>
     );
   }
@@ -170,6 +186,16 @@ export default function WalletHome() {
         alignItems: "center",
       }}
     >
+      <Box sx={{ width: "100%", maxWidth: 480, pt: 3, pb: 2 }}>
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+          align="center"
+          sx={{ mb: 2 }}
+        >
+          Wallet
+        </Typography>
+      </Box>
       <Box sx={{ width: "100%", maxWidth: 480 }}>
         <WalletCard
           userName={userName}
@@ -195,7 +221,7 @@ export default function WalletHome() {
         onClose={() => setShowSwitchModal(false)}
         keypairs={allKeypairs}
         activePubkey={wallet?.pubkey}
-        onSelect={(kp) => setWallet(kp)}
+        onSelect={onSelectWallet}
       />
     </Box>
   );

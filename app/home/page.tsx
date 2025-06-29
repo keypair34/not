@@ -9,7 +9,6 @@ import ActivityListView from "./components/activity_list_view";
 import { SolanaWallet, STORE_ACTIVE_KEYPAIR } from "@/lib/crate/generated";
 import { store } from "@/lib/store/store";
 
-
 enum State {
   Loading,
   Loaded,
@@ -30,7 +29,7 @@ export default function HomeFeedPage() {
     setPubkey(wallet.pubkey);
     setTimeout(() => {
       setState(State.Loaded);
-    }, 2000); // 2 seconds delay
+    }, 1000); // 2 seconds delay
   }
 
   React.useEffect(() => {
@@ -58,10 +57,10 @@ export default function HomeFeedPage() {
           Activity Feed
         </Typography>
       </Box>
-      {state === State.Loading && (
-        <LoadingCard/>
+      {state === State.Loading && <LoadingCard />}
+      {state === State.Loaded && pubkey && (
+        <ActivityListView feed={feed} pubkey={pubkey} />
       )}
-      {state === State.Loaded && pubkey && <ActivityListView feed={feed} pubkey={pubkey} /> }
     </Box>
   );
 }
