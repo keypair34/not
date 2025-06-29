@@ -11,13 +11,14 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import LanguageIcon from "@mui/icons-material/Language";
 import { useRouter } from "next/navigation";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
+import { openUrl } from "@tauri-apps/plugin-opener";
 
 export default function AboutPage() {
   const router = useRouter();
 
   const handleExternal = async (url: string) => {
     await selectionFeedback();
-    window.open(url, "_blank");
+    await openUrl(url);
   };
 
   return (
@@ -81,7 +82,7 @@ export default function AboutPage() {
             fontWeight="bold"
             sx={{ mb: 1, color: "#1e88e5" }}
           >
-            Not - Crypto Wallet
+            Not - Crypto Dollar Wallet
           </Typography>
           <Typography variant="body1" sx={{ mb: 2 }}>
             A modern non-custodial open-source Solana wallet app built for
