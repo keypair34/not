@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2.0.0",
-  "productName": "NotWallet",
+  "productName": "Not - Crypto Dollar Wallet",
   "version": "0.3.1",
   "identifier": "xyz.notwallet.NotWallet",
   "build": {
@@ -31,6 +31,9 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
+    "android": {
+      "minSdkVersion": 23
+    },
     "iOS": {
       "minimumSystemVersion": "13.0",
       "developmentTeam": "NADBSNEZWH"
