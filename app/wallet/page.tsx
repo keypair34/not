@@ -60,7 +60,7 @@ function groupStablecoinsByDenomination(
 export default function WalletHome() {
   // Placeholder data
   const balance = "$2,500.00";
-  const userName = "Alex Morgan";
+  const [userName, setUserName] = React.useState<string>("Alex Morgan");
   const { lock } = useAppLock();
   const router = useRouter();
   const [wallet, setWallet] = React.useState<SolanaWallet | undefined>(
@@ -75,23 +75,20 @@ export default function WalletHome() {
     try {
       const keypairs = await store().get<SolanaWallet[]>(STORE_KEYPAIRS);
       let walletActive: SolanaWallet | undefined;
-      try {
-        walletActive = await store().get<SolanaWallet>(STORE_ACTIVE_KEYPAIR);
-      } catch {
-        walletActive = undefined;
-      }
+      walletActive = await store().get<SolanaWallet>(STORE_ACTIVE_KEYPAIR);
       let wallet: SolanaWallet | undefined = walletActive;
       if (!wallet && Array.isArray(keypairs) && keypairs.length > 0) {
         wallet = keypairs[0];
         // Set the first wallet as active if none is active
-        try {
-          await invoke("set_active_keypair", { keypair: wallet });
-        } catch (e) {
-          // Optionally handle error
-        }
+        await invoke("set_active_keypair", { keypair: wallet });
       }
       debug(`wallet: ${wallet?.pubkey}`);
       setWallet(wallet);
+      // Load username
+      const username = await store().get<string>("username");
+      if (username !== undefined) {
+        setUserName(username);
+      }
       setState(State.Loaded);
     } catch {
       setState(State.Error);
