@@ -44,6 +44,7 @@ export default function ActivityDetailPage() {
           maxWidth: 400,
           width: "100%",
           px: 2,
+          py: 2,
           boxShadow: 3,
           position: "relative",
         }}
