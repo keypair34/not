@@ -7,11 +7,18 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import LanguageIcon from "@mui/icons-material/Language";
 import { useRouter } from "next/navigation";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 
 export default function AboutPage() {
   const router = useRouter();
+
+  const handleExternal = async (url: string) => {
+    await selectionFeedback();
+    window.open(url, "_blank");
+  };
 
   return (
     <Box
@@ -25,13 +32,31 @@ export default function AboutPage() {
         py: 4,
       }}
     >
-      <Card sx={{ maxWidth: 400, width: "100%", p: 0, boxShadow: 3, position: "relative" }}>
-        <Box sx={{ display: "flex", alignItems: "center", pl: 1, pt: 2, pb: 1 }}>
+      <Card
+        sx={{
+          maxWidth: 400,
+          width: "100%",
+          px: 2,
+          py: 2,
+          boxShadow: 3,
+          position: "relative",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            pl: 2,
+            pt: 2,
+            pb: 1,
+            bgcolor: "transparent",
+          }}
+        >
           <Button
             startIcon={<ArrowBackIcon />}
             onClick={async () => {
               await selectionFeedback();
-              router.back()
+              router.back();
             }}
             sx={{
               minWidth: 0,
@@ -43,7 +68,7 @@ export default function AboutPage() {
           >
             Back
           </Button>
-          <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end"}}>
+          <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
             <Typography variant="h5" fontWeight="bold" paddingRight={2}>
               About
             </Typography>
@@ -51,14 +76,45 @@ export default function AboutPage() {
         </Box>
         <Divider />
         <Box sx={{ px: 4, py: 3, pr: 5 }}>
+          <Typography
+            variant="h6"
+            fontWeight="bold"
+            sx={{ mb: 1, color: "#1e88e5" }}
+          >
+            Not - Crypto Wallet
+          </Typography>
           <Typography variant="body1" sx={{ mb: 2 }}>
-            <b>Not Wallet</b> is a modern, open-source Solana wallet app built for privacy, simplicity, and security.
+            A modern non-custodial open-source Solana wallet app built for
+            privacy, simplicity, and security.
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            This app is developed and maintained by The Stable Foundation. For more information, visit our website or check out the source code.
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+            Developed and maintained by The Stable Foundation.
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Version: 0.0.1
+          <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<LanguageIcon />}
+              onClick={() => handleExternal("https://bach.money")}
+              sx={{ textTransform: "none", fontWeight: 600 }}
+            >
+              Website
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              startIcon={<GitHubIcon />}
+              onClick={() =>
+                handleExternal("https://github.com/TheStableFoundation/not")
+              }
+              sx={{ textTransform: "none", fontWeight: 600 }}
+            >
+              GitHub
+            </Button>
+          </Box>
+          <Divider sx={{ my: 2 }} />
+          <Typography variant="caption" color="text.secondary">
+            © {new Date().getFullYear()} The Stable Foundation
           </Typography>
         </Box>
       </Card>
