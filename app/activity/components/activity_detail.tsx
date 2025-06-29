@@ -38,11 +38,9 @@ function ActivityDetailContent() {
     <Box
       sx={{
         minHeight: "unset",
-        bgcolor: "#f5f6fa",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        py: 6,
         position: "relative",
       }}
     >
