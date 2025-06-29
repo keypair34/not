@@ -2,21 +2,32 @@
 
 import * as React from "react";
 import { Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import Box from "@mui/material/Box";
+import LoadingCard from "@/lib/components/loading-card";
+import ActivityDetailContent from "@/app/activity/components/activity_detail";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
+import { Box } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { feed } from "../home/components/feed";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
+import { useRouter } from "next/navigation";
 
-function ActivityDetailContent() {
-  const searchParams = useSearchParams();
+enum State {
+  Loading,
+  Loaded,
+  Error,
+}
+
+export default function ActivityDetailPage() {
+  const [state, setState] = React.useState(State.Loading);
   const router = useRouter();
-  const id = Number(searchParams.get("id"));
-  const activity = feed.find((item) => item.id === id);
+
+  const loadActivity = async () => {
+    setTimeout(() => {
+      setState(State.Loaded);
+    }, 2000);
+  };
 
   const handleBack = async () => {
     try {
@@ -25,23 +36,9 @@ function ActivityDetailContent() {
     router.back();
   };
 
-  if (!activity) {
-    return (
-      <Box
-        sx={{
-          minHeight: "100vh",
-          bgcolor: "#f5f6fa",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Typography color="error" variant="h6">
-          Activity not found.
-        </Typography>
-      </Box>
-    );
-  }
+  React.useEffect(() => {
+    loadActivity();
+  }, []);
 
   return (
     <Box
@@ -55,8 +52,18 @@ function ActivityDetailContent() {
         py: 4,
       }}
     >
-      <Card sx={{ maxWidth: 400, width: "100%", p: 0, boxShadow: 3, position: "relative" }}>
-        <Box sx={{ display: "flex", alignItems: "center", pl: 1, pt: 2, pb: 1 }}>
+      <Card
+        sx={{
+          maxWidth: 400,
+          width: "100%",
+          p: 0,
+          boxShadow: 3,
+          position: "relative",
+        }}
+      >
+        <Box
+          sx={{ display: "flex", alignItems: "center", pl: 1, pt: 2, pb: 1 }}
+        >
           <Button
             startIcon={<ArrowBackIcon />}
             onClick={handleBack}
@@ -77,32 +84,9 @@ function ActivityDetailContent() {
           </Box>
         </Box>
         <Divider />
-        <Box sx={{ px: 4, py: 3 }}>
-          <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1 }}>
-            {activity.action}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            {activity.description}
-          </Typography>
-          <Typography variant="body2" sx={{ mb: 1 }}>
-            <b>Amount:</b> {activity.amount}
-          </Typography>
-          <Typography variant="body2" sx={{ mb: 1 }}>
-            <b>Date:</b> {activity.time}
-          </Typography>
-          <Typography variant="body2" sx={{ mb: 1 }}>
-            <b>Wallet:</b> {activity.user.wallet}
-          </Typography>
-        </Box>
+        {state === State.Loading && <LoadingCard />}
+        {state === State.Loaded && <ActivityDetailContent />}
       </Card>
     </Box>
-  );
-}
-
-export default function ActivityDetailPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <ActivityDetailContent />
-    </Suspense>
   );
 }
