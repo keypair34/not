@@ -16,10 +16,21 @@ export default function SettingsPage() {
   const router = useRouter();
 
   // Centralized click handler for all links
-  const handleClick = async (type: "about" | "openSource" | "footer") => {
+  const handleClick = async (
+    type:
+      | "about"
+      | "openSource"
+      | "footer"
+      | "privacyPolicy"
+      | "termsOfService",
+  ) => {
     await selectionFeedback();
     if (type === "about") {
       router.push("/about");
+    } else if (type === "privacyPolicy") {
+      openUrl("https://bach.money/privacy-policy");
+    } else if (type === "termsOfService") {
+      openUrl("https://bach.money/terms-of-service");
     } else if (type === "openSource") {
       openUrl("https://github.com/TheStableFoundation/not");
     } else if (type === "footer") {
@@ -39,6 +50,16 @@ export default function SettingsPage() {
         py: 4,
       }}
     >
+      <Box sx={{ width: "100%", maxWidth: 480, pt: 3, pb: 2 }}>
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+          align="center"
+          sx={{ mb: 2 }}
+        >
+          Settings
+        </Typography>
+      </Box>
       <Card
         sx={{
           maxWidth: 400,
@@ -50,7 +71,7 @@ export default function SettingsPage() {
       >
         <Box sx={{ pt: 4, pb: 2, px: 4 }}>
           <Typography variant="h5" fontWeight="bold" sx={{ mb: 2 }}>
-            Settings
+            About
           </Typography>
         </Box>
         <Divider />
@@ -70,6 +91,48 @@ export default function SettingsPage() {
           >
             <ListItemText
               primary="About"
+              primaryTypographyProps={{
+                sx: { fontSize: "1.08rem", fontWeight: 500, py: 1 },
+              }}
+            />
+          </ListItem>
+          <Divider />
+          <ListItem
+            sx={{
+              px: 4,
+              cursor: "pointer",
+              minHeight: 56,
+              borderRadius: 2,
+              "&:hover": { bgcolor: "#f3f4f6" },
+              transition: "background 0.2s",
+            }}
+            onClick={() => handleClick("termsOfService")}
+            component="li"
+            disablePadding
+          >
+            <ListItemText
+              primary="Terms of Service"
+              primaryTypographyProps={{
+                sx: { fontSize: "1.08rem", fontWeight: 500, py: 1 },
+              }}
+            />
+          </ListItem>
+          <Divider />
+          <ListItem
+            sx={{
+              px: 4,
+              cursor: "pointer",
+              minHeight: 56,
+              borderRadius: 2,
+              "&:hover": { bgcolor: "#f3f4f6" },
+              transition: "background 0.2s",
+            }}
+            onClick={() => handleClick("privacyPolicy")}
+            component="li"
+            disablePadding
+          >
+            <ListItemText
+              primary="Privacy Policy"
               primaryTypographyProps={{
                 sx: { fontSize: "1.08rem", fontWeight: 500, py: 1 },
               }}
