@@ -42,6 +42,7 @@ function ActivityDetailContent() {
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
+        py: 4,
       }}
     >
       <Card

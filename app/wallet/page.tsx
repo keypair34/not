@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
 import LoadingCard from "@/lib/components/loading-card";
 import { store } from "../../lib/store/store";
 import {
@@ -186,6 +186,16 @@ export default function WalletHome() {
         alignItems: "center",
       }}
     >
+      <Box sx={{ width: "100%", maxWidth: 480, pt: 3, pb: 2 }}>
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+          align="center"
+          sx={{ mb: 2 }}
+        >
+          Wallet
+        </Typography>
+      </Box>
       <Box sx={{ width: "100%", maxWidth: 480 }}>
         <WalletCard
           userName={userName}
