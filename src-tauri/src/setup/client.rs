@@ -15,15 +15,14 @@ pub struct ClientInfo {
     pub os_name: String,
     pub os_version: String,
     pub app_version: String,
-    pub device_model: Option<String>,
 }
 
 /// Response from the server after registering client
 #[derive(Debug, Deserialize)]
 pub struct RegisterClientResponse {
-    pub success: bool,
+    pub code: bool,
     pub message: Option<String>,
-    // Add more fields as needed based on the API response
+    pub client_info: Option<ClientInfo>,
 }
 
 /// Register the client with the server.
@@ -70,53 +69,14 @@ pub fn setup_client(app: &App) -> Result<(), Box<dyn std::error::Error>> {
     };
 
     // Get OS information
-    #[cfg(target_os = "windows")]
-    let os_name = "Windows".to_string();
-    #[cfg(target_os = "macos")]
-    let os_name = "macOS".to_string();
-    #[cfg(target_os = "linux")]
-    let os_name = "Linux".to_string();
-    #[cfg(target_os = "ios")]
-    let os_name = "iOS".to_string();
-    #[cfg(target_os = "android")]
-    let os_name = "Android".to_string();
-    #[cfg(not(any(
-        target_os = "windows",
-        target_os = "macos",
-        target_os = "linux",
-        target_os = "ios",
-        target_os = "android"
-    )))]
-    let os_name = "Unknown".to_string();
+    let info = os_info::get();
 
-    // Get OS version
-    // Get OS version information
-    #[cfg(target_os = "windows")]
-    let os_version = std::env::consts::OS.to_string();
-    #[cfg(target_os = "macos")]
-    let os_version = std::env::consts::OS.to_string();
-    #[cfg(target_os = "linux")]
-    let os_version = std::env::consts::OS.to_string();
-    #[cfg(target_os = "ios")]
-    let os_version = "iOS".to_string();
-    #[cfg(target_os = "android")]
-    let os_version = "Android".to_string();
-    #[cfg(not(any(
-        target_os = "windows",
-        target_os = "macos",
-        target_os = "linux",
-        target_os = "ios",
-        target_os = "android"
-    )))]
-    let os_version = "Unknown".to_string();
+    // Print full information:
+    println!("OS information: {info}");
 
-    // Get device model information
-    #[cfg(target_os = "ios")]
-    let device_model = Some("iPhone/iPad".to_string());
-    #[cfg(target_os = "android")]
-    let device_model = Some("Android Device".to_string());
-    #[cfg(not(any(target_os = "ios", target_os = "android")))]
-    let device_model = None;
+    // Print information separately:
+    println!("Type: {}", info.os_type());
+    println!("Version: {}", info.version());
 
     // Simple device information with straightforward platform detection
     // For a production app, you might want to implement more sophisticated
@@ -125,10 +85,9 @@ pub fn setup_client(app: &App) -> Result<(), Box<dyn std::error::Error>> {
     // Create client info with simple fields as requested
     let client_info = ClientInfo {
         uuid: installation_id,
-        os_name,
-        os_version,
+        os_name: info.os_type().to_string(),
+        os_version: info.version().to_string(),
         app_version: app.handle().package_info().version.to_string(),
-        device_model,
     };
 
     // Log client registration
