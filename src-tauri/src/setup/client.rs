@@ -11,6 +11,17 @@ const INSTALLATION_ID_KEY: &str = "installation_id";
 /// Client information to be sent to the server
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ClientInfo {
+    pub id: i32,
+    pub uuid: String,
+    pub os_name: String,
+    pub os_version: String,
+    pub app_version: String,
+    pub created_at: String,
+    pub updated_at: String,
+}
+
+#[derive(Debug, Serialize, Clone)]
+pub struct ClientInfoPayload {
     pub uuid: String,
     pub os_name: String,
     pub os_version: String,
@@ -83,7 +94,7 @@ pub fn setup_client(app: &App) -> Result<(), Box<dyn std::error::Error>> {
     // device detection using platform-specific APIs
 
     // Create client info with simple fields as requested
-    let client_info = ClientInfo {
+    let client_info = ClientInfoPayload {
         uuid: installation_id,
         os_name: info.os_type().to_string(),
         os_version: info.version().to_string(),
@@ -115,12 +126,12 @@ pub fn setup_client(app: &App) -> Result<(), Box<dyn std::error::Error>> {
 
 /// Send client information to the server
 async fn send_client_info(
-    client_info: &ClientInfo,
+    client_info: &ClientInfoPayload,
 ) -> Result<RegisterClientResponse, Box<dyn StdError>> {
     let client = HttpClient::new();
 
     // API endpoint
-    let url = "https://0.0.0.0:3001/api/v1/not-wallet";
+    let url = "https://api.musik88.com/api/v1/setup-client";
 
     let response = client
         .post(url)
