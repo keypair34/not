@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import Link from "next/link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { invoke } from "@tauri-apps/api/core";
-import { debug } from '@tauri-apps/plugin-log';
+import { debug } from "@tauri-apps/plugin-log";
 import { useRouter } from "next/navigation";
 import { SolanaWallet } from "../../../lib/crate/generated";
 
@@ -29,10 +29,9 @@ export default function ImportWalletPage() {
     setError("");
     try {
       debug(`Invoking import_solana_wallet with seed: ${seed}`);
-      const result = await invoke<SolanaWallet>(
-        "import_solana_wallet",
-        { mnemonicPhrase: seed }
-      );
+      const result = await invoke<SolanaWallet>("import_solana_wallet", {
+        mnemonicPhrase: seed,
+      });
       debug(`import_solana_wallet result: ${JSON.stringify(result)}`);
       setPubkey(result.pubkey);
       // Redirect to import-keypairs page after successful import, passing wallet in state
