@@ -7,12 +7,12 @@ import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import Link from "next/link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { invoke } from "@tauri-apps/api/core";
 import { debug } from "@tauri-apps/plugin-log";
 import { useRouter } from "next/navigation";
 import { SolanaWallet } from "../../../lib/crate/generated";
-import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 
 export default function ImportWalletPage() {
   const [seed, setSeed] = React.useState("");
@@ -75,18 +75,16 @@ export default function ImportWalletPage() {
             justifyContent: "space-between",
           }}
         >
-          <Button
-            startIcon={<ArrowBackIcon />}
-            variant="text"
-            color="primary"
-            sx={{ mb: 0 }}
-            onClick={async () => {
-              await selectionFeedback();
-              router.push("/");
-            }}
-          >
-            Back
-          </Button>
+          <Link href="/" passHref legacyBehavior>
+            <Button
+              startIcon={<ArrowBackIcon />}
+              variant="text"
+              color="primary"
+              sx={{ mb: 0 }}
+            >
+              Back
+            </Button>
+          </Link>
           <Typography
             variant="h4"
             component="h1"

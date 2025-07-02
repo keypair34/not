@@ -1,6 +1,6 @@
 [package]
 name = "notwallet"
-version = "0.3.2"
+version = "0.3.3"
 description = "Solana non-custodial wallet, stable coin payment platform, and more 🔐"
 authors = ["info@bach.money"]
 edition = "2021"
@@ -31,6 +31,7 @@ tauri-plugin-store = "2"
 bs58 = "0.5"
 tsync = "2"
 openssl = { version = "0.10", features = ["vendored"] }
+os_info = "2"
 tauri-plugin-opener = "2"
 reqwest = { version = "0.12", default-features = false, features = [
     "json",
