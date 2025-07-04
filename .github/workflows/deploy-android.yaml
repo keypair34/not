@@ -87,10 +87,10 @@ jobs:
       - name: Initialize Android project
         run: cargo tauri android init
 
-      # - name: Copy build.gradle.kts
-      #  run: |
-      #   rm src-tauri/gen/android/app/build.gradle.kts
-      #  yes | cp -rf scripts/android/build.gradle.kts src-tauri/gen/android/app/build.gradle.kts
+      - name: Copy build.gradle.kts
+        run: |
+          rm src-tauri/gen/android/app/build.gradle.kts
+          yes | cp -rf scripts/android/build.gradle.kts src-tauri/gen/android/app/build.gradle.kts
 
       - name: Install OpenSSL development packages
         run: |
@@ -107,14 +107,13 @@ jobs:
             --output ./upload-keystore.jks \
             --password ${{ secrets.KEYSTORE_ENCRYPTION_PASSWORD }}
 
-      #- name: Create keystore.properties
-      # run: |
-      #   cat > src-tauri/gen/android/keystore.properties << EOF
-      #  password=${{ secrets.KEYSTORE_PASSWORD }}
-      # keyAlias=upload
-      #storeFile=${{ github.workspace }}/upload-keystore.jks
-      #EOF
-
+      - name: Create keystore.properties
+        run: |
+          cat > src-tauri/gen/android/keystore.properties << EOF
+          password=${{ secrets.KEYSTORE_PASSWORD }}
+          keyAlias=upload
+          storeFile=${{ github.workspace }}/upload-keystore.jks
+          #EOF
       - name: Publish Android
         env:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
