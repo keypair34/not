@@ -10,5 +10,5 @@
 !/gen/apple/*.xcprivacy
 gen/android/*
 !gen/android/app/build.gradle.kts
-!gen/android/keystore.properties
+!gen/android/keystore.properties.example
 /gen/schemas/*
