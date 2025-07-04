@@ -23,6 +23,10 @@ jobs:
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
+      - name: Install cargo tauri
+        run: |
+          cargo install tauri-cli --version "^2.0.0" --locked
+          cargo tauri android init
 
       - name: Install frontend dependencies
         uses: pnpm/action-setup@v4
@@ -33,8 +37,15 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Install OpenSSL (if needed)
+        run: |
+          if ! command -v openssl &> /dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y openssl
+          fi
 
       - name: Decrypt Android keystore
         run: |

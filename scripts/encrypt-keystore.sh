@@ -43,10 +43,11 @@ ENCRYPTED_FILE="$SECRETS_DIR/$KEYSTORE_FILENAME.gpg"
 
 # Encrypt the file
 echo "Encrypting $KEYSTORE_PATH to $ENCRYPTED_FILE..."
-gpg --symmetric --batch --passphrase="$ENCRYPTION_PASSWORD" --cipher-algo AES256 -o "$ENCRYPTED_FILE" "$KEYSTORE_PATH"
+openssl enc -aes-256-cbc -salt -pbkdf2 -pass pass:"$ENCRYPTION_PASSWORD" -in "$KEYSTORE_PATH" -out "$ENCRYPTED_FILE"
 
 echo "✅ Encryption successful!"
 echo "Encrypted file saved to: $ENCRYPTED_FILE"
 echo
 echo "Make sure to add this passphrase as a GitHub secret named 'KEYSTORE_ENCRYPTION_PASSWORD'"
 echo "Also update your GitHub workflow to decrypt this file during the build process."
+echo "Note: This file is encrypted with OpenSSL AES-256-CBC with PBKDF2."

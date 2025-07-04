@@ -6,7 +6,7 @@ This document explains how to securely handle the Android keystore file for sign
 
 When building and publishing Android apps, you need a keystore file to sign the app. This keystore file contains sensitive private keys that should never be exposed in your Git repository. This guide shows how to:
 
-1. Encrypt your keystore file for safe storage in the repository
+1. Encrypt your keystore file for safe storage in the repository using OpenSSL
 2. Decrypt the keystore in GitHub Actions for automated builds
 3. Configure the necessary secrets in GitHub
 
@@ -20,6 +20,8 @@ Follow these steps to encrypt your Android keystore file:
 ```bash
 ./scripts/encrypt-keystore.sh --keystore /path/to/your/upload-keystore.jks --password your-secure-password
 ```
+
+Note: This script uses OpenSSL for encryption with AES-256-CBC cipher.
 
 3. This creates an encrypted file at `./secrets/upload-keystore.jks.gpg`
 4. Add and commit this encrypted file to your repository
@@ -55,6 +57,8 @@ You can test the decryption process locally with:
   --password your-encryption-password
 ```
 
+This uses OpenSSL to decrypt the file.
+
 ## Security Best Practices
 
 - Use strong, unique passwords for encryption and keystore access
@@ -67,6 +71,7 @@ You can test the decryption process locally with:
 
 If you encounter issues:
 
-- Ensure GPG is installed on your local machine and GitHub Actions runner
+- Ensure OpenSSL is installed on your local machine (it comes pre-installed on most systems)
 - Verify that all required secrets are correctly set in GitHub
 - Check that file paths in the scripts match your actual directory structure
+- For GitHub Actions, the workflow automatically installs OpenSSL if needed

@@ -48,10 +48,11 @@ mkdir -p "$OUTPUT_DIR"
 
 # Decrypt the file
 echo "Decrypting $ENCRYPTED_FILE to $OUTPUT_FILE..."
-gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPTION_PASSWORD" --output "$OUTPUT_FILE" "$ENCRYPTED_FILE"
+openssl enc -d -aes-256-cbc -pbkdf2 -pass pass:"$DECRYPTION_PASSWORD" -in "$ENCRYPTED_FILE" -out "$OUTPUT_FILE"
 
 # Make sure the keystore file has the correct permissions
 chmod 600 "$OUTPUT_FILE"
 
 echo "✅ Decryption successful!"
 echo "Decrypted file saved to: $OUTPUT_FILE"
+echo "Note: This file was decrypted with OpenSSL AES-256-CBC with PBKDF2."
