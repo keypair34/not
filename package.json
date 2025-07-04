@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "tauri": "tauri",
-    "publish-ios": "./scripts/publish-ios.sh",
+    "publish-ios": "./scripts/publish-ios.sh \"$@\"",
     "publish-android": "./scripts/publish-android.sh"
   },
   "dependencies": {
