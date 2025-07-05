@@ -5,7 +5,7 @@ mod setup;
 mod wallet;
 
 use crate::{
-    setup::setup,
+    setup::{commands::get_installation_id, setup},
     wallet::{
         check_pubkey::check_pubkey,
         commands::{derive_next_keypair, onboarding_create_wallet},
@@ -42,6 +42,7 @@ pub fn run() {
             sign_message,
             check_pubkey,
             set_active_keypair,
+            get_installation_id,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

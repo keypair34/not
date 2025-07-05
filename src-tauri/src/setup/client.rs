@@ -6,7 +6,7 @@ use std::error::Error as StdError;
 use tauri::{async_runtime, App};
 use uuid::Uuid;
 
-const INSTALLATION_ID_KEY: &str = "installation_id";
+pub const INSTALLATION_ID_KEY: &str = "installation_id";
 
 /// Client information to be sent to the server
 #[derive(Debug, Serialize, Deserialize, Clone)]
