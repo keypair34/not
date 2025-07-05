@@ -176,7 +176,13 @@ export default function SettingsPage() {
             component="li"
             disablePadding
           >
-            App Info
+            {" "}
+            <ListItemText
+              primary="App Info"
+              primaryTypographyProps={{
+                sx: { fontSize: "1.08rem", fontWeight: 500, py: 1 },
+              }}
+            />
           </ListItem>
         </List>
       </Card>

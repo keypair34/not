@@ -12,6 +12,7 @@ import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { getVersion } from "@tauri-apps/api/app";
+import { invoke } from "@tauri-apps/api/core";
 
 export default function AppInfoPage() {
   const router = useRouter();
@@ -26,8 +27,12 @@ export default function AppInfoPage() {
       setVersion(appVersion);
     };
     const fetchInstallationId = async () => {
-      //const id = await getInstallationId();
-      setInstallationId("mumbo-jumbo-id");
+      try {
+        const id = await invoke<string>("get_installation_id");
+        setInstallationId(id);
+      } catch (error) {
+        console.error("Failed to fetch installation ID:", error);
+      }
     };
     Promise.all([fetchVersion(), fetchInstallationId()]);
   }, []);
@@ -100,9 +105,9 @@ export default function AppInfoPage() {
           disablePadding
         >
           <ListItemText
-            primary={version}
+            primary={`Version ${version}`}
             primaryTypographyProps={{
-              sx: { fontSize: "1.08rem", fontWeight: 500, py: 1 },
+              sx: { fontSize: "1rem", fontWeight: 500, py: 1 },
             }}
           />
         </ListItem>
@@ -122,7 +127,7 @@ export default function AppInfoPage() {
           <ListItemText
             primary={installationId}
             primaryTypographyProps={{
-              sx: { fontSize: "1.08rem", fontWeight: 500, py: 1 },
+              sx: { fontSize: "0.9rem", fontWeight: 500, py: 1 },
             }}
           />
         </ListItem>
