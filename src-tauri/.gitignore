@@ -11,6 +11,7 @@
 !/gen/apple/fastlane
 !/gen/apple/Gemfile
 !/gen/apple/Gemfile.lock
+!/gen/apple/.ruby-version
 gen/android/*
 !gen/android/app/build.gradle.kts
 !gen/android/keystore.properties
