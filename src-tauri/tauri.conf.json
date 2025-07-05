@@ -32,7 +32,8 @@
       "icons/icon.ico"
     ],
     "android": {
-      "minSdkVersion": 24
+      "minSdkVersion": 24,
+      "versionCode": 1000
     },
     "iOS": {
       "minimumSystemVersion": "13.0",
