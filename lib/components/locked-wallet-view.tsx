@@ -55,12 +55,20 @@ export default function LockedWalletView({
     >
       <Box sx={{ width: "100%", maxWidth: 480, pt: 3, pb: 2 }}>
         <Typography
-          variant="h4"
+          variant="h6"
+          component="h1"
           fontWeight="bold"
           align="center"
-          sx={{ mb: 2 }}
         >
-          Not - Crypto Dollar Wallet
+          Not
+        </Typography>
+        <Typography
+          variant="body1"
+          component="p"
+          fontWeight="bold"
+          align="center"
+        >
+          A Crypto Dollar Wallet
         </Typography>
       </Box>
       <Card sx={{ maxWidth: 400, width: "100%", boxShadow: 3 }}>
