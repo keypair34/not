@@ -11,11 +11,9 @@ import ListItemText from "@mui/material/ListItemText";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useRouter } from "next/navigation";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
-import { getVersion } from "@tauri-apps/api/app";
 
 export default function SettingsPage() {
   const router = useRouter();
-  const [version, setVersion] = React.useState<string | null>(null);
 
   // Centralized click handler for all links
   const handleClick = async (
@@ -42,14 +40,6 @@ export default function SettingsPage() {
       router.push("/settings/app-info");
     }
   };
-
-  React.useEffect(() => {
-    const fetchVersion = async () => {
-      const appVersion = await getVersion();
-      setVersion(appVersion);
-    };
-    fetchVersion();
-  }, []);
 
   return (
     <Box
