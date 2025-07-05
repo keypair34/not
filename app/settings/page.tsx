@@ -24,7 +24,8 @@ export default function SettingsPage() {
       | "openSource"
       | "footer"
       | "privacyPolicy"
-      | "termsOfService",
+      | "termsOfService"
+      | "appInfo",
   ) => {
     await selectionFeedback();
     if (type === "about") {
@@ -37,23 +38,9 @@ export default function SettingsPage() {
       openUrl("https://github.com/TheStableFoundation/not");
     } else if (type === "footer") {
       openUrl("https://bach.money/");
+    } else if (type === "appInfo") {
+      router.push("/settings/app-info");
     }
-  };
-
-  const versionView = () => {
-    return (
-      <ListItemText
-        primary={`Version ${version}`}
-        primaryTypographyProps={{
-          sx: {
-            fontSize: "0.9rem",
-            fontWeight: 500,
-            py: 1,
-            fontStyle: "italic",
-          },
-        }}
-      />
-    );
   };
 
   React.useEffect(() => {
@@ -195,10 +182,11 @@ export default function SettingsPage() {
               "&:hover": { bgcolor: "#f3f4f6" },
               transition: "background 0.2s",
             }}
+            onClick={() => handleClick("appInfo")}
             component="li"
             disablePadding
           >
-            {versionView()}
+            App Info
           </ListItem>
         </List>
       </Card>
