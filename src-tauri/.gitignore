@@ -8,6 +8,9 @@
 
 /gen/apple/*
 !/gen/apple/*.xcprivacy
+!/gen/apple/fastlane
+!/gen/apple/Gemfile
+!/gen/apple/Gemfile.lock
 gen/android/*
 !gen/android/app/build.gradle.kts
 !gen/android/keystore.properties
