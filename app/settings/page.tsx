@@ -50,12 +50,13 @@ export default function SettingsPage() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        py: 4,
+        pb: 10,
       }}
     >
-      <Box sx={{ width: "100%", maxWidth: 480, pt: 3, pb: 2 }}>
+      <Box sx={{ width: "100%", maxWidth: 480 }}>
         <Typography
-          variant="h4"
+          variant="h5"
+          component="h1"
           fontWeight="bold"
           align="center"
           sx={{ mb: 2 }}
