@@ -27,7 +27,7 @@ export default function SettingsPage() {
   ) => {
     await selectionFeedback();
     if (type === "about") {
-      router.push("/about");
+      router.push("/settings/about");
     } else if (type === "privacyPolicy") {
       openUrl("https://bach.money/privacy-policy");
     } else if (type === "termsOfService") {
