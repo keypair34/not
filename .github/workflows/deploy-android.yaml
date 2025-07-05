@@ -1,7 +1,6 @@
 name: "publish Android"
 
 on:
-  push:
   workflow_dispatch:
 
 jobs:
