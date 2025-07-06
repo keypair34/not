@@ -1,5 +1,5 @@
 use crate::constants::store::store;
-use crate::model::client::{ClientInfoPayload, RegisterClientResponse};
+use crate::model::client::{ClientApp, ClientInfoPayload, RegisterClientResponse};
 use log::{error, info};
 use reqwest::Client as HttpClient;
 use std::error::Error as StdError;
@@ -68,6 +68,7 @@ pub fn setup_client(app: &App) -> Result<(), Box<dyn std::error::Error>> {
     // Create client info with simple fields as requested
     let client_info = ClientInfoPayload {
         uuid: installation_id,
+        app: ClientApp::NotWallet,
         os_name: info.os_type().to_string(),
         os_version: info.version().to_string(),
         app_version: app.handle().package_info().version.to_string(),
@@ -100,6 +101,13 @@ pub fn setup_client(app: &App) -> Result<(), Box<dyn std::error::Error>> {
 async fn send_client_info(
     client_info: &ClientInfoPayload,
 ) -> Result<RegisterClientResponse, Box<dyn StdError>> {
+    if client_info.app == ClientApp::Splitfire {
+        return Err(Box::new(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "Client app is NotWallet",
+        )));
+    }
+
     let client = HttpClient::new();
 
     // API endpoint
