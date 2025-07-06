@@ -23,7 +23,8 @@ export default function BottomTabBar() {
   else if (
     pathname === "/settings" ||
     pathname === "/settings/about" ||
-    pathname === "/settings/app-info"
+    pathname === "/settings/app-info" ||
+    pathname === "/settings/app-preferences"
   )
     value = 2;
   else if (pathname === "/home" || pathname.startsWith("/activity")) value = 0;

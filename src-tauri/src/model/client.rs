@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 pub struct ClientInfo {
     pub id: i32,
     pub uuid: String,
+    pub app: ClientApp,
     pub os_name: String,
     pub os_version: String,
     pub app_version: String,
@@ -21,7 +22,7 @@ pub struct ClientInfoPayload {
     pub app_version: String,
 }
 
-#[derive(Debug, Serialize, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum ClientApp {
     NotWallet,
     Splitfire,
