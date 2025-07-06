@@ -23,7 +23,8 @@ export default function SettingsPage() {
       | "footer"
       | "privacyPolicy"
       | "termsOfService"
-      | "appInfo",
+      | "appInfo"
+      | "appPreferences",
   ) => {
     await selectionFeedback();
     if (type === "about") {
@@ -38,6 +39,8 @@ export default function SettingsPage() {
       openUrl("https://bach.money/");
     } else if (type === "appInfo") {
       router.push("/settings/app-info");
+    } else if (type === "appPreferences") {
+      router.push("/settings/app-preferences");
     }
   };
 
@@ -158,6 +161,28 @@ export default function SettingsPage() {
           >
             <ListItemText
               primary="Open Source"
+              primaryTypographyProps={{
+                sx: { fontSize: "1.08rem", fontWeight: 500, py: 1 },
+              }}
+            />
+          </ListItem>
+          <Divider />
+          <ListItem
+            sx={{
+              px: 4,
+              cursor: "pointer",
+              minHeight: 56,
+              borderRadius: 2,
+              "&:hover": { bgcolor: "#f3f4f6" },
+              transition: "background 0.2s",
+            }}
+            onClick={() => handleClick("appPreferences")}
+            component="li"
+            disablePadding
+          >
+            {" "}
+            <ListItemText
+              primary="App Preferences"
               primaryTypographyProps={{
                 sx: { fontSize: "1.08rem", fontWeight: 500, py: 1 },
               }}
