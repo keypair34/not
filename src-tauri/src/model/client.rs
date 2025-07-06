@@ -15,9 +15,16 @@ pub struct ClientInfo {
 #[derive(Debug, Serialize, Clone)]
 pub struct ClientInfoPayload {
     pub uuid: String,
+    pub app: ClientApp,
     pub os_name: String,
     pub os_version: String,
     pub app_version: String,
+}
+
+#[derive(Debug, Serialize, Clone, PartialEq)]
+pub enum ClientApp {
+    NotWallet,
+    Splitfire,
 }
 
 /// Response from the server after registering client
