@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
   <key>ITSAppUsesNonExemptEncryption</key>
-  <false/>  # or `true` if your app uses encryption
+  <false/>
 </dict>
 </plist>
