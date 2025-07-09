@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/navigation";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
+import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 
 interface WalletCardProps {
   userName: string;
@@ -19,7 +20,7 @@ interface WalletCardProps {
   wallet: SolanaWallet;
   onLock: () => void;
   onDeposit: () => void;
-  onSwitchKeypair: ()=> void;
+  onSwitchKeypair: () => void;
 }
 
 export default function WalletCard({
@@ -112,15 +113,14 @@ export default function WalletCard({
                   p: 0,
                   cursor: "pointer",
                 }}
-                onClick={() =>
-                  wallet?.pubkey &&
-                  navigator.clipboard.writeText(wallet.pubkey)
-                }
+                onClick={async () => {
+                  if (wallet?.pubkey) {
+                    await writeText(wallet.pubkey);
+                  }
+                }}
               >
                 {wallet?.pubkey
-                  ? `${wallet.pubkey.slice(0, 3)}...${wallet.pubkey.slice(
-                      -3
-                    )}`
+                  ? `${wallet.pubkey.slice(0, 3)}...${wallet.pubkey.slice(-3)}`
                   : ""}
               </Typography>
             </Tooltip>
@@ -137,9 +137,27 @@ export default function WalletCard({
                 size="small"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <path d="M16 17L21 12L16 7" stroke="#1e88e5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M21 12H9" stroke="#1e88e5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M8 7L3 12L8 17" stroke="#1e88e5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path
+                    d="M16 17L21 12L16 7"
+                    stroke="#1e88e5"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M21 12H9"
+                    stroke="#1e88e5"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M8 7L3 12L8 17"
+                    stroke="#1e88e5"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </IconButton>
             </Tooltip>

@@ -152,7 +152,7 @@ export default function CreatePasswordPage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "100vh",
+          minHeight: "60vh",
           bgcolor: "#f5f6fa",
         }}
       >

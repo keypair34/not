@@ -13,22 +13,21 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { STORE_PASSWORD } from "../crate/generated";
 import bcrypt from "bcryptjs";
-import { redirect } from "next/navigation";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
-import { useAppLock } from "../context/app-lock-context";
 
 type LockedWalletViewProps = {
   showPassword: boolean;
   setShowPassword: (value: boolean) => void;
+  onUnlock: () => void;
 };
 
 export default function LockedWalletView({
   showPassword,
   setShowPassword,
+  onUnlock,
 }: LockedWalletViewProps) {
   const [passwordInput, setPasswordInput] = React.useState<string>("");
   const [error, setError] = React.useState<string | null>(null);
-  const { unlock } = useAppLock();
 
   const handleUnlock = async () => {
     setError(null);
@@ -37,23 +36,41 @@ export default function LockedWalletView({
     if (hash && bcrypt.compareSync(passwordInput, hash)) {
       setPasswordInput("");
       await selectionFeedback();
-      unlock();
-      redirect("/wallet");
+      onUnlock();
+      return;
     }
     setError("Incorrect password. Please try again.");
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+    <Box
+      sx={{
         minHeight: "unset",
-        height: "auto",
-        background: "#f5f6fa",
+        bgcolor: "#f5f6fa",
+        pb: 10,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
       }}
     >
+      <Box sx={{ width: "100%", maxWidth: 480, pt: 3, pb: 2 }}>
+        <Typography
+          variant="h6"
+          component="h1"
+          fontWeight="bold"
+          align="center"
+        >
+          Not
+        </Typography>
+        <Typography
+          variant="body1"
+          component="p"
+          fontWeight="bold"
+          align="center"
+        >
+          A Crypto Dollar Wallet
+        </Typography>
+      </Box>
       <Card sx={{ maxWidth: 400, width: "100%", boxShadow: 3 }}>
         <CardContent>
           <Box
@@ -112,6 +129,6 @@ export default function LockedWalletView({
           </Box>
         </CardContent>
       </Card>
-    </div>
+    </Box>
   );
 }

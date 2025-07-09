@@ -1,7 +1,7 @@
 {
   "name": "notwallet",
   "private": false,
-  "version": "0.2.2",
+  "version": "0.3.3",
   "type": "module",
   "scripts": {
     "dev": "next dev --turbopack -p 61234",
@@ -9,15 +9,17 @@
     "start": "next start",
     "lint": "next lint",
     "tauri": "tauri",
-    "publish-ios": "./scripts/publish-ios.sh"
+    "publish-ios": "./scripts/publish-ios.sh \"$@\"",
+    "publish-android": "./scripts/publish-android.sh"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "7.1.1",
     "@mui/material": "7.1.1",
     "@mui/material-nextjs": "7.1.1",
+<<<<<<< HEAD
     "@rive-app/react-canvas": "^4.21.3",
     "@tauri-apps/api": "^2.6.0",
     "@tauri-apps/plugin-haptics": "^2.2.5",
@@ -27,19 +29,36 @@
     "@tauri-apps/plugin-store": "~2.2.1",
     "bcryptjs": "^3.0.2",
     "next": "^15.3.4",
+=======
+    "@rive-app/react-canvas": "^4.21.4",
+    "@tauri-apps/api": "^2.6.0",
+    "@tauri-apps/plugin-clipboard-manager": "~2.3.0",
+    "@tauri-apps/plugin-haptics": "^2.3.0",
+    "@tauri-apps/plugin-log": "~2.4.0",
+    "@tauri-apps/plugin-opener": "~2.2.7",
+    "@tauri-apps/plugin-shell": "^2.3.0",
+    "@tauri-apps/plugin-store": "~2.2.1",
+    "bcryptjs": "^3.0.2",
+    "next": "^15.3.5",
+>>>>>>> 3b34a7c603099db7d37cd2d5cc52531fd138b096
     "qrcode.react": "^4.2.0",
     "react": "^19.1.0",
     "react-confetti": "^6.4.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@tauri-apps/cli": "^2.6.0",
+=======
+    "@tauri-apps/cli": "^2.6.2",
+>>>>>>> 3b34a7c603099db7d37cd2d5cc52531fd138b096
     "@types/node": "22.7.5",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "@vitejs/plugin-react": "^4.6.0",
     "autoprefixer": "^10.4.21",
-    "eslint": "^9.29.0",
+    "esbuild": "^0.25.5",
+    "eslint": "^9.30.1",
     "eslint-config-next": "15.3.3",
     "postcss": "^8.5.6",
     "tailwindcss": "4.0.14",

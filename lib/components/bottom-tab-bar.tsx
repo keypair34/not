@@ -8,10 +8,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  selectionFeedback
-} from '@tauri-apps/plugin-haptics'
-
+import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 
 export default function BottomTabBar() {
   const pathname = usePathname();
@@ -21,15 +18,16 @@ export default function BottomTabBar() {
     pathname === "/wallet" ||
     pathname === "/deposit" ||
     pathname === "/create-new-wallet" // Include the new wallet creation page in the Wallet tab
-  ) value = 1;
+  )
+    value = 1;
   else if (
     pathname === "/settings" ||
-    pathname === "/about"
-  ) value = 2;
-  else if (
-    pathname === "/home" ||
-    pathname.startsWith("/activity")
-  ) value = 0;
+    pathname === "/settings/about" ||
+    pathname === "/settings/app-info" ||
+    pathname === "/settings/app-preferences"
+  )
+    value = 2;
+  else if (pathname === "/home" || pathname.startsWith("/activity")) value = 0;
 
   const handleChange = async (_: React.SyntheticEvent, newValue: number) => {
     try {
