@@ -19,17 +19,6 @@
     "@mui/icons-material": "7.1.1",
     "@mui/material": "7.1.1",
     "@mui/material-nextjs": "7.1.1",
-<<<<<<< HEAD
-    "@rive-app/react-canvas": "^4.21.3",
-    "@tauri-apps/api": "^2.6.0",
-    "@tauri-apps/plugin-haptics": "^2.2.5",
-    "@tauri-apps/plugin-log": "~2.4.0",
-    "@tauri-apps/plugin-opener": "~2.2.7",
-    "@tauri-apps/plugin-shell": "^2.2.2",
-    "@tauri-apps/plugin-store": "~2.2.1",
-    "bcryptjs": "^3.0.2",
-    "next": "^15.3.4",
-=======
     "@rive-app/react-canvas": "^4.21.4",
     "@tauri-apps/api": "^2.6.0",
     "@tauri-apps/plugin-clipboard-manager": "~2.3.0",
@@ -40,18 +29,13 @@
     "@tauri-apps/plugin-store": "~2.2.1",
     "bcryptjs": "^3.0.2",
     "next": "^15.3.5",
->>>>>>> 3b34a7c603099db7d37cd2d5cc52531fd138b096
     "qrcode.react": "^4.2.0",
     "react": "^19.1.0",
     "react-confetti": "^6.4.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
-<<<<<<< HEAD
-    "@tauri-apps/cli": "^2.6.0",
-=======
     "@tauri-apps/cli": "^2.6.2",
->>>>>>> 3b34a7c603099db7d37cd2d5cc52531fd138b096
     "@types/node": "22.7.5",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
