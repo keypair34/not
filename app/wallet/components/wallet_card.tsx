@@ -161,7 +161,6 @@ export default function WalletCard({
                 </svg>
               </IconButton>
             </Tooltip>
-            {/* Plus button next to pubkey */}
             <Tooltip title="Create new keypair or mnemonic" arrow>
               <IconButton
                 sx={{

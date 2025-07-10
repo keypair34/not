@@ -11,14 +11,16 @@ interface Activity {
   coin: string;
   amount: number;
   date: string;
-  type: "received" | "sent";
+  type: "received" | "sent" | "airdrop";
 }
 
 interface ActivityListViewProps {
   groupedActivities: Record<string, Activity[]>;
 }
 
-export default function ActivityListView({ groupedActivities }: ActivityListViewProps) {
+export default function ActivityListView({
+  groupedActivities,
+}: ActivityListViewProps) {
   return (
     <Stack spacing={2}>
       {Object.entries(groupedActivities).map(([denom, acts]) => (
@@ -40,8 +42,7 @@ export default function ActivityListView({ groupedActivities }: ActivityListView
             {acts.map((activity, idx) => (
               <Box key={idx}>
                 <Typography variant="body2" color="#212529">
-                  {activity.type === "received" ? "Received" : "Sent"}{" "}
-                  {activity.coin}
+                  {activity.type} {activity.coin}
                 </Typography>
                 <Typography variant="caption" color="#90a4ae">
                   {activity.type === "received" ? "+" : "-"}$

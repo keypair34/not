@@ -82,7 +82,7 @@ export default function AboutPage() {
             fontWeight="bold"
             sx={{ mb: 1, color: "#1e88e5" }}
           >
-            Not - Crypto Dollar Wallet
+            NotWallet - A Crypto Dollar Wallet
           </Typography>
           <Typography variant="body1" sx={{ mb: 2 }}>
             A modern non-custodial open-source Solana wallet app built for
