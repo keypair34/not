@@ -16,8 +16,9 @@ export default function BottomTabBar() {
   let value = 0;
   if (
     pathname === "/wallet" ||
+    pathname === "/wallet/token" ||
     pathname === "/deposit" ||
-    pathname === "/create-new-wallet" // Include the new wallet creation page in the Wallet tab
+    pathname === "/create-new-wallet"
   )
     value = 1;
   else if (
