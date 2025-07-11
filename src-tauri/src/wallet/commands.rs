@@ -137,6 +137,7 @@ pub async fn derive_next_keypair(app: AppHandle, seed_uuid: Uuid) -> Result<Sola
 }
 
 #[command]
-pub fn get_bach_balance(pubkey: String) {
-    bach_balance(pubkey);
+pub fn get_bach_balance(pubkey: String) -> String {
+    info!("Getting Bach balance for {}", pubkey);
+    bach_balance(pubkey)
 }

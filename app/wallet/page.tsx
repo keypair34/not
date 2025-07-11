@@ -64,7 +64,6 @@ function groupStablecoinsByDenomination(
 
 export default function WalletHome() {
   // Placeholder data
-  const balance = "10.9345 BACH";
   const [userName, setUserName] = React.useState<string>("Nowhere Man");
   const { lock } = useAppLock();
   const router = useRouter();
@@ -201,7 +200,6 @@ export default function WalletHome() {
       <Box sx={{ width: "100%", maxWidth: 480 }}>
         <WalletCard
           userName={userName}
-          balance={balance}
           wallet={wallet}
           onLock={async () => {
             await selectionFeedback();

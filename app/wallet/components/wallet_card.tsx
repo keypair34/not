@@ -13,10 +13,10 @@ import Box from "@mui/material/Box";
 import { useRouter } from "next/navigation";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+import { invoke } from "@tauri-apps/api/core";
 
 interface WalletCardProps {
   userName: string;
-  balance: string;
   wallet: SolanaWallet;
   onLock: () => void;
   onDeposit: () => void;
@@ -25,7 +25,6 @@ interface WalletCardProps {
 
 export default function WalletCard({
   userName,
-  balance,
   wallet,
   onLock,
   onDeposit,
@@ -33,11 +32,25 @@ export default function WalletCard({
 }: WalletCardProps) {
   const router = useRouter();
 
+  const [balance, setBalance] = React.useState<string>("");
+
   // Handler for creating new keypair/mnemonic
   const handleCreateNew = async () => {
     await selectionFeedback();
     router.push("/create-new-wallet");
   };
+
+  const init = async () => {
+    const balance = await invoke<string>("get_bach_balance", {
+      pubkey: wallet.pubkey,
+    });
+    setBalance(`${balance} BACH`);
+  };
+
+  React.useEffect(() => {
+    init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Card
@@ -52,7 +65,6 @@ export default function WalletCard({
         position: "relative",
       }}
     >
-      {/* Lock button in top right */}
       <Button
         size="small"
         variant="outlined"

@@ -2,6 +2,7 @@ use crate::constants::{
     address::{BACH_TOKEN_ADDRESS, SPL_TOKEN_PROGRAM_ID},
     rpc::rpc_url,
 };
+use log::debug;
 use serde::{Deserialize, Serialize};
 use solana_account_decoder::parse_token::UiTokenAccount;
 use solana_account_decoder::UiAccountData;
@@ -20,7 +21,8 @@ pub(crate) fn bach_balance(pubkey: String) -> String {
     let token_accounts = connection
         .get_token_accounts_by_owner(&pubkey, TokenAccountsFilter::ProgramId(bach_pubkey))
         .unwrap();
-    println!("Number of token accounts: {}", token_accounts.len());
+
+    debug!("Number of token accounts: {}", token_accounts.len());
 
     // Get bach token accounts
     let bach_account = token_accounts
@@ -29,6 +31,17 @@ pub(crate) fn bach_balance(pubkey: String) -> String {
         .filter_map(|account| get_token_account(&account.data))
         .filter(|account| account.mint == BACH_TOKEN_ADDRESS)
         .collect::<Vec<_>>();
+
+    debug!("Number of bach token accounts: {}", bach_account.len());
+
+    if bach_account.is_empty() {
+        return "0".to_string();
+    }
+
+    debug!(
+        "Bach balance: {}",
+        bach_account[0].token_amount.ui_amount_string
+    );
     bach_account[0].token_amount.ui_amount_string.clone()
 }
 
