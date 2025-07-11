@@ -224,7 +224,7 @@ export default function SettingsPage() {
         }}
         onClick={() => handleClick("footer")}
       >
-        Not - Crypto Dollar Wallet © {new Date().getFullYear()}{" "}
+        NotWallet - A Crypto Dollar Wallet © {new Date().getFullYear()}{" "}
         <span style={{ color: "#1e88e5", textDecoration: "underline" }}>
           bach.money
         </span>

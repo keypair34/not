@@ -34,7 +34,7 @@ export default function OnboardingCardAirdrop({
     setError(null);
     try {
       const now = Date.now();
-      const message = `I want my €BACH ${now}`;
+      const message = `I want my $BACH ${now}`;
       await invoke<string>("sign_message", { message });
       setModalOpen(false);
       setShowConfetti(true);
@@ -96,7 +96,7 @@ export default function OnboardingCardAirdrop({
               letterSpacing: 1,
             }}
           >
-            🎉 Claim Your €BACH Airdrop!
+            🎉 Claim Your $BACH Airdrop!
           </Typography>
           {error ? (
             <Box sx={{ mt: 2 }}>

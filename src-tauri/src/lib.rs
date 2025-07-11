@@ -8,7 +8,7 @@ use crate::{
     setup::{commands::get_installation_id, setup},
     wallet::{
         check_pubkey::check_pubkey,
-        commands::{derive_next_keypair, onboarding_create_wallet},
+        commands::{derive_next_keypair, get_bach_balance, onboarding_create_wallet},
         import_wallet::{derive_new_keypair, import_solana_wallet},
         set_active_keypair::set_active_keypair,
         sign::sign_message,
@@ -43,6 +43,7 @@ pub fn run() {
             check_pubkey,
             set_active_keypair,
             get_installation_id,
+            get_bach_balance,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

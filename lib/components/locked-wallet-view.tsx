@@ -60,7 +60,7 @@ export default function LockedWalletView({
           fontWeight="bold"
           align="center"
         >
-          Not
+          NotWallet
         </Typography>
         <Typography
           variant="body1"

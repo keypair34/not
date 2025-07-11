@@ -2,6 +2,7 @@ use crate::constants::store::{store, STORE_KEYPAIRS, STORE_SEEDS};
 use crate::model::keypair::SolanaWallet;
 use crate::model::seed::{Seed, SeedType};
 use crate::model::wallet::OnboardingCreateWallet;
+use crate::wallet::balance::bach_balance;
 use crate::wallet::derive_keypair::derive_keypair_default;
 use bip39::{Language, Mnemonic};
 use chrono::Utc;
@@ -133,4 +134,10 @@ pub async fn derive_next_keypair(app: AppHandle, seed_uuid: Uuid) -> Result<Sola
     debug!("Derived keypair: {}", wallet.pubkey);
     info!("Derived keypair for seed {}: {}", seed.id, wallet.pubkey);
     Ok(wallet)
+}
+
+#[command]
+pub fn get_bach_balance(pubkey: String) -> String {
+    info!("Getting Bach balance for {}", pubkey);
+    bach_balance(pubkey)
 }
