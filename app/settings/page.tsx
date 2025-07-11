@@ -11,11 +11,9 @@ import ListItemText from "@mui/material/ListItemText";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useRouter } from "next/navigation";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
-import { getVersion } from "@tauri-apps/api/app";
 
 export default function SettingsPage() {
   const router = useRouter();
-  const [version, setVersion] = React.useState<string | null>(null);
 
   // Centralized click handler for all links
   const handleClick = async (
@@ -24,11 +22,13 @@ export default function SettingsPage() {
       | "openSource"
       | "footer"
       | "privacyPolicy"
-      | "termsOfService",
+      | "termsOfService"
+      | "appInfo"
+      | "appPreferences",
   ) => {
     await selectionFeedback();
     if (type === "about") {
-      router.push("/about");
+      router.push("/settings/about");
     } else if (type === "privacyPolicy") {
       openUrl("https://bach.money/privacy-policy");
     } else if (type === "termsOfService") {
@@ -37,32 +37,12 @@ export default function SettingsPage() {
       openUrl("https://github.com/TheStableFoundation/not");
     } else if (type === "footer") {
       openUrl("https://bach.money/");
+    } else if (type === "appInfo") {
+      router.push("/settings/app-info");
+    } else if (type === "appPreferences") {
+      router.push("/settings/app-preferences");
     }
   };
-
-  const versionView = () => {
-    return (
-      <ListItemText
-        primary={`Version ${version}`}
-        primaryTypographyProps={{
-          sx: {
-            fontSize: "0.9rem",
-            fontWeight: 500,
-            py: 1,
-            fontStyle: "italic",
-          },
-        }}
-      />
-    );
-  };
-
-  React.useEffect(() => {
-    const fetchVersion = async () => {
-      const appVersion = await getVersion();
-      setVersion(appVersion);
-    };
-    fetchVersion();
-  }, []);
 
   return (
     <Box
@@ -73,12 +53,13 @@ export default function SettingsPage() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        py: 4,
+        pb: 10,
       }}
     >
-      <Box sx={{ width: "100%", maxWidth: 480, pt: 3, pb: 2 }}>
+      <Box sx={{ width: "100%", maxWidth: 480 }}>
         <Typography
-          variant="h4"
+          variant="h5"
+          component="h1"
           fontWeight="bold"
           align="center"
           sx={{ mb: 2 }}
@@ -195,10 +176,39 @@ export default function SettingsPage() {
               "&:hover": { bgcolor: "#f3f4f6" },
               transition: "background 0.2s",
             }}
+            onClick={() => handleClick("appPreferences")}
             component="li"
             disablePadding
           >
-            {versionView()}
+            {" "}
+            <ListItemText
+              primary="App Preferences"
+              primaryTypographyProps={{
+                sx: { fontSize: "1.08rem", fontWeight: 500, py: 1 },
+              }}
+            />
+          </ListItem>
+          <Divider />
+          <ListItem
+            sx={{
+              px: 4,
+              cursor: "pointer",
+              minHeight: 56,
+              borderRadius: 2,
+              "&:hover": { bgcolor: "#f3f4f6" },
+              transition: "background 0.2s",
+            }}
+            onClick={() => handleClick("appInfo")}
+            component="li"
+            disablePadding
+          >
+            {" "}
+            <ListItemText
+              primary="App Info"
+              primaryTypographyProps={{
+                sx: { fontSize: "1.08rem", fontWeight: 500, py: 1 },
+              }}
+            />
           </ListItem>
         </List>
       </Card>
@@ -214,7 +224,7 @@ export default function SettingsPage() {
         }}
         onClick={() => handleClick("footer")}
       >
-        Not - Crypto Dollar Wallet © {new Date().getFullYear()}{" "}
+        NotWallet - A Crypto Dollar Wallet © {new Date().getFullYear()}{" "}
         <span style={{ color: "#1e88e5", textDecoration: "underline" }}>
           bach.money
         </span>

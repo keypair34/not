@@ -3,6 +3,7 @@ use log::info;
 use tauri::{App, Manager};
 
 mod client;
+pub(crate) mod commands;
 mod store;
 
 pub(crate) fn setup(app: &App) -> Result<(), Box<dyn std::error::Error>> {

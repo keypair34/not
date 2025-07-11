@@ -1,40 +1,12 @@
 use crate::constants::store::store;
+use crate::model::client::{ClientApp, ClientInfoPayload, RegisterClientResponse};
 use log::{error, info};
 use reqwest::Client as HttpClient;
-use serde::{Deserialize, Serialize};
 use std::error::Error as StdError;
 use tauri::{async_runtime, App};
 use uuid::Uuid;
 
-const INSTALLATION_ID_KEY: &str = "installation_id";
-
-/// Client information to be sent to the server
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct ClientInfo {
-    pub id: i32,
-    pub uuid: String,
-    pub os_name: String,
-    pub os_version: String,
-    pub app_version: String,
-    pub created_at: String,
-    pub updated_at: String,
-}
-
-#[derive(Debug, Serialize, Clone)]
-pub struct ClientInfoPayload {
-    pub uuid: String,
-    pub os_name: String,
-    pub os_version: String,
-    pub app_version: String,
-}
-
-/// Response from the server after registering client
-#[derive(Debug, Deserialize)]
-pub struct RegisterClientResponse {
-    pub code: bool,
-    pub message: Option<String>,
-    pub client_info: Option<ClientInfo>,
-}
+pub const INSTALLATION_ID_KEY: &str = "installation_id";
 
 /// Register the client with the server.
 /// - Checks if we already have an installation_id in the store
@@ -96,6 +68,7 @@ pub fn setup_client(app: &App) -> Result<(), Box<dyn std::error::Error>> {
     // Create client info with simple fields as requested
     let client_info = ClientInfoPayload {
         uuid: installation_id,
+        app: ClientApp::NotWallet,
         os_name: info.os_type().to_string(),
         os_version: info.version().to_string(),
         app_version: app.handle().package_info().version.to_string(),
@@ -128,6 +101,13 @@ pub fn setup_client(app: &App) -> Result<(), Box<dyn std::error::Error>> {
 async fn send_client_info(
     client_info: &ClientInfoPayload,
 ) -> Result<RegisterClientResponse, Box<dyn StdError>> {
+    if client_info.app == ClientApp::Splitfire {
+        return Err(Box::new(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "Client app is NotWallet",
+        )));
+    }
+
     let client = HttpClient::new();
 
     // API endpoint

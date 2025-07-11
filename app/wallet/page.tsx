@@ -31,7 +31,7 @@ function groupStablecoinsByDenomination(
     coin: string;
     amount: number;
     date: string;
-    type: "received" | "sent";
+    type: "received" | "sent" | "airdrop";
   }[],
 ) {
   // Define mapping from coin to denomination
@@ -47,7 +47,12 @@ function groupStablecoinsByDenomination(
   // Group by denomination
   const grouped: Record<
     string,
-    { coin: string; amount: number; date: string; type: "received" | "sent" }[]
+    {
+      coin: string;
+      amount: number;
+      date: string;
+      type: "received" | "sent" | "airdrop";
+    }[]
   > = {};
   for (const activity of activities) {
     const denom = denominationMap[activity.coin] || activity.coin;
@@ -59,8 +64,7 @@ function groupStablecoinsByDenomination(
 
 export default function WalletHome() {
   // Placeholder data
-  const balance = "$2,500.00";
-  const [userName, setUserName] = React.useState<string>("Alex Morgan");
+  const [userName, setUserName] = React.useState<string>("Nowhere Man");
   const { lock } = useAppLock();
   const router = useRouter();
   const [wallet, setWallet] = React.useState<SolanaWallet | undefined>(
@@ -70,7 +74,6 @@ export default function WalletHome() {
   const [showSwitchModal, setShowSwitchModal] = React.useState(false);
   const [allKeypairs, setAllKeypairs] = React.useState<SolanaWallet[]>([]);
 
-  // Simulate wallet loading, replace with real loading logic
   const loadWallet = async () => {
     try {
       const keypairs = await store().get<SolanaWallet[]>(STORE_KEYPAIRS);
@@ -183,9 +186,10 @@ export default function WalletHome() {
         alignItems: "center",
       }}
     >
-      <Box sx={{ width: "100%", maxWidth: 480, pt: 3, pb: 2 }}>
+      <Box sx={{ width: "100%", maxWidth: 480 }}>
         <Typography
-          variant="h4"
+          variant="h5"
+          component="h1"
           fontWeight="bold"
           align="center"
           sx={{ mb: 2 }}
@@ -196,7 +200,6 @@ export default function WalletHome() {
       <Box sx={{ width: "100%", maxWidth: 480 }}>
         <WalletCard
           userName={userName}
-          balance={balance}
           wallet={wallet}
           onLock={async () => {
             await selectionFeedback();

@@ -1,9 +1,6 @@
 name: "publish iOS"
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 # These permissions are needed to interact with GitHub's OIDC Token endpoint
