@@ -8,6 +8,7 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
+import InfoIcon from "@mui/icons-material/Info";
 
 interface Activity {
   coin: string;
@@ -28,7 +29,7 @@ export default function ActivityListView({
   return (
     <Stack spacing={2}>
       {Object.entries(groupedActivities).map(([denom, acts]) => (
-        <Stack direction="row" spacing={2} key={denom}>
+        <Stack direction="row" spacing={8} key={denom} alignItems="flex-start">
           <Button
             onClick={() => router.push(`/wallet/token?id=${denom}`)}
             sx={{
@@ -36,9 +37,11 @@ export default function ActivityListView({
               boxShadow: "none",
               bgcolor: "transparent",
               verticalAlign: "top",
+              alignSelf: "flex-start",
+              mt: 1,
             }}
           >
-            {denom}
+            <InfoIcon></InfoIcon> {` ${denom}`}
           </Button>
           <Accordion
             key={denom}
@@ -47,6 +50,7 @@ export default function ActivityListView({
               boxShadow: "none",
               bgcolor: "transparent",
               width: "100%",
+              ml: 2,
             }}
           >
             <AccordionSummary
@@ -61,7 +65,7 @@ export default function ActivityListView({
             </AccordionSummary>
             <AccordionDetails sx={{ px: 0 }}>
               {acts.map((activity, idx) => (
-                <Box key={idx}>
+                <Box key={idx} sx={{ mb: 1, ml: 2, mr: 2 }}>
                   <Typography variant="body2" color="#212529">
                     {activity.type} {activity.coin}
                   </Typography>

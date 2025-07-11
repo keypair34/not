@@ -8,9 +8,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useRouter } from "next/navigation";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 
-export default function WalletTokenHeader() {
+export default function WalletTokenHeader({ token }: { token: string }) {
   const router = useRouter();
-
   return (
     <Box
       sx={{
@@ -40,7 +39,7 @@ export default function WalletTokenHeader() {
       </Button>
       <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
         <Typography variant="h5" fontWeight="bold" paddingRight={2}>
-          BACH
+          {token} (demo)
         </Typography>
       </Box>
     </Box>

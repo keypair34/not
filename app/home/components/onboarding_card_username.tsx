@@ -95,7 +95,9 @@ export default function OnboardingCardUsername({
           variant="outlined"
           placeholder="Enter your username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setUsername(e.target.value)
+          }
           sx={{
             mb: 2,
             bgcolor: "#f3f4f6",

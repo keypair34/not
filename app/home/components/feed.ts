@@ -2,7 +2,7 @@ export const feed = [
   {
     id: 1,
     user: {
-      name: "Nowhere Man",
+      name: "Nowhere Man (demo)",
       avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=nowhereman",
       wallet: "7k3h...2x9v",
     },
@@ -16,7 +16,7 @@ export const feed = [
   {
     id: 2,
     user: {
-      name: "Taxman",
+      name: "Taxman (demo)",
       avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=alexmorgan",
       wallet: "7k3h...2x9v",
     },

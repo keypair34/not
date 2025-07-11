@@ -33,6 +33,15 @@ export default function ActivityCard({
   // Example activities data moved here
   const activities: Activity[] = [
     { coin: "BACH", amount: 10.9345, date: "Jun 9, 2025", type: "airdrop" },
+    { coin: "BACH", amount: 100.0, date: "Jun 10, 2025", type: "received" },
+    { coin: "BACH", amount: 50.0, date: "Jun 11, 2025", type: "sent" },
+    { coin: "BACH", amount: 25.0, date: "Jun 12, 2025", type: "received" },
+    { coin: "BACH", amount: 10.0, date: "Jun 13, 2025", type: "sent" },
+    { coin: "USDC", amount: 5.0, date: "Jun 14, 2025", type: "received" },
+    { coin: "USDC", amount: 2.5, date: "Jun 15, 2025", type: "sent" },
+    { coin: "BACH", amount: 1.25, date: "Jun 16, 2025", type: "received" },
+    { coin: "USDC", amount: 0.625, date: "Jun 17, 2025", type: "sent" },
+    { coin: "USDC", amount: 0.3125, date: "Jun 18, 2025", type: "received" },
   ];
 
   const loadActivities = async () => {
@@ -63,7 +72,7 @@ export default function ActivityCard({
         fontWeight="bold"
         sx={{ mb: 2, color: "#212529" }}
       >
-        Recent Activity
+        Recent Activity (demo)
       </Typography>
       <Divider sx={{ mb: 2 }} />
       {state === State.Loading && <LoadingCard />}

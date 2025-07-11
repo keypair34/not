@@ -4,6 +4,7 @@ use crate::model::seed::{Seed, SeedType};
 use crate::model::wallet::OnboardingCreateWallet;
 use crate::wallet::balance::bach_balance;
 use crate::wallet::derive_keypair::derive_keypair_default;
+use crate::wallet::token_info::token_info;
 use bip39::{Language, Mnemonic};
 use chrono::Utc;
 use log::{debug, error, info};
@@ -140,4 +141,10 @@ pub async fn derive_next_keypair(app: AppHandle, seed_uuid: Uuid) -> Result<Sola
 pub fn get_bach_balance(pubkey: String) -> String {
     info!("Getting Bach balance for {}", pubkey);
     bach_balance(pubkey)
+}
+
+#[command]
+pub fn get_token_info(id: String) -> String {
+    info!("Getting token info for {}", id);
+    token_info(id)
 }
