@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Card, Grid, ButtonGroup, useTheme } from "@mui/material";
+import { Card, ButtonGroup, useTheme } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -153,8 +153,8 @@ export const WalletTokenContent = () => {
   return (
     <Card>
       <Box p={3}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
+        <Box sx={{ display: "grid", gridTemplateColumns: "1fr", gap: 3 }}>
+          <Box>
             <Box mb={2}>
               <Typography variant="h4">${currentPrice.toFixed(2)}</Typography>
               <Typography
@@ -196,8 +196,8 @@ export const WalletTokenContent = () => {
             <Box height={300}>
               <Line data={data} options={options} />
             </Box>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Box>
     </Card>
   );
