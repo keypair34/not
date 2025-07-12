@@ -24,44 +24,6 @@ enum State {
   Error,
 }
 
-// Helper to group stablecoins by denomination
-// (kept here for ActivityCard to receive as prop)
-function groupStablecoinsByDenomination(
-  activities: {
-    coin: string;
-    amount: number;
-    date: string;
-    type: "received" | "sent" | "airdrop";
-  }[],
-) {
-  // Define mapping from coin to denomination
-  const denominationMap: Record<string, string> = {
-    USDC: "USD",
-    USDT: "USD",
-    USDG: "USD",
-    EURC: "EUR",
-    EURT: "EUR",
-    // Add more as needed
-  };
-
-  // Group by denomination
-  const grouped: Record<
-    string,
-    {
-      coin: string;
-      amount: number;
-      date: string;
-      type: "received" | "sent" | "airdrop";
-    }[]
-  > = {};
-  for (const activity of activities) {
-    const denom = denominationMap[activity.coin] || activity.coin;
-    if (!grouped[denom]) grouped[denom] = [];
-    grouped[denom].push(activity);
-  }
-  return grouped;
-}
-
 export default function WalletHome() {
   // Placeholder data
   const [userName, setUserName] = React.useState<string>("Nowhere Man");
@@ -212,9 +174,7 @@ export default function WalletHome() {
             setShowSwitchModal(true);
           }}
         />
-        <ActivityCard
-          groupStablecoinsByDenomination={groupStablecoinsByDenomination}
-        />
+        <ActivityCard />
       </Box>
       <ActiveKeypairSelectionModal
         open={showSwitchModal}
