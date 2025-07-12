@@ -39,7 +39,7 @@ export default function WalletTokenHeader({ token }: { token: string }) {
       </Button>
       <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
         <Typography variant="h5" fontWeight="bold" paddingRight={2}>
-          {token} (demo)
+          {token}
         </Typography>
       </Box>
     </Box>
