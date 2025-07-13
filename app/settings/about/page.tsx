@@ -82,11 +82,11 @@ export default function AboutPage() {
             fontWeight="bold"
             sx={{ mb: 1, color: "#1e88e5" }}
           >
-            Not - Crypto Dollar Wallet
+            NotWallet - A Crypto Dollar Wallet
           </Typography>
           <Typography variant="body1" sx={{ mb: 2 }}>
-            A modern non-custodial open-source Solana wallet app built for
-            privacy, simplicity, and security.
+            A modern, community-owned, non-custodial open-source Solana wallet
+            app built for privacy, simplicity, and security.
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
             Developed and maintained by The Stable Foundation.

@@ -24,43 +24,9 @@ enum State {
   Error,
 }
 
-// Helper to group stablecoins by denomination
-// (kept here for ActivityCard to receive as prop)
-function groupStablecoinsByDenomination(
-  activities: {
-    coin: string;
-    amount: number;
-    date: string;
-    type: "received" | "sent";
-  }[],
-) {
-  // Define mapping from coin to denomination
-  const denominationMap: Record<string, string> = {
-    USDC: "USD",
-    USDT: "USD",
-    USDG: "USD",
-    EURC: "EUR",
-    EURT: "EUR",
-    // Add more as needed
-  };
-
-  // Group by denomination
-  const grouped: Record<
-    string,
-    { coin: string; amount: number; date: string; type: "received" | "sent" }[]
-  > = {};
-  for (const activity of activities) {
-    const denom = denominationMap[activity.coin] || activity.coin;
-    if (!grouped[denom]) grouped[denom] = [];
-    grouped[denom].push(activity);
-  }
-  return grouped;
-}
-
 export default function WalletHome() {
   // Placeholder data
-  const balance = "$2,500.00";
-  const [userName, setUserName] = React.useState<string>("Alex Morgan");
+  const [userName, setUserName] = React.useState<string>("Nowhere Man");
   const { lock } = useAppLock();
   const router = useRouter();
   const [wallet, setWallet] = React.useState<SolanaWallet | undefined>(
@@ -70,7 +36,6 @@ export default function WalletHome() {
   const [showSwitchModal, setShowSwitchModal] = React.useState(false);
   const [allKeypairs, setAllKeypairs] = React.useState<SolanaWallet[]>([]);
 
-  // Simulate wallet loading, replace with real loading logic
   const loadWallet = async () => {
     try {
       const keypairs = await store().get<SolanaWallet[]>(STORE_KEYPAIRS);
@@ -197,7 +162,6 @@ export default function WalletHome() {
       <Box sx={{ width: "100%", maxWidth: 480 }}>
         <WalletCard
           userName={userName}
-          balance={balance}
           wallet={wallet}
           onLock={async () => {
             await selectionFeedback();
@@ -210,9 +174,7 @@ export default function WalletHome() {
             setShowSwitchModal(true);
           }}
         />
-        <ActivityCard
-          groupStablecoinsByDenomination={groupStablecoinsByDenomination}
-        />
+        <ActivityCard />
       </Box>
       <ActiveKeypairSelectionModal
         open={showSwitchModal}

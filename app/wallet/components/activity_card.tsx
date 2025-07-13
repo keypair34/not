@@ -4,13 +4,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import LoadingCard from "@/lib/components/loading-card";
 import ActivityListView from "./activity_list_view";
-
-interface Activity {
-  coin: string;
-  amount: number;
-  date: string;
-  type: "received" | "sent";
-}
+import { activitiesTestnet } from "./transactions";
 
 enum State {
   Loading,
@@ -18,27 +12,11 @@ enum State {
   Error,
 }
 
-interface ActivityCardProps {
-  groupStablecoinsByDenomination: (
-    activities: Activity[],
-  ) => Record<string, Activity[]>;
-}
+interface ActivityCardProps {}
 
-export default function ActivityCard({
-  groupStablecoinsByDenomination,
-}: ActivityCardProps) {
+export default function ActivityCard({}: ActivityCardProps) {
   // Add loading state
   const [state, setState] = React.useState(State.Loading);
-
-  // Example activities data moved here
-  const activities: Activity[] = [
-    { coin: "USDC", amount: 1000, date: "Jun 12, 2024", type: "received" },
-    { coin: "USDT", amount: 500, date: "Jun 11, 2024", type: "received" },
-    { coin: "USDG", amount: 200, date: "Jun 10, 2024", type: "received" },
-    { coin: "USDC", amount: 250, date: "Jun 10, 2024", type: "sent" },
-    { coin: "EURC", amount: 100, date: "Jun 9, 2024", type: "received" },
-    // ...other activities...
-  ];
 
   const loadActivities = async () => {
     setTimeout(() => {
@@ -49,9 +27,6 @@ export default function ActivityCard({
   React.useEffect(() => {
     loadActivities();
   }, []);
-
-  const groupedActivities = groupStablecoinsByDenomination(activities);
-
   return (
     <Card
       sx={{
@@ -68,12 +43,12 @@ export default function ActivityCard({
         fontWeight="bold"
         sx={{ mb: 2, color: "#212529" }}
       >
-        Recent Activity
+        Recent Activity (demo)
       </Typography>
       <Divider sx={{ mb: 2 }} />
       {state === State.Loading && <LoadingCard />}
       {state === State.Loaded && (
-        <ActivityListView groupedActivities={groupedActivities} />
+        <ActivityListView groupedActivities={activitiesTestnet} />
       )}
     </Card>
   );
