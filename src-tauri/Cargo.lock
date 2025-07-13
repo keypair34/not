@@ -3120,7 +3120,7 @@ dependencies = [
 
 [[package]]
 name = "notwallet"
-version = "0.3.3"
+version = "0.3.4"
 dependencies = [
  "bip39",
  "bs58",
