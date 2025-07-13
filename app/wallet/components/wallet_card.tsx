@@ -12,19 +12,19 @@ import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/navigation";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
+import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+import { invoke } from "@tauri-apps/api/core";
 
 interface WalletCardProps {
   userName: string;
-  balance: string;
   wallet: SolanaWallet;
   onLock: () => void;
   onDeposit: () => void;
-  onSwitchKeypair: ()=> void;
+  onSwitchKeypair: () => void;
 }
 
 export default function WalletCard({
   userName,
-  balance,
   wallet,
   onLock,
   onDeposit,
@@ -32,11 +32,25 @@ export default function WalletCard({
 }: WalletCardProps) {
   const router = useRouter();
 
+  const [balance, setBalance] = React.useState<string>("");
+
   // Handler for creating new keypair/mnemonic
   const handleCreateNew = async () => {
     await selectionFeedback();
     router.push("/create-new-wallet");
   };
+
+  const init = async () => {
+    const balance = await invoke<string>("get_bach_balance", {
+      pubkey: wallet.pubkey,
+    });
+    setBalance(`${balance} BACH`);
+  };
+
+  React.useEffect(() => {
+    init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Card
@@ -51,7 +65,6 @@ export default function WalletCard({
         position: "relative",
       }}
     >
-      {/* Lock button in top right */}
       <Button
         size="small"
         variant="outlined"
@@ -112,15 +125,14 @@ export default function WalletCard({
                   p: 0,
                   cursor: "pointer",
                 }}
-                onClick={() =>
-                  wallet?.pubkey &&
-                  navigator.clipboard.writeText(wallet.pubkey)
-                }
+                onClick={async () => {
+                  if (wallet?.pubkey) {
+                    await writeText(wallet.pubkey);
+                  }
+                }}
               >
                 {wallet?.pubkey
-                  ? `${wallet.pubkey.slice(0, 3)}...${wallet.pubkey.slice(
-                      -3
-                    )}`
+                  ? `${wallet.pubkey.slice(0, 3)}...${wallet.pubkey.slice(-3)}`
                   : ""}
               </Typography>
             </Tooltip>
@@ -137,13 +149,30 @@ export default function WalletCard({
                 size="small"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <path d="M16 17L21 12L16 7" stroke="#1e88e5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M21 12H9" stroke="#1e88e5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M8 7L3 12L8 17" stroke="#1e88e5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path
+                    d="M16 17L21 12L16 7"
+                    stroke="#1e88e5"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M21 12H9"
+                    stroke="#1e88e5"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M8 7L3 12L8 17"
+                    stroke="#1e88e5"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </IconButton>
             </Tooltip>
-            {/* Plus button next to pubkey */}
             <Tooltip title="Create new keypair or mnemonic" arrow>
               <IconButton
                 sx={{

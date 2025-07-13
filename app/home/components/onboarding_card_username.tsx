@@ -7,22 +7,31 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import { store } from "@/lib/store/store";
 
 type OnboardingCardUsernameProps = {
   open: boolean;
   onClose: () => void;
 };
 
-export default function OnboardingCardUsername({ open, onClose }: OnboardingCardUsernameProps) {
+export default function OnboardingCardUsername({
+  open,
+  onClose,
+}: OnboardingCardUsernameProps) {
   const [username, setUsername] = React.useState("");
   const [usernameSaved, setUsernameSaved] = React.useState(false);
 
-  const handleSaveUsername = () => {
-    // You can add logic to persist username here
-    setUsernameSaved(true);
-    setTimeout(() => {
-      onClose();
-    }, 1200);
+  const handleSaveUsername = async () => {
+    try {
+      await store().set("username", username);
+      setUsernameSaved(true);
+      setTimeout(() => {
+        onClose();
+      }, 1200);
+    } catch (e) {
+      // Optionally handle error
+      setUsernameSaved(false);
+    }
   };
 
   if (!open) return null;
@@ -86,7 +95,9 @@ export default function OnboardingCardUsername({ open, onClose }: OnboardingCard
           variant="outlined"
           placeholder="Enter your username"
           value={username}
-          onChange={e => setUsername(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setUsername(e.target.value)
+          }
           sx={{
             mb: 2,
             bgcolor: "#f3f4f6",
@@ -112,7 +123,11 @@ export default function OnboardingCardUsername({ open, onClose }: OnboardingCard
             },
           }}
           inputProps={{
-            style: { fontFamily: "monospace", fontSize: "1.1rem", color: "#212529" },
+            style: {
+              fontFamily: "monospace",
+              fontSize: "1.1rem",
+              color: "#212529",
+            },
             maxLength: 32,
           }}
           disabled={usernameSaved}

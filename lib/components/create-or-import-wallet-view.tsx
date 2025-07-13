@@ -18,7 +18,7 @@ export default function CreateOrImportWalletView() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "100vh",
+        minHeight: "60vh",
         background: "#f5f6fa",
       }}
     >
@@ -33,12 +33,17 @@ export default function CreateOrImportWalletView() {
           />
         </Box>
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div" align="center">
-            Not Wallet
+          <Typography
+            gutterBottom
+            variant="h3"
+            component="h1"
+            fontWeight="bold"
+            align="center"
+          >
+            Not
           </Typography>
           <Typography variant="body2" color="text.secondary" align="center">
-            Your non-custodial stablecoins wallet. Secure, private, and easy to
-            use.
+            Crypto Dollar Wallet: Secure & easy USD stablecoin wallet
           </Typography>
         </CardContent>
         <CardActions sx={{ flexDirection: "column", gap: 2, pb: 2 }}>
