@@ -4,10 +4,24 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
+import { store } from "@/lib/store/store";
+import {
+  Seed,
+  SolanaWallet,
+  STORE_ACTIVE_KEYPAIR,
+  STORE_SEEDS,
+} from "@/lib/crate/generated";
+import { debug } from "@tauri-apps/plugin-log";
 
 interface WalletSettingsSeedPhraseModalProps {
   open: boolean;
   onClose: () => void;
+}
+
+enum State {
+  Loading,
+  Loaded,
+  Error,
 }
 
 export default function WalletSettingsSeedPhraseModal({
@@ -17,12 +31,30 @@ export default function WalletSettingsSeedPhraseModal({
   const [showSeedPhrase, setShowSeedPhrase] = React.useState(false);
   const [seedPhrase, setSeedPhrase] = React.useState("");
   const [seconds, setSeconds] = React.useState(5);
+  const [state, setState] = React.useState(State.Loading);
 
   const onSetShowSeedPhrase = async () => {
-    // Get the current seed phrase from the wallet
-    // const seedPhrase = await getSeedPhrase();
-    // Show the seed phrase in a modal
-    setSeedPhrase("this is your seed phrase");
+    try {
+      setState(State.Loading);
+      const walletActive =
+        await store().get<SolanaWallet>(STORE_ACTIVE_KEYPAIR);
+      debug(`wallet: ${walletActive?.seed_id}`);
+      if (!walletActive) throw new Error("No active wallet");
+
+      const seeds = await store().get<Seed[]>(STORE_SEEDS);
+      // Filter seeds by wallet active seed_id, get the first one
+      const filteredSeed = seeds?.filter(
+        (seed) => seed.id === walletActive?.seed_id,
+      )[0];
+      // Sanity check
+      if (!filteredSeed) throw new Error("No seed found");
+      if (!filteredSeed.phrase) throw new Error("Seed phrase not found");
+
+      setSeedPhrase(filteredSeed.phrase);
+      setState(State.Loaded);
+    } catch {
+      setState(State.Error);
+    }
   };
 
   const onShowSeedPhrase = async () => {
@@ -103,7 +135,9 @@ export default function WalletSettingsSeedPhraseModal({
                   letterSpacing: 1,
                 }}
               >
-                {seedPhrase}
+                {state === State.Loading && "Loading ..."}
+                {state === State.Error && "Error"}
+                {state === State.Loaded && seedPhrase}
               </Typography>
               <Typography variant="body2" color="warning">
                 Will close in {seconds} seconds.
