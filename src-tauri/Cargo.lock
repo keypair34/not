@@ -8835,6 +8835,7 @@ dependencies = [
  "log",
  "serde",
  "serde_json",
+ "solana-account-decoder",
  "solana-client",
  "solana-sdk",
  "thiserror 1.0.69",
