@@ -74,7 +74,7 @@ export default function AppPreferences() {
           </Button>
           <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
             <Typography variant="h5" fontWeight="bold" paddingRight={2}>
-              App Preferences
+              Preferences
             </Typography>
           </Box>
         </Box>
@@ -93,7 +93,7 @@ export default function AppPreferences() {
           }}
         >
           <FormControl>
-            <FormLabel id="demo-theme-toggle">Theme</FormLabel>
+            <FormLabel id="demo-theme-toggle">Theme (beta)</FormLabel>
             <RadioGroup
               aria-labelledby="demo-theme-toggle"
               name="theme-toggle"

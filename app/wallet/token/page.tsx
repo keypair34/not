@@ -5,9 +5,8 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
-import WalletTokenHeader from "@/app/wallet/components/wallet-token-header";
+import WalletHeader from "@/app/wallet/components/wallet-header";
 import WalletTokenContent from "../components/wallet-token-content";
-//import { invoke } from "@tauri-apps/api/core";
 import * as log from "@tauri-apps/plugin-log";
 import { Suspense } from "react";
 
@@ -66,7 +65,7 @@ function WalletToken() {
           position: "relative",
         }}
       >
-        <WalletTokenHeader token={coin as string} />
+        <WalletHeader token={coin as string} />
         <Divider />
         <WalletTokenContent
           id={id as string}

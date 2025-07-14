@@ -17,6 +17,7 @@ export default function BottomTabBar() {
   if (
     pathname === "/wallet" ||
     pathname === "/wallet/token" ||
+    pathname === "/wallet/settings" ||
     pathname === "/deposit" ||
     pathname === "/create-new-wallet"
   )
