@@ -35,6 +35,7 @@ export default function WalletSettingsSeedPhraseModal({
   const [seedPhrase, setSeedPhrase] = React.useState("");
   const [seconds, setSeconds] = React.useState(5);
   const [state, setState] = React.useState(State.Loading);
+  const timerRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const onSetShowSeedPhrase = async () => {
     try {
@@ -60,18 +61,53 @@ export default function WalletSettingsSeedPhraseModal({
     }
   };
 
+  const clearTimer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  const handleClose = () => {
+    clearTimer();
+    setShowSeedPhrase(false);
+    setSeconds(5);
+    onClose();
+  };
+
+  // Reset state when component unmounts
+  React.useEffect(() => {
+    return () => {
+      clearTimer();
+    };
+  }, []);
+
+  // Reset state when modal open state changes
+  React.useEffect(() => {
+    if (!open) {
+      handleClose();
+    }
+  }, [open]);
+
   const onShowSeedPhrase = async () => {
     await selectionFeedback();
     await onSetShowSeedPhrase();
     setShowSeedPhrase(true);
-    const interval = setInterval(() => {
-      setSeconds((prevSeconds) => prevSeconds - 1);
+    setSeconds(5);
+
+    // Clear any existing timer first
+    clearTimer();
+
+    // Set new timer
+    timerRef.current = setInterval(() => {
+      setSeconds((prevSeconds) => {
+        if (prevSeconds <= 1) {
+          handleClose();
+          return 0;
+        }
+        return prevSeconds - 1;
+      });
     }, 1000);
-    setTimeout(() => {
-      clearInterval(interval);
-      setShowSeedPhrase(false);
-      onClose();
-    }, 5000);
   };
 
   return (
@@ -79,7 +115,7 @@ export default function WalletSettingsSeedPhraseModal({
       open={open}
       onClose={async () => {
         await selectionFeedback();
-        onClose();
+        handleClose();
       }}
       aria-labelledby="wallet-settings-seed-phrase-modal"
       sx={{
@@ -224,7 +260,7 @@ export default function WalletSettingsSeedPhraseModal({
           }}
           onClick={async () => {
             await selectionFeedback();
-            onClose();
+            handleClose();
           }}
         >
           {showSeedPhrase ? "Close" : "Cancel"}
