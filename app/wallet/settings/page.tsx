@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
@@ -12,16 +13,18 @@ import EyeIcon from "@mui/icons-material/Visibility";
 import { useRouter } from "next/navigation";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 import { ListItemIcon } from "@mui/material";
+import WalletSettingsSeedPhraseModal from "../components/wallet-settings-seed-phrase-modal";
 
 export default function WalletSettingsPage() {
   const router = useRouter();
+  const [showSeedPhraseModal, setShowSeedPhraseModal] = React.useState(false);
 
   const handleClick = async (type: "addWallet" | "showSeedPhrase") => {
     await selectionFeedback();
     if (type === "addWallet") {
       router.push("/create-new-wallet");
     } else if (type === "showSeedPhrase") {
-      router.push("/wallet/show-seed-phrase");
+      setShowSeedPhraseModal(true);
     }
   };
 
@@ -94,6 +97,10 @@ export default function WalletSettingsPage() {
           </ListItem>
         </List>
       </Card>
+      <WalletSettingsSeedPhraseModal
+        open={showSeedPhraseModal}
+        onClose={() => setShowSeedPhraseModal(false)}
+      />
     </Box>
   );
 }
