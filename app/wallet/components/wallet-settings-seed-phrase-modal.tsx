@@ -3,8 +3,11 @@ import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 import { store } from "@/lib/store/store";
+import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import {
   Seed,
   SolanaWallet,
@@ -124,21 +127,53 @@ export default function WalletSettingsSeedPhraseModal({
         >
           {showSeedPhrase && (
             <Box>
-              <Typography
-                variant="body1"
-                color="text.secondary"
+              <Box
                 sx={{
+                  position: "relative",
+                  p: 2,
                   mb: 2,
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  color: "#1e88e5",
-                  letterSpacing: 1,
+                  border: "1px solid rgba(30, 136, 229, 0.2)",
+                  borderRadius: 1,
+                  backgroundColor: "rgba(30, 136, 229, 0.05)",
                 }}
               >
-                {state === State.Loading && "Loading ..."}
-                {state === State.Error && "Error"}
-                {state === State.Loaded && seedPhrase}
-              </Typography>
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  sx={{
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    color: "#1e88e5",
+                    letterSpacing: 1,
+                    wordBreak: "break-word",
+                  }}
+                >
+                  {state === State.Loading && "Loading ..."}
+                  {state === State.Error && "Error"}
+                  {state === State.Loaded && seedPhrase}
+                </Typography>
+                {state === State.Loaded && (
+                  <IconButton
+                    size="small"
+                    sx={{
+                      position: "absolute",
+                      top: 8,
+                      right: 8,
+                      backgroundColor: "rgba(255, 255, 255, 0.5)",
+                      "&:hover": {
+                        backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      },
+                    }}
+                    onClick={async () => {
+                      await selectionFeedback();
+                      await writeText(seedPhrase);
+                    }}
+                    aria-label="copy seed phrase"
+                  >
+                    <ContentCopyIcon fontSize="small" />
+                  </IconButton>
+                )}
+              </Box>
               <Typography variant="body2" color="warning">
                 Will close in {seconds} seconds.
               </Typography>
