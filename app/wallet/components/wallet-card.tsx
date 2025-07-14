@@ -5,6 +5,7 @@ import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import AddIcon from "@mui/icons-material/Add";
+import SettingsIcon from "@mui/icons-material/Settings";
 import LockIcon from "@mui/icons-material/Lock";
 import { SolanaWallet } from "../../../lib/crate/generated";
 import IconButton from "@mui/material/IconButton";
@@ -34,10 +35,9 @@ export default function WalletCard({
 
   const [balance, setBalance] = React.useState<string>("");
 
-  // Handler for creating new keypair/mnemonic
-  const handleCreateNew = async () => {
+  const handleWalletSettings = async () => {
     await selectionFeedback();
-    router.push("/create-new-wallet");
+    router.push("/wallet/settings");
   };
 
   const init = async () => {
@@ -181,10 +181,10 @@ export default function WalletCard({
                   "&:hover": { bgcolor: "#e3f2fd" },
                   ml: 1,
                 }}
-                onClick={handleCreateNew}
+                onClick={handleWalletSettings}
                 size="small"
               >
-                <AddIcon fontSize="small" />
+                <SettingsIcon fontSize="small" />
               </IconButton>
             </Tooltip>
           </Box>

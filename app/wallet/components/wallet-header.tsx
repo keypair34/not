@@ -8,7 +8,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useRouter } from "next/navigation";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
 
-export default function WalletTokenHeader({ token }: { token: string }) {
+export default function WalletHeader({ token }: { token: string }) {
   const router = useRouter();
   return (
     <Box
