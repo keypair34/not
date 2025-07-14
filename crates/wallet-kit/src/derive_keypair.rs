@@ -1,8 +1,8 @@
 use bip39::Mnemonic;
 use log::debug;
 use solana_sdk::derivation_path::DerivationPath;
-use solana_sdk::signer::keypair::Keypair;
 use solana_sdk::signer::keypair::keypair_from_seed_and_derivation_path;
+use solana_sdk::signer::keypair::Keypair;
 use std::str::FromStr;
 
 /// Derives a Solana keypair from a mnemonic, account, and change index.
