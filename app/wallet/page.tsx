@@ -12,7 +12,7 @@ import {
 import { debug } from "@tauri-apps/plugin-log";
 import { redirect, useRouter } from "next/navigation";
 import { useAppLock } from "../../lib/context/app-lock-context";
-import WalletCard from "./components/wallet_card";
+import WalletCard from "./components/wallet-card";
 import ActivityCard from "./components/activity_card";
 import { invoke } from "@tauri-apps/api/core";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
