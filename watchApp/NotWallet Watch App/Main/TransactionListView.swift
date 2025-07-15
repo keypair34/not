@@ -15,10 +15,13 @@ struct TransactionListView: View {
         Transaction(date: "2025-07-10", amount: "-0.300 BACH", description: "Groceries"),
         Transaction(date: "2025-07-09", amount: "+0.800 BACH", description: "Refund")
     ]
+    @State private var selectedTransaction: Transaction? = nil
     
     var body: some View {
         List(transactions) { tx in
-            NavigationLink(destination: TransactionDetailView(transaction: tx)) {
+            Button(action: {
+                selectedTransaction = tx
+            }) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(tx.amount)
                         .font(.system(size: 18, weight: .semibold, design: .monospaced))
@@ -32,8 +35,12 @@ struct TransactionListView: View {
                 }
                 .padding(.vertical, 4)
             }
+            .buttonStyle(.plain)
         }
         .navigationTitle("Transactions")
+        .sheet(item: $selectedTransaction) { tx in
+            TransactionDetailView(transaction: tx)
+        }
     }
 }
 
