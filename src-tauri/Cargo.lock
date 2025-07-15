@@ -3988,8 +3988,6 @@ dependencies = [
  "reqwest 0.12.22",
  "serde",
  "serde_json",
- "solana-account-decoder",
- "solana-client",
  "solana-sdk",
  "tauri",
  "tauri-build",
