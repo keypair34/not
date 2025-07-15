@@ -1,10 +1,10 @@
-use log::debug;
+use log::{debug, error};
 use serde::{Deserialize, Serialize};
 use solana_account_decoder::parse_token::UiTokenAccount;
 use solana_account_decoder::UiAccountData;
 use solana_client::rpc_client::RpcClient;
 use solana_client::rpc_request::TokenAccountsFilter;
-use solana_sdk::pubkey::Pubkey;
+use solana_program::pubkey::Pubkey;
 use std::str::FromStr;
 
 pub fn bach_balance(
@@ -19,9 +19,15 @@ pub fn bach_balance(
     let pubkey = Pubkey::from_str(&pubkey).unwrap();
 
     // Get all token accounts owned by the pubkey
-    let token_accounts = connection
+    let token_accounts = match connection
         .get_token_accounts_by_owner(&pubkey, TokenAccountsFilter::ProgramId(bach_pubkey))
-        .unwrap();
+    {
+        Ok(accounts) => accounts,
+        Err(err) => {
+            error!("Error getting token accounts: {}", err);
+            return String::new();
+        }
+    };
 
     debug!("Number of token accounts: {}", token_accounts.len());
 
