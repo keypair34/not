@@ -1,4 +1,3 @@
-pub(crate) mod balance;
 pub(crate) mod check_pubkey;
 pub(crate) mod commands;
 pub(crate) mod import_wallet;
