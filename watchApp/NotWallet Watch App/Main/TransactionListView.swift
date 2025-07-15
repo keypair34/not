@@ -18,18 +18,20 @@ struct TransactionListView: View {
     
     var body: some View {
         List(transactions) { tx in
-            VStack(alignment: .leading, spacing: 4) {
-                Text(tx.amount)
-                    .font(.system(size: 18, weight: .semibold, design: .monospaced))
-                    .foregroundColor(tx.amount.hasPrefix("+") ? .green : .red)
-                Text(tx.description)
-                    .font(.system(size: 16, weight: .regular, design: .rounded))
-                    .foregroundColor(.primary)
-                Text(tx.date)
-                    .font(.system(size: 12, weight: .light, design: .rounded))
-                    .foregroundColor(.secondary)
+            NavigationLink(destination: TransactionDetailView(transaction: tx)) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(tx.amount)
+                        .font(.system(size: 18, weight: .semibold, design: .monospaced))
+                        .foregroundColor(tx.amount.hasPrefix("+") ? .green : .red)
+                    Text(tx.description)
+                        .font(.system(size: 16, weight: .regular, design: .rounded))
+                        .foregroundColor(.primary)
+                    Text(tx.date)
+                        .font(.system(size: 12, weight: .light, design: .rounded))
+                        .foregroundColor(.secondary)
+                }
+                .padding(.vertical, 4)
             }
-            .padding(.vertical, 4)
         }
         .navigationTitle("Transactions")
     }
