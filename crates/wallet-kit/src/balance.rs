@@ -4,7 +4,7 @@ use solana_account_decoder::parse_token::UiTokenAccount;
 use solana_account_decoder::UiAccountData;
 use solana_client::rpc_client::RpcClient;
 use solana_client::rpc_request::TokenAccountsFilter;
-use solana_sdk::pubkey::Pubkey;
+use solana_program::pubkey::Pubkey;
 use std::str::FromStr;
 
 pub fn bach_balance(
