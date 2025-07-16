@@ -22,9 +22,40 @@ export default function RootLayout({
     setMode("light");
   }
 
-  const darkTheme = createTheme({
-    colorSchemes: {
-      dark: true,
+  const nordicTheme = createTheme({
+    palette: {
+      mode: "light",
+      primary: {
+        main: "#9932CC", // Main purple
+        light: "#A64DFF",
+        dark: "#800080",
+        contrastText: "#fff",
+      },
+      secondary: {
+        main: "#AD5AD7", // Updated secondary color
+        light: "#C792EA",
+        dark: "#9932CC",
+        contrastText: "#fff",
+      },
+      background: {
+        default: "#f5f6fa", // Soft gray
+        paper: "#fff",
+      },
+      text: {
+        primary: "#222",
+        secondary: "#5E81AC",
+      },
+      info: {
+        main: "#ECEFF4", // Extra neutral
+      },
+    },
+    shape: {
+      borderRadius: 8,
+    },
+    typography: {
+      fontFamily: "Inter, Helvetica Neue, Arial, sans-serif",
+      fontWeightBold: 700,
+      fontWeightRegular: 400,
     },
   });
 
@@ -43,7 +74,7 @@ export default function RootLayout({
         `}</style>
       </head>
       <body>
-        <ThemeProvider theme={darkTheme} defaultMode="light">
+        <ThemeProvider theme={nordicTheme} defaultMode="light">
           <CssBaseline />
           <AppRouterCacheProvider>
             <AppLockProvider>
