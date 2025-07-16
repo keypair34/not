@@ -37,6 +37,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.BachInfoActivity"
+            android:label="Bach Info"
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
+            <!-- You can add intent-filters here if this activity can be launched directly
+                 or by other apps, but for now, it's just launched from MainActivity. -->
+        </activity>
     </application>
 
 </manifest>

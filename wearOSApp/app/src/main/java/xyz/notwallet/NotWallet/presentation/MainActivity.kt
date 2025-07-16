@@ -5,6 +5,7 @@
 
 package xyz.notwallet.NotWallet.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,11 +20,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,6 +55,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun WearApp() {
+
+    val context = LocalContext.current
+
     NotWalletTheme {
         Box(
             modifier = Modifier
@@ -71,7 +77,7 @@ fun WearApp() {
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF9932CC),
                     modifier = Modifier.clickable {
-                        // Show BACH info dialog or navigate
+                        context.startActivity(Intent(context, BachInfoActivity::class.java))
                     }
                 )
                 Text(
