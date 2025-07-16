@@ -1,4 +1,3 @@
-
 package xyz.notwallet.NotWallet.presentation
 
 import android.content.Intent
@@ -14,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -43,9 +44,7 @@ class MainActivity : ComponentActivity() {
 
         setTheme(android.R.style.Theme_DeviceDefault)
 
-        setContent {
-            WearApp()
-        }
+        setContent { WearApp() }
     }
 }
 
@@ -56,63 +55,53 @@ fun WearApp() {
 
     NotWalletTheme {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background),
-            contentAlignment = Alignment.TopCenter
+                modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background),
+                contentAlignment = Alignment.TopCenter
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    modifier =
+                            Modifier.fillMaxSize()
+                                    .padding(16.dp)
+                                    .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "€BACH",
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF9932CC),
-                    modifier = Modifier.clickable {
-                        context.startActivity(Intent(context, BachInfoActivity::class.java))
-                    }
+                        text = "€BACH",
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF9932CC),
+                        modifier =
+                                Modifier.clickable {
+                                    context.startActivity(
+                                            Intent(context, BachInfoActivity::class.java)
+                                    )
+                                }
                 )
-                Text(
-                    text = "Fixed supply: 12 million BACH",
-                    fontSize = 12.sp,
-                    color = Color.Gray
-                )
+                Text(text = "Fixed supply: 12 million BACH", fontSize = 12.sp, color = Color.Gray)
                 Spacer(modifier = Modifier.height(16.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .background(Color.LightGray)
-                ) {
-                    // Placeholder for PriceGraphView
-                    PriceGraphView()
+                Box(modifier = Modifier.fillMaxWidth().height(60.dp).background(Color.LightGray)) {
+                    PriceGraphView(modifier = Modifier.fillMaxSize())
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 HorizontalDivider()
                 Text(
-                    text = "My saldo",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.Gray
+                        text = "My saldo",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Gray
                 )
                 Button(
-                    onClick = {
-                        // Show transactions dialog or navigate
-                    },
-                    modifier = Modifier.fillMaxWidth()
+                        onClick = {
+                            // Show transactions dialog or navigate
+                        },
+                        modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "10.624434723489 BACH",
-                        fontSize = 20.sp,
-                        fontFamily = FontFamily.Monospace,
-                        color = Color.Black,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .clip(RectangleShape)
+                            text = "10.624434723489 BACH",
+                            fontSize = 20.sp,
+                            fontFamily = FontFamily.Monospace,
+                            color = Color.Black,
+                            modifier = Modifier.padding(8.dp).clip(RectangleShape)
                     )
                 }
             }
