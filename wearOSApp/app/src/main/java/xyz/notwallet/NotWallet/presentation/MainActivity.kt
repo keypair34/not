@@ -1,5 +1,6 @@
 package xyz.notwallet.NotWallet.presentation
 
+
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -35,6 +36,7 @@ import androidx.wear.compose.material.Text
 import androidx.wear.tooling.preview.devices.WearDevices
 import xyz.notwallet.NotWallet.presentation.components.PriceGraphView
 import xyz.notwallet.NotWallet.presentation.theme.NotWalletTheme
+import xyz.notwallet.NotWallet.presentation.transactions.TransactionListActivity
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +94,9 @@ fun WearApp() {
                 )
                 Button(
                         onClick = {
-                            // Show transactions dialog or navigate
+                            context.startActivity(
+                                    Intent(context, TransactionListActivity::class.java)
+                            )
                         },
                         modifier = Modifier.fillMaxWidth()
                 ) {
