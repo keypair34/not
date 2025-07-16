@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,10 +40,12 @@ fun TransactionListView(transactions: List<Transaction>) {
     var selectedTransaction by remember { mutableStateOf<Transaction?>(null) }
 
     NotWalletTheme {
-        Scaffold {
+        Scaffold(modifier = Modifier.background(Color.Black)) {
             LazyColumn(
                     modifier =
-                            Modifier.fillMaxSize().padding(it).padding(top = 24.dp, bottom = 24.dp),
+                            Modifier.fillMaxSize()
+                                    .padding(it)
+                                    .background(Color.Black),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(transactions) { tx ->
@@ -116,5 +119,14 @@ class TransactionListActivity : ComponentActivity() {
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
-    TransactionListView(transactions = emptyList())
+    TransactionListView(
+            transactions =
+                    listOf(
+                            Transaction("2025-07-13", "+2.000 BACH", "Salary"),
+                            Transaction("2025-07-12", "-0.500 BACH", "Coffee Shop"),
+                            Transaction("2025-07-11", "+1.200 BACH", "Gift"),
+                            Transaction("2025-07-10", "-0.300 BACH", "Groceries"),
+                            Transaction("2025-07-09", "+0.800 BACH", "Refund")
+                    )
+    )
 }
