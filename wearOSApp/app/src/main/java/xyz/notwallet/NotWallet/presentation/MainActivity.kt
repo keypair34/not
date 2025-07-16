@@ -1,7 +1,3 @@
-/* While this template provides a good starting point for using Wear Compose, you can always
- * take a look at https://github.com/android/wear-os-samples/tree/main/ComposeStarter to find the
- * most up to date changes to the libraries and their usages.
- */
 
 package xyz.notwallet.NotWallet.presentation
 
@@ -20,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +32,7 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.tooling.preview.devices.WearDevices
+import xyz.notwallet.NotWallet.presentation.components.PriceGraphView
 import xyz.notwallet.NotWallet.presentation.theme.NotWalletTheme
 
 class MainActivity : ComponentActivity() {
@@ -93,6 +89,7 @@ fun WearApp() {
                         .background(Color.LightGray)
                 ) {
                     // Placeholder for PriceGraphView
+                    PriceGraphView()
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 HorizontalDivider()
