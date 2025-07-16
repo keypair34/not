@@ -86,7 +86,7 @@ function ActivityDetailContent() {
         <Typography
           variant="subtitle1"
           fontWeight="bold"
-          sx={{ mb: 1, color: "#1e88e5" }}
+          sx={{ mb: 1, color: "#AD5AD7" }}
         >
           {activity.action}
         </Typography>
