@@ -32,7 +32,6 @@ export default function WalletCard({
   onSwitchKeypair,
 }: WalletCardProps) {
   const router = useRouter();
-
   const [balance, setBalance] = React.useState<string>("");
 
   const handleWalletSettings = async () => {
@@ -57,9 +56,9 @@ export default function WalletCard({
       sx={{
         mb: 3,
         borderRadius: 4,
-        boxShadow: 6,
+        boxShadow: "0 2px 16px rgba(153,50,204,0.08)",
         p: 4,
-        background: "linear-gradient(135deg, #212529 60%, #1e88e5 100%)",
+        background: "linear-gradient(135deg, #9932CC 0%, #A64DFF 100%)",
         color: "#fff",
         overflow: "hidden",
         position: "relative",
@@ -67,16 +66,19 @@ export default function WalletCard({
     >
       <Button
         size="small"
-        variant="outlined"
+        variant="contained"
         sx={{
           position: "absolute",
           top: 16,
           right: 16,
           minWidth: 0,
-          px: 1,
-          borderColor: "#1e88e5",
-          color: "#1e88e5",
-          zIndex: 1,
+          px: 1.5,
+          borderRadius: 2,
+          fontWeight: "bold",
+          background: "#fff",
+          color: "#9932CC",
+          boxShadow: "0 1px 6px #9932CC22",
+          "&:hover": { background: "#f5f6fa" },
         }}
         onClick={onLock}
         startIcon={<LockIcon />}
@@ -85,7 +87,7 @@ export default function WalletCard({
       </Button>
       <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 2 }}>
         <Avatar sx={{ width: 56, height: 56, bgcolor: "#fff" }}>
-          <Typography variant="h5" color="#212529">
+          <Typography variant="h5" color="#9932CC">
             {userName[0]}
           </Typography>
         </Avatar>
@@ -98,22 +100,20 @@ export default function WalletCard({
               mt: 1,
               mb: 1,
               bgcolor: "#fff",
-              borderRadius: 1,
-              px: 1.5,
+              borderRadius: 2,
+              px: 2,
               py: 1,
               display: "flex",
               alignItems: "center",
               gap: 1,
-              width: "100%", // Make the box extend to the end of the container
-              maxWidth: "100%",
-              boxShadow: 1,
+              boxShadow: "0 1px 4px #9932CC11",
             }}
           >
             <Tooltip title="Copy pubkey" arrow>
               <Typography
                 variant="body2"
                 sx={{
-                  color: "#1e88e5",
+                  color: "#9932CC",
                   fontFamily: "monospace",
                   fontWeight: "bold",
                   fontSize: "1.05rem",
@@ -121,8 +121,6 @@ export default function WalletCard({
                   whiteSpace: "pre-wrap",
                   flex: 1,
                   userSelect: "all",
-                  m: 0,
-                  p: 0,
                   cursor: "pointer",
                 }}
                 onClick={async () => {
@@ -136,14 +134,14 @@ export default function WalletCard({
                   : ""}
               </Typography>
             </Tooltip>
-            {/* Switch button after pubkey, before plus button */}
             <Tooltip title="Switch keypair" arrow>
               <IconButton
                 sx={{
-                  color: "#1e88e5",
+                  color: "#9932CC",
                   bgcolor: "#f5f6fa",
-                  "&:hover": { bgcolor: "#e3f2fd" },
+                  "&:hover": { bgcolor: "#EDE7F6" },
                   ml: 1,
+                  borderRadius: 2,
                 }}
                 onClick={onSwitchKeypair}
                 size="small"
@@ -151,21 +149,21 @@ export default function WalletCard({
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                   <path
                     d="M16 17L21 12L16 7"
-                    stroke="#1e88e5"
+                    stroke="#9932CC"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
                   <path
                     d="M21 12H9"
-                    stroke="#1e88e5"
+                    stroke="#9932CC"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
                   <path
                     d="M8 7L3 12L8 17"
-                    stroke="#1e88e5"
+                    stroke="#9932CC"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -173,13 +171,14 @@ export default function WalletCard({
                 </svg>
               </IconButton>
             </Tooltip>
-            <Tooltip title="Create new keypair or mnemonic" arrow>
+            <Tooltip title="Wallet settings" arrow>
               <IconButton
                 sx={{
-                  color: "#1e88e5",
+                  color: "#9932CC",
                   bgcolor: "#f5f6fa",
-                  "&:hover": { bgcolor: "#e3f2fd" },
+                  "&:hover": { bgcolor: "#EDE7F6" },
                   ml: 1,
+                  borderRadius: 2,
                 }}
                 onClick={handleWalletSettings}
                 size="small"
@@ -192,7 +191,7 @@ export default function WalletCard({
       </Stack>
       <Typography
         variant="subtitle2"
-        sx={{ color: "#b0bec5", mb: 1, letterSpacing: 1 }}
+        sx={{ color: "#B768FF", mb: 1, letterSpacing: 1 }}
       >
         Total Balance
       </Typography>
@@ -202,8 +201,8 @@ export default function WalletCard({
         sx={{
           color: "#fff",
           mb: 2,
-          textShadow: "0 2px 12px #1e88e5cc",
-          fontFamily: "Inter, Roboto, Arial, sans-serif",
+          textShadow: "0 2px 12px #9932CC55",
+          fontFamily: "Inter, Helvetica Neue, Arial, sans-serif",
         }}
       >
         {balance}
@@ -211,15 +210,14 @@ export default function WalletCard({
       <Stack direction="row" spacing={2} sx={{ mb: 1 }}>
         <Button
           variant="contained"
-          color="primary"
           startIcon={<AddIcon />}
           sx={{
-            bgcolor: "#fff",
-            color: "#1e88e5",
+            background: "linear-gradient(90deg, #9932CC 0%, #A64DFF 100%)",
+            color: "#fff",
             fontWeight: "bold",
             borderRadius: 2,
-            boxShadow: 2,
-            "&:hover": { bgcolor: "#e3f2fd" },
+            boxShadow: "0 1px 6px #9932CC22",
+            "&:hover": { background: "#A64DFF" },
           }}
           fullWidth
           onClick={onDeposit}

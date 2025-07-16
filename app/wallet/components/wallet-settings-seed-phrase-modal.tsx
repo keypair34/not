@@ -146,8 +146,13 @@ export default function WalletSettingsSeedPhraseModal({
             mb: 2,
             textAlign: "center",
             fontWeight: "bold",
-            color: "#1e88e5",
-            letterSpacing: 1,
+            color: "transparent",
+            background: "linear-gradient(90deg, #9932CC 0%, #AD5AD7 100%)",
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            letterSpacing: "0.02em",
+            fontFamily: "Inter, Helvetica Neue, Arial, sans-serif",
           }}
         >
           Show Seed Phrase
@@ -168,9 +173,9 @@ export default function WalletSettingsSeedPhraseModal({
                   position: "relative",
                   p: 2,
                   mb: 2,
-                  border: "1px solid rgba(30, 136, 229, 0.2)",
+                  border: "1px solid #AD5AD7",
                   borderRadius: 1,
-                  backgroundColor: "rgba(30, 136, 229, 0.05)",
+                  backgroundColor: "#F5F6FA",
                 }}
               >
                 <Typography
@@ -179,7 +184,7 @@ export default function WalletSettingsSeedPhraseModal({
                   sx={{
                     textAlign: "center",
                     fontWeight: "bold",
-                    color: "#1e88e5",
+                    color: "#AD5AD7",
                     letterSpacing: 1,
                     wordBreak: "break-word",
                   }}
@@ -223,7 +228,7 @@ export default function WalletSettingsSeedPhraseModal({
                 mb: 2,
                 textAlign: "center",
                 fontWeight: "bold",
-                color: "#1e88e5",
+                color: "#AD5AD7",
                 letterSpacing: 1,
               }}
             >
@@ -257,6 +262,9 @@ export default function WalletSettingsSeedPhraseModal({
             borderRadius: 2,
             fontWeight: "bold",
             letterSpacing: 1,
+            color: "#AD5AD7",
+            borderColor: "#AD5AD7",
+            "&:hover": { background: "#F5F6FA", borderColor: "#C792EA" },
           }}
           onClick={async () => {
             await selectionFeedback();

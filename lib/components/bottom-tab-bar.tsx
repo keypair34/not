@@ -71,24 +71,24 @@ export default function BottomTabBar() {
           label="Home"
           icon={<HomeIcon />}
           sx={{
-            color: value === 0 ? "#1e88e5" : undefined,
-            "&.Mui-selected": { color: "#1e88e5" },
+            color: value === 0 ? "#AD5AD7" : undefined,
+            "&.Mui-selected": { color: "#AD5AD7" },
           }}
         />
         <BottomNavigationAction
           label="Wallet"
           icon={<AccountBalanceWalletIcon />}
           sx={{
-            color: value === 1 ? "#1e88e5" : undefined,
-            "&.Mui-selected": { color: "#1e88e5" },
+            color: value === 1 ? "#AD5AD7" : undefined,
+            "&.Mui-selected": { color: "#AD5AD7" },
           }}
         />
         <BottomNavigationAction
           label="Settings"
           icon={<SettingsIcon />}
           sx={{
-            color: value === 2 ? "#1e88e5" : undefined,
-            "&.Mui-selected": { color: "#1e88e5" },
+            color: value === 2 ? "#AD5AD7" : undefined,
+            "&.Mui-selected": { color: "#AD5AD7" },
           }}
         />
       </BottomNavigation>

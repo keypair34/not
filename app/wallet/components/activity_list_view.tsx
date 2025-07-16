@@ -65,7 +65,7 @@ export default function ActivityListView({
               id={`${group.id}-header`}
               sx={{ px: 0, bgcolor: "transparent" }}
             >
-              <Typography variant="subtitle2" sx={{ color: "#1e88e5" }}>
+              <Typography variant="subtitle2" sx={{ color: "#AD5AD7" }}>
                 Activity
               </Typography>
             </AccordionSummary>
