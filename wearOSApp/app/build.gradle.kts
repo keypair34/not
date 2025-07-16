@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "xyz.notwallet.NotWalletWear"
+    namespace = "xyz.notwallet.NotWallet"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "xyz.notwallet.NotWalletWear"
+        applicationId = "xyz.notwallet.NotWallet"
         minSdk = 30
         targetSdk = 36
         versionCode = 1
