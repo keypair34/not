@@ -35,3 +35,6 @@ keystore.properties
 
 # Allow encrypted keystore files
 !secrets/*.gpg
+
+# App builds
+*.pkg

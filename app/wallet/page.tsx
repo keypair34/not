@@ -12,7 +12,7 @@ import {
 import { debug } from "@tauri-apps/plugin-log";
 import { redirect, useRouter } from "next/navigation";
 import { useAppLock } from "../../lib/context/app-lock-context";
-import WalletCard from "./components/wallet_card";
+import WalletCard from "./components/wallet-card";
 import ActivityCard from "./components/activity_card";
 import { invoke } from "@tauri-apps/api/core";
 import { selectionFeedback } from "@tauri-apps/plugin-haptics";
@@ -22,44 +22,6 @@ enum State {
   Loading,
   Loaded,
   Error,
-}
-
-// Helper to group stablecoins by denomination
-// (kept here for ActivityCard to receive as prop)
-function groupStablecoinsByDenomination(
-  activities: {
-    coin: string;
-    amount: number;
-    date: string;
-    type: "received" | "sent" | "airdrop";
-  }[],
-) {
-  // Define mapping from coin to denomination
-  const denominationMap: Record<string, string> = {
-    USDC: "USD",
-    USDT: "USD",
-    USDG: "USD",
-    EURC: "EUR",
-    EURT: "EUR",
-    // Add more as needed
-  };
-
-  // Group by denomination
-  const grouped: Record<
-    string,
-    {
-      coin: string;
-      amount: number;
-      date: string;
-      type: "received" | "sent" | "airdrop";
-    }[]
-  > = {};
-  for (const activity of activities) {
-    const denom = denominationMap[activity.coin] || activity.coin;
-    if (!grouped[denom]) grouped[denom] = [];
-    grouped[denom].push(activity);
-  }
-  return grouped;
 }
 
 export default function WalletHome() {
@@ -212,9 +174,7 @@ export default function WalletHome() {
             setShowSwitchModal(true);
           }}
         />
-        <ActivityCard
-          groupStablecoinsByDenomination={groupStablecoinsByDenomination}
-        />
+        <ActivityCard />
       </Box>
       <ActiveKeypairSelectionModal
         open={showSwitchModal}

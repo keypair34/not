@@ -166,13 +166,18 @@ export default function ImportKeypairsPage() {
               variant="outlined"
               color="secondary"
               fullWidth
-              sx={{ mt: 2 }}
+              sx={{
+                mt: 2,
+                color: "#AD5AD7",
+                borderColor: "#AD5AD7",
+                "&:hover": { background: "#F5F6FA", borderColor: "#C792EA" },
+              }}
               onClick={async () => {
                 await selectionFeedback();
                 router.replace("/onboarding/create-password");
               }}
             >
-              I&apos;m done
+              Continue
             </Button>
           </CardContent>
         </Card>

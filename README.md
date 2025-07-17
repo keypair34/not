@@ -1,8 +1,6 @@
 # NotWallet
 
-Solana wallet and more. Do your own research.
-
-**Use at your own risk.**
+Solana wallet and more. Do your own research. Use at your own risk.
 
 ## Recommended IDE Setup
 
@@ -12,7 +10,7 @@ Solana wallet and more. Do your own research.
 
 ## Run targets
 
-Build desktop, iOS, and Android targets:
+This repo consists of source code to build desktop, iOS, (experimental) watchOS, and Android targets:
 
 ```bash
 # Desktop
@@ -27,6 +25,8 @@ $ pnpm run tauri android dev
 
 - Follow Tauri guide for more information.
 - When updating `tauri.conf.json`, always clean up `src-tauri/gen` folder and init the android and ios project again.
+
+watchOS app is under the watchApp folder as an Xcode project.
 
 ```bash
 $ pnpm run tauri android init
