@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
@@ -26,6 +27,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,16 +59,18 @@ fun WearApp() {
 
     NotWalletTheme {
         Box(
-                modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background),
+                modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background, RoundedCornerShape(30)),
                 contentAlignment = Alignment.TopCenter
         ) {
             Column(
                     modifier =
                             Modifier.fillMaxSize()
                                     .padding(16.dp)
-                                    .verticalScroll(rememberScrollState()),
+                                    .verticalScroll(rememberScrollState())
+                                    .background(MaterialTheme.colors.background, RoundedCornerShape(30)),
                     horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(modifier = Modifier.height(16.dp))
                 Text(
                         text = "€BACH",
                         fontSize = 32.sp,
@@ -79,7 +83,8 @@ fun WearApp() {
                                     )
                                 }
                 )
-                Text(text = "Fixed supply: 12 million BACH", fontSize = 12.sp, color = Color.Gray)
+                Text(text = "Fixed supply", fontSize = 12.sp, color = Color.Gray)
+                Text(text = "12 million BACH", fontSize = 18.sp, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(16.dp))
                 Box(modifier = Modifier.fillMaxWidth().height(60.dp).background(Color.LightGray)) {
                     PriceGraphView(modifier = Modifier.fillMaxSize())
@@ -90,7 +95,8 @@ fun WearApp() {
                         text = "My saldo",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.Gray
+                        color = Color.Gray,
+                        modifier = Modifier.padding(vertical = 8.dp)
                 )
                 Button(
                         onClick = {
@@ -112,6 +118,7 @@ fun WearApp() {
                             maxLines = 1
                     )
                 }
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
