@@ -59,7 +59,7 @@ fun WearApp() {
 
     NotWalletTheme {
         Box(
-                modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background, RoundedCornerShape(30)),
+                modifier = Modifier.fillMaxSize().background(Color.Black, RoundedCornerShape(30)),
                 contentAlignment = Alignment.TopCenter
         ) {
             Column(
@@ -67,7 +67,7 @@ fun WearApp() {
                             Modifier.fillMaxSize()
                                     .padding(16.dp)
                                     .verticalScroll(rememberScrollState())
-                                    .background(MaterialTheme.colors.background, RoundedCornerShape(30)),
+                                    .background(Color.Black, RoundedCornerShape(30)),
                     horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
@@ -86,7 +86,7 @@ fun WearApp() {
                 Text(text = "Fixed supply", fontSize = 12.sp, color = Color.Gray)
                 Text(text = "12 million BACH", fontSize = 18.sp, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(16.dp))
-                Box(modifier = Modifier.fillMaxWidth().height(60.dp).background(Color.LightGray)) {
+                Box(modifier = Modifier.fillMaxWidth().height(60.dp).background(Color.Black)) {
                     PriceGraphView(modifier = Modifier.fillMaxSize())
                 }
                 Spacer(modifier = Modifier.height(16.dp))

@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
@@ -38,9 +39,10 @@ fun BachInfoScreen() {
 @Composable
 fun ScrollViewContent() {
     Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState()),
+            modifier = Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState()).background(Color.Black, RoundedCornerShape(30)),
             horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(16.dp))
         Text(text = "€BACH", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White)
         Text(text = "Fixed supply: 12 million BACH", fontSize = 12.sp, color = Color.Gray)
         Spacer(modifier = Modifier.height(16.dp))
@@ -56,28 +58,47 @@ fun ScrollViewContent() {
                 color = Color.White
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
+        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
-                    text = "Symbol: BACH",
-                    fontSize = 16.sp,
+                    text = "Symbol",
+                    fontSize = 12.sp,
                     fontWeight = FontWeight.Normal,
                     color = Color.LightGray
             )
             Text(
-                    text = "Network: Solana",
-                    fontSize = 16.sp,
+                text = "BACH",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.LightGray
+            )
+            Text(
+                    text = "Network",
+                    fontSize = 12.sp,
                     fontWeight = FontWeight.Normal,
                     color = Color.LightGray
             )
             Text(
-                    text = "Decimals: 12",
-                    fontSize = 16.sp,
+                text = "Solana",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.LightGray
+            )
+            Text(
+                    text = "Decimals",
+                    fontSize = 12.sp,
                     fontWeight = FontWeight.Normal,
                     color = Color.LightGray
+            )
+            Text(
+                text = "12",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.LightGray
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
         HorizontalDivider()
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
