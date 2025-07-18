@@ -74,6 +74,7 @@ export default function WalletSettingsPage() {
             />
           </ListItem>
           <Divider />
+
           <ListItem
             sx={{
               px: 4,
@@ -92,6 +93,30 @@ export default function WalletSettingsPage() {
             </ListItemIcon>
             <ListItemText
               primary="Show Seed Phrase"
+              sx={{ fontSize: "1.08rem", fontWeight: 500, py: 1 }}
+            />
+          </ListItem>
+        </List>
+        <Divider sx={{ mt: 2, mb: 1 }} />
+        <List sx={{ p: 0 }}>
+          <ListItem
+            sx={{
+              px: 4,
+              cursor: "pointer",
+              minHeight: 56,
+              borderRadius: 2,
+              "&:hover": { bgcolor: "#f3f4f6" },
+              transition: "background 0.2s",
+            }}
+            onClick={() => router.push("/wallet/import")}
+            component="li"
+            disablePadding
+          >
+            <ListItemIcon>
+              <AddIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Import Seed Phrase"
               sx={{ fontSize: "1.08rem", fontWeight: 500, py: 1 }}
             />
           </ListItem>
