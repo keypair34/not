@@ -1,6 +1,7 @@
 [versions]
 agp = "8.11.1"
 kotlin = "2.2.0"
+cargo-ndk = "0.3.4"
 playServicesWearable = "19.0.0"
 composeBom = "2025.07.00"
 composeMaterial = "1.4.1"
@@ -30,4 +31,5 @@ material3-android = { group = "androidx.compose.material3", name = "material3-an
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+cargo-ndk = { id = "com.github.willir.rust.cargo-ndk-android", version.ref = "cargo-ndk" }
 

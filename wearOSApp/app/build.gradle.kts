@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.cargo.ndk)
 }
 
 android {
@@ -56,4 +57,10 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+}
+
+cargoNdk {
+    module  = "../../crates/wallet-kit"
+    librariesNames = arrayListOf("libwallet_kit.so")
+    extraCargoBuildArguments = arrayListOf("-p", "libwallet_kit")
 }
