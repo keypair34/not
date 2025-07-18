@@ -4,13 +4,7 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import InfoIcon from "@mui/icons-material/Info";
 
-interface Activity {
-  id: string;
-  type: "received" | "sent";
-  coin: string;
-  amount: number;
-  date: string;
-}
+import type { Activity } from "./transactions";
 
 interface ActivityListViewProps {
   activities: Activity[];
@@ -36,17 +30,33 @@ export default function ActivityListView({
         >
           <Avatar
             sx={{
-              bgcolor: activity.type === "received" ? "#AD5AD7" : "#fff",
-              color: activity.type === "received" ? "#fff" : "#AD5AD7",
+              bgcolor:
+                activity.type === "received"
+                  ? "#AD5AD7"
+                  : activity.type === "airdrop"
+                    ? "#FFD700"
+                    : "#fff",
+              color:
+                activity.type === "received"
+                  ? "#fff"
+                  : activity.type === "airdrop"
+                    ? "#AD5AD7"
+                    : "#AD5AD7",
               mr: 2,
               boxShadow:
-                activity.type === "received" ? "0 0 8px #AD5AD7" : "none",
+                activity.type === "received"
+                  ? "0 0 8px #AD5AD7"
+                  : activity.type === "airdrop"
+                    ? "0 0 8px #FFD700"
+                    : "none",
             }}
           >
             {activity.type === "received" ? (
               <ArrowDownwardIcon />
-            ) : (
+            ) : activity.type === "sent" ? (
               <ArrowUpwardIcon />
+            ) : (
+              <InfoIcon />
             )}
           </Avatar>
           <CardContent sx={{ flex: 1, py: 2 }}>
@@ -60,12 +70,20 @@ export default function ActivityListView({
               </Typography>
             </Stack>
             <Typography variant="body2" sx={{ mt: 1, color: "#212529" }}>
-              {activity.type === "received" ? "Received" : "Sent"}{" "}
+              {activity.type === "received"
+                ? "Received"
+                : activity.type === "sent"
+                  ? "Sent"
+                  : "Airdrop"}{" "}
               {activity.coin}
             </Typography>
             <Typography variant="h6" sx={{ color: "#AD5AD7", fontWeight: 700 }}>
-              {activity.type === "received" ? "+" : "-"}$
-              {activity.amount.toLocaleString()}
+              {activity.type === "received"
+                ? "+"
+                : activity.type === "sent"
+                  ? "-"
+                  : "+"}
+              ${activity.amount.toLocaleString()}
             </Typography>
             <Typography variant="caption" sx={{ color: "#90a4ae" }}>
               {activity.date}
