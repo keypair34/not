@@ -48,7 +48,7 @@ export default function ActivityCard({}: ActivityCardProps) {
       <Divider sx={{ mb: 2 }} />
       {state === State.Loading && <LoadingCard />}
       {state === State.Loaded && (
-        <ActivityListView groupedActivities={activitiesTestnet} />
+        <ActivityListView activities={activitiesTestnet} />
       )}
     </Card>
   );
