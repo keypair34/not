@@ -47,12 +47,7 @@ For iOS, modify the api key and api user in the publish-ios.sh script with your 
 $ pnpm publish-ios
 ```
 
-<details>
-  <summary>Screenshots</summary>
+## Download
 
-  <p><img src="screenshots/0.png" alt="locked-wallet-view.png" width="250"/></p>
-  <p><img src="screenshots/1.png" alt="wallet-home.png" width="250"/></p>
-  <p><img src="screenshots/2.png" alt="wallet-mobile.png" width="250"/></p>
-
-</details>
-
+- [TestFlight (iOS)](https://testflight.apple.com/join/your-app-id)
+- [Google Play Store (Android)](https://play.google.com/store/apps/details?id=your.app.id)

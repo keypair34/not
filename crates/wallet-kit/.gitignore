@@ -46,3 +46,5 @@ perf.data.old
 # Generated Swift package
 WalletKit/
 generated/
+out/
+jniLibs/
