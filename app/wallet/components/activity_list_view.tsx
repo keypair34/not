@@ -1,84 +1,95 @@
 import * as React from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
-import { Button } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { Card, CardContent, Typography, Stack, Avatar } from "@mui/material";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import InfoIcon from "@mui/icons-material/Info";
 
-interface Activity {
-  coin: string;
-  amount: number;
-  date: string;
-  type: "received" | "sent" | "airdrop";
-}
+import type { Activity } from "./transactions";
 
 interface ActivityListViewProps {
-  groupedActivities: Record<string, Activity[]>;
+  activities: Activity[];
 }
 
 export default function ActivityListView({
-  groupedActivities,
+  activities,
 }: ActivityListViewProps) {
-  const router = useRouter();
-
   return (
     <Stack spacing={2}>
-      {Object.entries(groupedActivities).map(([denom, acts]) => (
-        <Stack direction="row" spacing={8} key={denom} alignItems="flex-start">
-          <Button
-            onClick={() => router.push(`/wallet/token?id=${denom}`)}
+      {activities.map((activity) => (
+        <Card
+          key={activity.id}
+          sx={{
+            borderRadius: 3,
+            boxShadow: "0 2px 12px rgba(173, 90, 215, 0.08)",
+            bgcolor: "#f7f2fa",
+            border: "1px solid #e1c8f7",
+            display: "flex",
+            alignItems: "center",
+            px: 2,
+          }}
+        >
+          <Avatar
             sx={{
-              mb: 1,
-              boxShadow: "none",
-              bgcolor: "transparent",
-              verticalAlign: "top",
-              alignSelf: "flex-start",
-              mt: 1,
+              bgcolor:
+                activity.type === "received"
+                  ? "#AD5AD7"
+                  : activity.type === "airdrop"
+                    ? "#FFD700"
+                    : "#fff",
+              color:
+                activity.type === "received"
+                  ? "#fff"
+                  : activity.type === "airdrop"
+                    ? "#AD5AD7"
+                    : "#AD5AD7",
+              mr: 2,
+              boxShadow:
+                activity.type === "received"
+                  ? "0 0 8px #AD5AD7"
+                  : activity.type === "airdrop"
+                    ? "0 0 8px #FFD700"
+                    : "none",
             }}
           >
-            <InfoIcon></InfoIcon> {` ${denom}`}
-          </Button>
-          <Accordion
-            key={denom}
-            sx={{
-              mb: 1,
-              boxShadow: "none",
-              bgcolor: "transparent",
-              width: "100%",
-              ml: 2,
-            }}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls={`${denom}-content`}
-              id={`${denom}-header`}
-              sx={{ px: 0, bgcolor: "transparent" }}
-            >
-              <Typography variant="subtitle2" sx={{ color: "#1e88e5" }}>
-                Activity
+            {activity.type === "received" ? (
+              <ArrowDownwardIcon />
+            ) : activity.type === "sent" ? (
+              <ArrowUpwardIcon />
+            ) : (
+              <InfoIcon />
+            )}
+          </Avatar>
+          <CardContent sx={{ flex: 1, py: 2 }}>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <InfoIcon sx={{ color: "#AD5AD7" }} />
+              <Typography
+                variant="subtitle1"
+                sx={{ color: "#AD5AD7", fontWeight: 600 }}
+              >
+                {activity.coin}
               </Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ px: 0 }}>
-              {acts.map((activity, idx) => (
-                <Box key={idx} sx={{ mb: 1, ml: 2, mr: 2 }}>
-                  <Typography variant="body2" color="#212529">
-                    {activity.type} {activity.coin}
-                  </Typography>
-                  <Typography variant="caption" color="#90a4ae">
-                    {activity.type === "received" ? "+" : "-"}$
-                    {activity.amount.toLocaleString()} &nbsp; • &nbsp;{" "}
-                    {activity.date}
-                  </Typography>
-                </Box>
-              ))}
-            </AccordionDetails>
-          </Accordion>
-        </Stack>
+            </Stack>
+            <Typography variant="body2" sx={{ mt: 1, color: "#212529" }}>
+              {activity.type === "received"
+                ? "Received"
+                : activity.type === "sent"
+                  ? "Sent"
+                  : "Airdrop"}{" "}
+              {activity.coin}
+            </Typography>
+            <Typography variant="h6" sx={{ color: "#AD5AD7", fontWeight: 700 }}>
+              {activity.type === "received"
+                ? "+"
+                : activity.type === "sent"
+                  ? "-"
+                  : "+"}
+              ${activity.amount.toLocaleString()}
+            </Typography>
+            <Typography variant="caption" sx={{ color: "#90a4ae" }}>
+              {activity.date}
+            </Typography>
+          </CardContent>
+        </Card>
       ))}
     </Stack>
   );

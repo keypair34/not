@@ -44,11 +44,11 @@ export default function OnboardingCardUsername({
         mb: 3,
         borderRadius: 4,
         boxShadow: 6,
-        background: "linear-gradient(135deg, #212529 60%, #1e88e5 100%)",
+        background: "linear-gradient(135deg, #9932CC 0%, #AD5AD7 100%)",
         color: "#fff",
         position: "relative",
         overflow: "visible",
-        border: "2px solid #1e88e5",
+        border: "2px solid #AD5AD7",
       }}
     >
       <IconButton
@@ -58,9 +58,9 @@ export default function OnboardingCardUsername({
           position: "absolute",
           top: 10,
           right: 10,
-          color: "#1e88e5",
+          color: "#AD5AD7",
           bgcolor: "#fff",
-          "&:hover": { bgcolor: "#e3f2fd" },
+          "&:hover": { bgcolor: "#F5F6FA" },
           zIndex: 2,
         }}
       >
@@ -71,9 +71,9 @@ export default function OnboardingCardUsername({
           variant="h5"
           fontWeight="bold"
           sx={{
-            mb: 1,
+            mt: 2,
             color: "#fff",
-            textShadow: "0 2px 8px #1e88e599",
+            textShadow: "0 2px 8px #AD5AD799",
             letterSpacing: 1,
           }}
         >
@@ -137,18 +137,15 @@ export default function OnboardingCardUsername({
           size="large"
           sx={{
             bgcolor: "#fff",
-            color: "#1e88e5",
+            color: "#AD5AD7",
             fontWeight: "bold",
             fontSize: "1.1rem",
-            borderRadius: 3,
+            borderRadius: 2,
             boxShadow: 2,
             px: 4,
             py: 1.5,
-            "&:hover": { bgcolor: "#e3f2fd", color: "#1565c0" },
+            "&:hover": { bgcolor: "#F5F6FA" },
             transition: "all 0.2s",
-            opacity: !username || usernameSaved ? 0.5 : 1,
-            pointerEvents: !username || usernameSaved ? "none" : "auto",
-            mt: 1,
           }}
           onClick={handleSaveUsername}
           disabled={!username || usernameSaved}

@@ -82,7 +82,7 @@ export default function LockedWalletView({
               alignItems: "center",
             }}
           >
-            <LockIcon sx={{ fontSize: 40, color: "#1e88e5", mb: 1 }} />
+            <LockIcon sx={{ fontSize: 40, color: "#AD5AD7", mb: 1 }} />
             <Typography variant="subtitle1" align="center" sx={{ mb: 1 }}>
               Wallet Locked
             </Typography>

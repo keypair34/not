@@ -2,7 +2,7 @@
 
 # Universal app (Intel and Apple chip)
 #
-tauri build --bundles app --target universal-apple-darwin --config src-tauri/tauri.appstore.conf.json
+cargo tauri build --bundles app --target universal-apple-darwin --config src-tauri/tauri.appstore.conf.json
 
 # Apple chip only app
 # Intel chip build system

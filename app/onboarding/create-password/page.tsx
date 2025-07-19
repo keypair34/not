@@ -141,6 +141,11 @@ export default function CreatePasswordPage() {
             }}
             color="secondary"
             variant="outlined"
+            sx={{
+              borderColor: "#AD5AD7",
+              color: "#AD5AD7",
+              "&:hover": { background: "#F5F6FA", borderColor: "#C792EA" },
+            }}
           >
             Create New Password
           </Button>
