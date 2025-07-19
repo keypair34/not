@@ -15,15 +15,14 @@ android {
         targetSdk = 36
         versionCode = 2
         versionName = "1.0"
-
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
             )
         }
     }
@@ -31,17 +30,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+    kotlinOptions { jvmTarget = "11" }
     useLibrary("wear-sdk")
-    buildFeatures {
-        compose = true
-    }
+    buildFeatures { compose = true }
 }
 
 dependencies {
-
     implementation(libs.play.services.wearable)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
@@ -60,22 +54,31 @@ dependencies {
 }
 
 cargoNdk {
-    module  = "../crates/wallet-kit"
+    module = "../crates/wallet-kit"
     librariesNames = arrayListOf("libwallet_kit.so")
+    extraCargoBuildArguments = arrayListOf("-p", "libwallet_kit")
 }
 
 android.applicationVariants.forEach { variant ->
     val bDir = layout.buildDirectory.dir("generated/source/uniffi/${variant.name}/java").get()
-    val generateBindings = tasks.register("generate${variant.name.capitalize()}UniFFIBindings", Exec::class) {
-        workingDir = file("../crates/wallet-kit")
-        commandLine(
-            "cargo", "run", "-p", "uniffi-bindgen", "generate",
-            "--library", "./jniLibs/arm64-v8a/libwallet_kit.so",
-            "--language", "kotlin",
-            "--out-dir", bDir
-        )
-        dependsOn("buildCargoNdk${variant.name.capitalize()}")
-    }
+    val generateBindings =
+            tasks.register("generate${variant.name.capitalize()}UniFFIBindings", Exec::class) {
+                workingDir = file("../crates/wallet-kit")
+                commandLine(
+                        "cargo",
+                        "run",
+                        "-p",
+                        "uniffi-bindgen",
+                        "generate",
+                        "--library",
+                        "./jniLibs/arm64-v8a/libwallet_kit.so",
+                        "--language",
+                        "kotlin",
+                        "--out-dir",
+                        bDir
+                )
+                dependsOn("buildCargoNdk${variant.name.capitalize()}")
+            }
 
     variant.javaCompileProvider.get().dependsOn(generateBindings)
 
@@ -83,9 +86,7 @@ android.applicationVariants.forEach { variant ->
         dependsOn(generateBindings)
     }
 
-    tasks.named("connectedDebugAndroidTest").configure {
-        dependsOn(generateBindings)
-    }
+    tasks.named("connectedDebugAndroidTest").configure { dependsOn(generateBindings) }
 
     android.sourceSets.named(variant.name) {
         java.srcDir(layout.buildDirectory.dir("generated/source/uniffi/${variant.name}/java"))
@@ -94,5 +95,6 @@ android.applicationVariants.forEach { variant ->
     // UniFFI tutorial notes that they made several attempts like this but were unsuccessful coming
     // to a good solution for forcing the directory to be marked as generated (short of checking in
     // project files, I suppose).
-    // idea.module.generatedSourceDirs += file("${buildDir}/generated/source/uniffi/${variant.name}/java/uniffi")
+    // idea.module.generatedSourceDirs +=
+    // file("${buildDir}/generated/source/uniffi/${variant.name}/java/uniffi")
 }
