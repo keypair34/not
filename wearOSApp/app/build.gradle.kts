@@ -60,7 +60,39 @@ dependencies {
 }
 
 cargoNdk {
-    module  = "../../crates/wallet-kit"
+    module  = "../crates/wallet-kit"
     librariesNames = arrayListOf("libwallet_kit.so")
-    extraCargoBuildArguments = arrayListOf("-p", "libwallet_kit")
+}
+
+android.applicationVariants.forEach { variant ->
+    val bDir = layout.buildDirectory.dir("generated/source/uniffi/${variant.name}/java").get()
+    val generateBindings = tasks.register("generate${variant.name.capitalize()}UniFFIBindings", Exec::class) {
+        workingDir = file("../crates/wallet-kit")
+        commandLine(
+            "cargo", "run", "-p", "uniffi-bindgen", "generate",
+            "--library", "./jniLibs/arm64-v8a/libwallet_kit.so",
+            "--language", "kotlin",
+            "--out-dir", bDir
+        )
+        dependsOn("buildCargoNdk${variant.name.capitalize()}")
+    }
+
+    variant.javaCompileProvider.get().dependsOn(generateBindings)
+
+    tasks.named("compile${variant.name.capitalize()}Kotlin").configure {
+        dependsOn(generateBindings)
+    }
+
+    tasks.named("connectedDebugAndroidTest").configure {
+        dependsOn(generateBindings)
+    }
+
+    android.sourceSets.named(variant.name) {
+        java.srcDir(layout.buildDirectory.dir("generated/source/uniffi/${variant.name}/java"))
+    }
+
+    // UniFFI tutorial notes that they made several attempts like this but were unsuccessful coming
+    // to a good solution for forcing the directory to be marked as generated (short of checking in
+    // project files, I suppose).
+    // idea.module.generatedSourceDirs += file("${buildDir}/generated/source/uniffi/${variant.name}/java/uniffi")
 }
