@@ -49,20 +49,21 @@ fun TransactionListView(transactions: List<Transaction>) {
                             Modifier.fillMaxSize()
                                     .padding(it)
                                     .background(Color.Black, RoundedCornerShape(30)),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 items(transactions) { tx ->
                     Button(
                             onClick = { selectedTransaction = tx },
-                            modifier = Modifier.fillMaxWidth().background(Color.Black)
+                            modifier = Modifier.background(Color.Black)
                     ) {
                         Column(
-                                modifier = Modifier.padding(8.dp),
+                                modifier = Modifier.padding(2.dp),
                                 horizontalAlignment = Alignment.Start
                         ) {
                             Text(
                                     text = tx.amount,
-                                    fontSize = 18.sp,
+                                    fontSize = 16.sp,
                                     fontWeight = FontWeight.SemiBold,
                                     color =
                                             if (tx.amount.startsWith("+")) Color.Green
