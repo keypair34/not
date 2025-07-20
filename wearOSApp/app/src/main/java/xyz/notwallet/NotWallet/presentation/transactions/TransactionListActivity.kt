@@ -7,17 +7,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,6 +27,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.items
+import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.tooling.preview.devices.WearDevices
 import xyz.notwallet.NotWallet.presentation.theme.NotWalletTheme
 
@@ -41,28 +39,38 @@ data class Transaction(val date: String, val amount: String, val description: St
 @Composable
 fun TransactionListView(transactions: List<Transaction>) {
     var selectedTransaction by remember { mutableStateOf<Transaction?>(null) }
+    val listState = rememberScalingLazyListState() // State for ScalingLazyColumn
 
     NotWalletTheme {
-        Scaffold(modifier = Modifier.background(Color.Black).padding(vertical = 16.dp)) {
-            LazyColumn(
+        androidx.wear.compose.material.Scaffold(
+            modifier = Modifier
+                .background(Color.Black)
+                .padding(vertical = 16.dp),
+            positionIndicator = {
+                // This is the scrollbar for ScalingLazyColumn
+                PositionIndicator(scalingLazyListState = listState)
+            },
+        ) {
+            ScalingLazyColumn(
                     modifier =
-                            Modifier.fillMaxSize()
-                                    .padding(it)
-                                    .background(Color.Black, RoundedCornerShape(30)),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                            Modifier
+                                .fillMaxSize()
+                                .background(Color.Black, RoundedCornerShape(30)),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 items(transactions) { tx ->
                     Button(
                             onClick = { selectedTransaction = tx },
-                            modifier = Modifier.fillMaxWidth().background(Color.Black)
+                            modifier = Modifier.background(Color.Black)
                     ) {
                         Column(
-                                modifier = Modifier.padding(8.dp),
+                                modifier = Modifier.padding(2.dp),
                                 horizontalAlignment = Alignment.Start
                         ) {
                             Text(
                                     text = tx.amount,
-                                    fontSize = 18.sp,
+                                    fontSize = 16.sp,
                                     fontWeight = FontWeight.SemiBold,
                                     color =
                                             if (tx.amount.startsWith("+")) Color.Green
