@@ -14,10 +14,8 @@ name = "uniffi-bindgen"
 path = "uniffi-bindgen.rs"
 
 [dependencies]
-solana-sdk = "2"
-solana-client = "2"
-solana-account-decoder = "2"
-solana-program = "2"
+solana-sdk = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-program = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "1.35.1", features = ["full"] }
@@ -28,3 +26,16 @@ uniffi = { version = "0.28", features = ["cli"] }
 
 [build-dependencies]
 uniffi = { version = "0.28", features = ["build"] }
+
+[patch.crates-io]
+solana-account = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-clock = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-cpi = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-frozen-abi = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-frozen-abi-macro = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-instruction = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-program-error = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-pubkey = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-rent = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-signature = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-sysvar-id = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
