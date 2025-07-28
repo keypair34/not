@@ -1,0 +1,34 @@
+[package]
+name = "wallet-kit-test"
+version = "0.1.0"
+edition = "2021"
+description = "Solana toolkit for NotWallet"
+license = "MIT"
+
+[lib]
+crate-type = ["lib", "cdylib", "staticlib"]
+name = "wallet_kit_test"
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "uniffi-bindgen.rs"
+
+[dependencies]
+solana-sdk = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+uniffi = { version = "0.29", features = ["cli"] }
+
+[build-dependencies]
+uniffi = { version = "0.29", features = ["build"] }
+
+[patch.crates-io]
+solana-account = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-clock = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-cpi = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-frozen-abi = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-frozen-abi-macro = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-instruction = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-program-error = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-pubkey = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-rent = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-signature = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-sysvar-id = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
