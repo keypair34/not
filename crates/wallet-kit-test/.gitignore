@@ -44,7 +44,7 @@ perf.data.old
 .envrc
 
 # Generated Swift package
-WalletKit/
+WalletKitTest/
 generated/
 out/
 jniLibs/

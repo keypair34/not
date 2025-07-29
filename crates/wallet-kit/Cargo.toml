@@ -14,8 +14,8 @@ name = "uniffi-bindgen"
 path = "uniffi-bindgen.rs"
 
 [dependencies]
-solana-sdk = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-program = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-sdk = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-program = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "1.35.1", features = ["full"] }
@@ -28,14 +28,14 @@ uniffi = { version = "0.28", features = ["cli"] }
 uniffi = { version = "0.28", features = ["build"] }
 
 [patch.crates-io]
-solana-account = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-clock = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-cpi = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-frozen-abi = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-frozen-abi-macro = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-instruction = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-program-error = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-pubkey = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-rent = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-signature = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-sysvar-id = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-account = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-clock = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-cpi = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-frozen-abi = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-frozen-abi-macro = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-instruction = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-program-error = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-pubkey = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-rent = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-signature = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-sysvar-id = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }

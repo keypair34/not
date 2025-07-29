@@ -14,21 +14,21 @@ name = "uniffi-bindgen"
 path = "uniffi-bindgen.rs"
 
 [dependencies]
-solana-sdk = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-sdk = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
 uniffi = { version = "0.29", features = ["cli"] }
 
 [build-dependencies]
 uniffi = { version = "0.29", features = ["build"] }
 
 [patch.crates-io]
-solana-account = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-clock = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-cpi = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-frozen-abi = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-frozen-abi-macro = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-instruction = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-program-error = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-pubkey = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-rent = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-signature = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
-solana-sysvar-id = { git = "https://github.com/joncinque/solana-sdk", branch = "move-wasm" }
+solana-account = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-clock = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-cpi = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-frozen-abi = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-frozen-abi-macro = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-instruction = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-program-error = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-pubkey = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-rent = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-signature = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
+solana-sysvar-id = { git = "https://github.com/anza-xyz/solana-sdk", branch = "master" }
